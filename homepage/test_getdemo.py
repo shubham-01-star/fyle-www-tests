@@ -20,19 +20,19 @@ def browser():
 
 def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phone=None, company_size=None, agree=None):
     if email:
-        l = browser.find_by_xpath(xpath="//input[@name='email']")
+        l = browser.find_by_xpath(xpath="//input[@name='email']", click=True)
         l.send_keys(email)
     
     if firstname:
-        l = browser.find_by_xpath(xpath="//input[@name='firstname']")
+        l = browser.find_by_xpath(xpath="//input[@name='firstname']", click=True)
         l.send_keys(firstname)
 
     if lastname:
-        l = browser.find_by_xpath(xpath="//input[@name='lastname']")
+        l = browser.find_by_xpath(xpath="//input[@name='lastname']", click=True)
         l.send_keys(lastname)
 
     if phone:
-        l = browser.find_by_xpath(xpath="//input[@name='phone']")
+        l = browser.find_by_xpath(xpath="//input[@name='phone']", click=True)
         l.send_keys(phone)
 
     if company_size:
@@ -41,7 +41,6 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
 
     if agree:
         l = browser.find_by_css_selector(css_selector='div.custom-checkbox', click=True)
-        l.click()
 
     l = browser.find_by_xpath(xpath='//button[text()="Get a demo"]', click=True)
 
