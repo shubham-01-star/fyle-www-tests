@@ -16,14 +16,17 @@ class Browser:
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
 
-    # def __del__(self):
-    #     time.sleep(5)
-    #       self.driver.close()
+    def close(self):
+        logger.debug('shutting down driver')
+        self.driver.close()
+
+    def __del__(self):
+        time.sleep(5)
+        self.close()
 
     def get(self, url):
         return self.driver.get(url)
 
-    # TODO: try to make it more generic
     def find_by_xpath(self, xpath):
         l = None
         try:
@@ -48,5 +51,3 @@ class Browser:
         for d in self.driver.find_elements_by_xpath("//div"):
             self.driver.execute_script("arguments[0]['style']['border']='1px solid black';", d)
 
-    def close(self):
-        self.driver.close()
