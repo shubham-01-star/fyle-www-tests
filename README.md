@@ -5,7 +5,6 @@ This is a public repository - please do not check in any passwords or keys.
 
 # Development
 
-* Download and install Chrome webdriver from https://chromedriver.chromium.org/downloads
 * Create virtualenv and install requirements using:
 
 ```
@@ -14,9 +13,27 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Next, you'll need to setup at webdrivers for Chrome and Safari to run the tests.
+
+# Setup Chrome WebDriver
+
+Download and install Chrome webdriver from chromium site [here](https://chromedriver.chromium.org/downloads)
+
+# Setup Safari WebDriver
+
+Please follow instructions from Apple [here](https://developer.apple.com/documentation/webkit/testing_with_webdriver_in_safari)
+
 # Running tests
 
-To run all tests:
+Before running the tests, choose the browser by setting the environment variable (by default, tests will choose Chrome):
+
+```
+export BROWSER=chrome
+# or
+export BROWSER=safari
+```
+
+To run all tests, use this command.
 
 ```
 python -m pytest
