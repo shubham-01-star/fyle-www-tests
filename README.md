@@ -1,4 +1,6 @@
-# fyle-web-tests
+# fyle-www-tests
+
+This repository contains tests for Fyle's website (https://www.fylehq.com). This is under active development.
 
 # Development
 
