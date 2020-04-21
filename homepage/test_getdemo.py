@@ -48,7 +48,8 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         l = browser.find_by_xpath(xpath=f"//li[@data-value='{company_size}']", click=True)
 
     if agree:
-        l = browser.find_by_css_selector(css_selector='div.custom-checkbox', click=True)
+        l = browser.find_by_xpath(xpath="//input[@name='gdpr_consent']")
+        browser.checkbox_click(l)
 
     time.sleep(1)
     l = browser.find_by_xpath(xpath='//button[text()="Get a demo"]', click=True)
@@ -68,6 +69,6 @@ def test_missing_firstname(browser):
 def test_success(browser):
     submit_getdemo_form(browser, email='megatron@fyle.in', firstname='Megatron', lastname='Transformer', phone='123456789', company_size='Under 5', agree=True)
     e = browser.find_by_xpath(xpath="//h3[contains(text(), 'Thank')]")
-    assert e and e.is_displayed(), 'Not finding thank you message'
+    assert e and e.is_displayed(), 'Not displaying thank you message'
 
 
