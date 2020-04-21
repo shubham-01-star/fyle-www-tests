@@ -44,7 +44,7 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         l.send_keys(phone)
 
     if company_size:
-        l = browser.find_by_css_selector(css_selector='div.form-employees', click=True)
+        l = browser.find_by_xpath(xpath="//input[@id='number_of_employees']", click=True)
         l = browser.find_by_xpath(xpath=f"//li[@data-value='{company_size}']", click=True)
 
     if agree:

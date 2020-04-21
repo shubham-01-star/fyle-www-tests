@@ -62,24 +62,6 @@ class Browser:
             
         return l
 
-    def find_by_css_selector(self, css_selector, click=False):
-        l = None
-        try:
-            # TODO: this is a hack - needs to be removed somehow
-            if click == True:
-                l = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, css_selector)))
-                l.click()
-#                self.driver.execute_script("arguments[0].click();", l)
-            else:
-                l = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
-        except TimeoutException as e:
-            logger.error('timeout while searching for element in %s', css_selector)
-        return l
-
-    # def find_elem_by_xpath(self, xpath):
-    #     l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-    #     return l
-
     def mark_divs(self, browser):
         for d in self.driver.find_elements_by_xpath("//div"):
             self.driver.execute_script("arguments[0]['style']['border']='1px solid black';", d)
