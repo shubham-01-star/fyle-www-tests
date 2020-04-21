@@ -33,6 +33,7 @@ class SimpleBrowser:
     def __init__(self, browser='chrome'):
         self.browser = browser
         self.driver = SimpleBrowser.__create_driver(browser=browser)
+        self.driver.set_window_size(1200, 900)
         assert self.driver, 'unable to initialize browser properly'
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
@@ -62,10 +63,15 @@ class SimpleBrowser:
     def input(self, xpath, keys=None, click=False):
         assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-        assert l.tag_name in ['input', 'li', 'button', 'span', 'a'], 'xpath did not return proper element'
+        ltag = l.tag_name.lower() if l.tag_name else None
+        ltype = l.get_attribute('type').lower() if l.get_attribute('type') else None
+        # logger.info('found element with tag %s', ltag)
+        assert ltag in ['input', 'li', 'button', 'span', 'a'], 'xpath did not return proper element'
         if click:
-            if l.get_attribute('type') == 'checkbox':
-                # strange issue where checkbox click isnt working properly in safari
+            # TODO: under certain conditions, we need to resort to JS click. this is not ideal. someday we should fix this
+            # - siva
+            jsclick = (ltype == 'checkbox' or ltag == 'li')
+            if jsclick:
                 self.driver.execute_script("arguments[0].click();", l)
             else:
                 l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))

@@ -29,29 +29,22 @@ def browser(module_browser):
     return module_browser
 
 def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phone=None, company_size=None, agree=None):
-
     if email:
         browser.input(xpath="//input[@name='email']", keys=email)
-
     if firstname:
         browser.input(xpath="//input[@name='firstname']", keys=firstname)
-
     if lastname:
         browser.input(xpath="//input[@name='lastname']", keys=lastname)
-
     if phone:
         browser.input(xpath="//input[@name='phone']", keys=phone)
-
     if company_size:
         browser.input(xpath="//input[@id='number_of_employees']", click=True)
         browser.input(xpath=f"//li[@data-value='{company_size}']", click=True)
-
     if agree:
         browser.input(xpath="//input[@name='gdpr_consent']", click=True)
-
     time.sleep(1)
     browser.input(xpath='//button[text()="Get a demo"]', click=True)
-    time.sleep(4)
+    time.sleep(2)
 
 
 def test_bad_email(browser):
