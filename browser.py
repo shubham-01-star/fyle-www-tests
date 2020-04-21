@@ -12,22 +12,26 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Browser:
-    def __init__(self, browser='chrome'):
-        assert browser in ['chrome', 'safari', 'firefox', None], 'unsupported browser'
-        self.driver = None
 
+    @classmethod
+    def __create_driver(cls, browser='chrome'):
+        assert browser in ['chrome', 'safari', 'firefox', None], 'unsupported browser'
+        driver = None
         for i in range(0, 3):
             try:
                 if browser == 'safari':
-                    self.driver = webdriver.Safari()
+                    driver = webdriver.Safari()
                 if browser == 'chrome' or not browser:
-                    self.driver = webdriver.Chrome()
+                    driver = webdriver.Chrome()
             except SessionNotCreatedException as e:
                 logger.error('couldnt create session properly')
                 time.sleep(4)
-            if self.driver:
+            if driver:
                 break
+        return driver
 
+    def __init__(self, browser='chrome'):
+        self.driver = Browser.__create_driver(browser=browser)
         assert self.driver, 'unable to initialize browser properly'
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
