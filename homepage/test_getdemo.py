@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import os
 import time
-from browser import Browser
+from browser import SimpleBrowser
 import logging
 import pytest
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def module_browser():
     browser = os.getenv('BROWSER', 'chrome')
     logger.info('creating browser %s', browser)
-    module_browser = Browser(browser=browser)
+    module_browser = SimpleBrowser(browser=browser)
     module_browser.get('https://www.fylehq.com')
     module_browser.find_by_xpath(xpath="//span[@class='banner-close']", click=True)
     return module_browser

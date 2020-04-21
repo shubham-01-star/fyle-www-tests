@@ -11,7 +11,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class Browser:
+class SimpleBrowser:
 
     @classmethod
     def __create_driver(cls, browser='chrome'):
@@ -31,15 +31,20 @@ class Browser:
         return driver
 
     def __init__(self, browser='chrome'):
-        self.driver = Browser.__create_driver(browser=browser)
+        self.browser = browser
+        self.driver = SimpleBrowser.__create_driver(browser=browser)
         assert self.driver, 'unable to initialize browser properly'
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
 
     def close(self):
-        logger.debug('shutting down driver')
-        self.driver.close()
-        time.sleep(4)
+        logger.info('shutting down driver')
+        time.sleep(1)
+        driver = self.driver
+        self.driver = None
+        if not driver:
+            driver.close()
+        time.sleep(2)
 
     def __del__(self):
         self.close()
