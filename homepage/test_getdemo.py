@@ -18,7 +18,8 @@ def module_browser():
     module_browser = SimpleBrowser(browser=browser)
     module_browser.get('https://www.fylehq.com')
     module_browser.find_by_xpath(xpath="//span[@class='banner-close']", click=True)
-    return module_browser
+    yield module_browser
+    del module_browser
 
 @pytest.fixture
 def browser(module_browser):
@@ -27,32 +28,31 @@ def browser(module_browser):
     return module_browser
 
 def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phone=None, company_size=None, agree=None):
+    # if email:
+    #     l = browser.find_by_xpath(xpath="//input[@name='email']", click=True)
+    #     l.send_keys(email)
+
     if email:
-        l = browser.find_by_xpath(xpath="//input[@name='email']", click=True)
-        l.send_keys(email)
-    
+        browser.input(xpath="//input[@name='email']", keys=email)
+
     if firstname:
-        l = browser.find_by_xpath(xpath="//input[@name='firstname']", click=True)
-        l.send_keys(firstname)
+        browser.input(xpath="//input[@name='firstname']", keys=firstname)
 
     if lastname:
-        l = browser.find_by_xpath(xpath="//input[@name='lastname']", click=True)
-        l.send_keys(lastname)
+        browser.input(xpath="//input[@name='lastname']", keys=lastname)
 
     if phone:
-        l = browser.find_by_xpath(xpath="//input[@name='phone']", click=True)
-        l.send_keys(phone)
+        browser.input(xpath="//input[@name='phone']", keys=phone)
 
     if company_size:
-        l = browser.find_by_xpath(xpath="//input[@id='number_of_employees']", click=True)
-        l = browser.find_by_xpath(xpath=f"//li[@data-value='{company_size}']", click=True)
+        browser.input(xpath="//input[@id='number_of_employees']", click=True)
+        browser.input(xpath=f"//li[@data-value='{company_size}']", click=True)
 
     if agree:
-        l = browser.find_by_xpath(xpath="//input[@name='gdpr_consent']")
-        browser.checkbox_click(l)
+        browser.input(xpath="//input[@name='gdpr_consent']", click=True)
 
     time.sleep(1)
-    l = browser.find_by_xpath(xpath='//button[text()="Get a demo"]', click=True)
+    browser.input(xpath='//button[text()="Get a demo"]', click=True)
     time.sleep(4)
 
 

@@ -71,6 +71,22 @@ class SimpleBrowser:
             
         return l
 
+    def input(self, xpath, keys=None, click=False):
+        assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
+        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        assert l.tag_name in ['input', 'li', 'button'], 'xpath did not return proper element'
+        if click:
+            if l.get_attribute('type') == 'checkbox':
+                # strange issue where checkbox click isnt working properly in safari
+                self.driver.execute_script("arguments[0].click();", l)
+            else:
+                l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+                l.click()
+        if keys:
+            l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            l.send_keys(keys)
+        return l
+
     def mark_divs(self, browser):
         for d in self.driver.find_elements_by_xpath("//div"):
             self.driver.execute_script("arguments[0]['style']['border']='1px solid black';", d)
