@@ -55,26 +55,14 @@ class SimpleBrowser:
     def checkbox_click(self, elem):
         self.driver.execute_script("arguments[0].click();", elem)
 
-    def find_by_xpath(self, xpath, click=False):
-        l = None
-        try:
-            # TODO: this is a hack - needs to be removed somehow
-            if click == True:
-                l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
-#                l.click()
-                self.driver.execute_script("arguments[0].click();", l)
-            else:
-                l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-
-        except TimeoutException as e:
-            logger.error('timeout while searching for element in %s', xpath)
-            
+    def find(self, xpath):
+        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         return l
 
     def input(self, xpath, keys=None, click=False):
         assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-        assert l.tag_name in ['input', 'li', 'button'], 'xpath did not return proper element'
+        assert l.tag_name in ['input', 'li', 'button', 'span', 'a'], 'xpath did not return proper element'
         if click:
             if l.get_attribute('type') == 'checkbox':
                 # strange issue where checkbox click isnt working properly in safari
