@@ -56,8 +56,10 @@ class SimpleBrowser:
     def checkbox_click(self, elem):
         self.driver.execute_script("arguments[0].click();", elem)
 
-    def find(self, xpath):
+    def find(self, xpath, scroll=True):
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        if scroll:
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
         return l
 
     def input(self, xpath, keys=None, click=False):
