@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import os
 import time
-from browser import SimpleBrowser
+from simplebrowser import SimpleBrowser
 import logging
 import pytest
 
