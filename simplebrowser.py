@@ -39,15 +39,15 @@ class SimpleBrowser:
         self.wait = WebDriverWait(self.driver, self.timeout)
 
     def close(self):
-        logger.info('shutting down driver')
         time.sleep(1)
         driver = self.driver
         self.driver = None
-        if not driver:
+        if driver:
             driver.close()
         time.sleep(2)
 
     def __del__(self):
+        logger.debug('destructor called')
         self.close()
 
     def get(self, url):
@@ -60,11 +60,13 @@ class SimpleBrowser:
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         if scroll:
             self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
+            time.sleep(1)
+            l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         return l
 
-    def input(self, xpath, keys=None, click=False):
+    def input(self, xpath, keys=None, click=False, scroll=True):
         assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
-        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        l = self.find(xpath, scroll)
         ltag = l.tag_name.lower() if l.tag_name else None
         ltype = l.get_attribute('type').lower() if l.get_attribute('type') else None
         # logger.info('found element with tag %s', ltag)
@@ -75,6 +77,7 @@ class SimpleBrowser:
             jsclick = (ltype == 'checkbox' or ltag == 'li')
             if jsclick:
                 self.driver.execute_script("arguments[0].click();", l)
+                time.sleep(0.5)
             else:
                 l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
                 l.click()
