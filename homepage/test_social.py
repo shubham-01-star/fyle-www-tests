@@ -12,5 +12,5 @@ def browser(module_browser):
     return module_browser
 
 def test_twitter(browser):
-    e = browser.find(xpath="//a[@href='https://www.twitter.com/FyleHQ']", scroll=True)
+    e = browser.find(xpath="//a[@href='https://twitter.com/FyleHQ']", scroll=True)
     assert e and e.is_displayed(), 'twitter link not there'

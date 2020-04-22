@@ -56,7 +56,7 @@ class SimpleBrowser:
     def checkbox_click(self, elem):
         self.driver.execute_script("arguments[0].click();", elem)
 
-    def find(self, xpath, scroll=True):
+    def find(self, xpath, scroll=False):
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         if scroll:
             self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
@@ -64,7 +64,7 @@ class SimpleBrowser:
             l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         return l
 
-    def input(self, xpath, keys=None, click=False, scroll=True):
+    def input(self, xpath, keys=None, click=False, scroll=False):
         assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
         l = self.find(xpath, scroll)
         ltag = l.tag_name.lower() if l.tag_name else None
