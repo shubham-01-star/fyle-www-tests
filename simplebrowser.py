@@ -1,28 +1,55 @@
-from selenium import webdriver      
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.webdriver.chrome.options import Options
 import os
 import time
 import logging
 
 logger = logging.getLogger(__name__)
 
+
 class SimpleBrowser:
 
     @classmethod
-    def __create_driver(cls, browser='chrome'):
-        assert browser in ['chrome', 'safari', 'firefox', None], 'unsupported browser'
+    def __create_chrome_driver(cls, device):
+        options = Options()
+        if device == 'nexus':
+            mobile_emulation = {
+                "deviceMetrics": {"width": 360, "height": 640, "pixelRatio": 3.0},
+                "userAgent": "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"}
+            options.add_experimental_option(
+                "mobileEmulation", mobile_emulation)
+        else:
+            options.add_argument("--window-size=1920,1080")
+
+        driver = webdriver.Chrome(options=options)
+        return driver
+
+    @classmethod
+    def __create_safari_driver(cls, device):
+        driver = webdriver.Safari()
+        driver.set_window_size(1920, 1080)
+        return driver
+
+    @classmethod
+    def __create_driver(cls, browser, device):
+        assert browser in ['chrome', 'safari',
+                           'firefox', None], 'unsupported browser'
+        assert device in ['nexus', None], 'unsupported device'
         driver = None
         for i in range(0, 3):
             try:
                 if browser == 'safari':
-                    driver = webdriver.Safari()
+                    driver = SimpleBrowser.__create_safari_driver(
+                        device=device)
                 if browser == 'chrome' or not browser:
-                    driver = webdriver.Chrome()
+                    driver = SimpleBrowser.__create_chrome_driver(
+                        device=device)
             except SessionNotCreatedException as e:
                 logger.error('couldnt create session properly')
                 time.sleep(4)
@@ -30,10 +57,10 @@ class SimpleBrowser:
                 break
         return driver
 
-    def __init__(self, browser='chrome'):
+    def __init__(self, browser='chrome', device=None):
         self.browser = browser
-        self.driver = SimpleBrowser.__create_driver(browser=browser)
-        self.driver.set_window_size(1200, 900)
+        self.driver = SimpleBrowser.__create_driver(
+            browser=browser, device=device)
         assert self.driver, 'unable to initialize browser properly'
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
@@ -61,16 +88,20 @@ class SimpleBrowser:
         if scroll:
             self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
             time.sleep(1)
-            l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            l = self.wait.until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
         return l
 
     def input(self, xpath, keys=None, click=False, scroll=False):
-        assert (keys and not click) or (not keys and click), 'only one of keys or click actions can be performed'
+        assert (keys and not click) or (
+            not keys and click), 'only one of keys or click actions can be performed'
         l = self.find(xpath, scroll)
         ltag = l.tag_name.lower() if l.tag_name else None
-        ltype = l.get_attribute('type').lower() if l.get_attribute('type') else None
+        ltype = l.get_attribute('type').lower(
+        ) if l.get_attribute('type') else None
         # logger.info('found element with tag %s', ltag)
-        assert ltag in ['input', 'li', 'button', 'span', 'a'], 'xpath did not return proper element'
+        assert ltag in ['input', 'li', 'button', 'span',
+                        'a'], 'xpath did not return proper element'
         if click:
             # TODO: under certain conditions, we need to resort to JS click. this is not ideal. someday we should fix this
             # - siva
@@ -79,7 +110,8 @@ class SimpleBrowser:
                 self.driver.execute_script("arguments[0].click();", l)
                 time.sleep(0.5)
             else:
-                l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+                l = self.wait.until(
+                    EC.element_to_be_clickable((By.XPATH, xpath)))
                 l.click()
         if keys:
             l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
@@ -88,5 +120,5 @@ class SimpleBrowser:
 
     def mark_divs(self, browser):
         for d in self.driver.find_elements_by_xpath("//div"):
-            self.driver.execute_script("arguments[0]['style']['border']='1px solid black';", d)
-
+            self.driver.execute_script(
+                "arguments[0]['style']['border']='1px solid black';", d)
