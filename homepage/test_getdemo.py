@@ -7,8 +7,8 @@ import pytest
 logger = logging.getLogger(__name__)
 
 @pytest.fixture
-def browser(module_browser):
-    module_browser.get('https://www.fylehq.com')
+def browser(module_browser, base_url):
+    module_browser.get(base_url)
     time.sleep(3)
     module_browser.input(xpath="//a[@id='best-expense-video-id']", click=True)
     return module_browser

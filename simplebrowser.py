@@ -26,7 +26,6 @@ class SimpleBrowser:
                 "mobileEmulation", mobile_emulation)
         else:
             options.add_argument("--window-size=1920,1080")
-
         driver = webdriver.Chrome(options=options)
         return driver
 
@@ -51,7 +50,7 @@ class SimpleBrowser:
                     driver = SimpleBrowser.__create_chrome_driver(
                         device=device)
             except SessionNotCreatedException as e:
-                logger.error('couldnt create session properly')
+                logger.exception('couldnt create session properly')
                 time.sleep(4)
             if driver:
                 break
