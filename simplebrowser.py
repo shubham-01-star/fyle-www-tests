@@ -100,7 +100,7 @@ class SimpleBrowser:
         ) if l.get_attribute('type') else None
         # logger.info('found element with tag %s', ltag)
         assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div'], 'xpath did not return proper element'
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
         if click:
             # TODO: under certain conditions, we need to resort to JS click. this is not ideal. someday we should fix this
             # - siva
