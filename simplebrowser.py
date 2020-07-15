@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 import os
 import time
 import logging
+import random
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,31 @@ class SimpleBrowser:
     def checkbox_click(self, elem):
         self.driver.execute_script("arguments[0].click();", elem)
 
+    def current_height(self):
+        return self.driver.execute_script("return document.body.scrollHeight")
+
+    def current_scroll_position(self):
+        return self.driver.execute_script("return window.pageYOffset")
+
+    def scroll_down_page(self, max_speed=200):
+        current_scroll_position, new_height= 0, 1
+        while current_scroll_position <= new_height:
+            delta = random.randint(1, max_speed)
+            current_scroll_position += delta
+            self.driver.execute_script(f'window.scrollTo(0, {current_scroll_position});')
+            time.sleep(random.uniform(0.0, 1.0))
+            new_height = self.current_height()
+
+    def scroll_up_page(self, max_speed=200):
+        pos = self.current_scroll_position()
+        while pos > 0:
+            delta = random.randint(1, max_speed)
+            pos -= delta
+            if pos < 0:
+                pos = 0
+            self.driver.execute_script(f'window.scrollTo(0, {pos});')
+            time.sleep(random.uniform(0.0, 1.0))
+ 
     def find(self, xpath, scroll=False):
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         if scroll:
@@ -90,6 +116,10 @@ class SimpleBrowser:
             l = self.wait.until(
                 EC.presence_of_element_located((By.XPATH, xpath)))
         return l
+
+    def find_many(self, xpath):
+        m = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
+        return m
 
     def input(self, xpath, keys=None, click=False, scroll=False):
         assert (keys and not click) or (
