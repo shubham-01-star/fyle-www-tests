@@ -89,7 +89,7 @@ class SimpleBrowser:
     def current_scroll_position(self):
         return self.driver.execute_script("return window.pageYOffset")
 
-    def scroll_down_page(self, max_speed=200):
+    def scroll_down_page(self, max_speed=300):
         current_scroll_position, new_height= 0, 1
         while current_scroll_position <= new_height:
             delta = random.randint(1, max_speed)
@@ -98,7 +98,7 @@ class SimpleBrowser:
             time.sleep(random.uniform(0.0, 1.0))
             new_height = self.current_height()
 
-    def scroll_up_page(self, max_speed=200):
+    def scroll_up_page(self, max_speed=300):
         pos = self.current_scroll_position()
         while pos > 0:
             delta = random.randint(1, max_speed)
@@ -146,6 +146,14 @@ class SimpleBrowser:
             l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
             l.send_keys(keys)
         return l
+
+    def close_windows(self):
+        # close all windows except 0
+        while len(self.driver.window_handles) > 1:
+            w = self.driver.window_handles[-1]
+            self.driver.switch_to.window(w)
+            self.driver.close()
+        self.driver.switch_to.window(self.driver.window_handles[0])
 
     def mark_divs(self, browser):
         for d in self.driver.find_elements_by_xpath("//div"):
