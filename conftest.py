@@ -17,5 +17,5 @@ def module_browser(base_url):
     logger.debug('creating browser %s, device %s', browser, device)
     module_browser = SimpleBrowser(browser=browser, device=device)
     module_browser.get(base_url)
-    module_browser.input(xpath="//span[contains(@class, 'banner-close')]", click=True)
+    module_browser.click(xpath="//span[contains(@class, 'banner-close')]")
     return module_browser

@@ -121,24 +121,25 @@ class SimpleBrowser:
         m = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
         return m
 
-    def input(self, xpath, keys=None, click=False, scroll=False):
-        assert (keys and not click) or (
-            not keys and click), 'only one of keys or click actions can be performed'
+    def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         ltag = l.tag_name.lower() if l.tag_name else None
-        ltype = l.get_attribute('type').lower(
-        ) if l.get_attribute('type') else None
+        assert ltag in ['input', 'li', 'button', 'span',
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+        l = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, xpath)))
+        l.click()
+        return l
+
+    def input(self, xpath, keys, scroll=False):
+        l = self.find(xpath, scroll)
+        ltag = l.tag_name.lower() if l.tag_name else None
         # logger.info('found element with tag %s', ltag)
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
-        if click:
-            l = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, xpath)))
-            l.click()
-        if keys:
-            l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
-            l.click()
-            l.send_keys(keys)
+        l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+        l.click()
+        l.send_keys(keys)
         return l
 
     def close_windows(self):

@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url):
     module_browser.get(base_url)
     time.sleep(3)
-    module_browser.input(xpath="//a[@id='best-expense-video-id']", click=True)
+    module_browser.click(xpath="//a[@id='best-expense-video-id']")
     return module_browser
 
 def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phone=None, company_size=None, agree=None):
@@ -24,13 +24,12 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
     if phone:
         browser.input(xpath="//input[@name='phone']", keys=phone)
     if company_size:
-        browser.input(xpath="//input[@id='number_of_employees']", click=True)
-        browser.input(xpath=f"//li[@data-value='{company_size}']", click=True)
+        browser.click(xpath="//input[@id='number_of_employees']")
+        browser.click(xpath=f"//li[@data-value='{company_size}']")
     if agree:
-        browser.input(xpath='//div[contains(@class, "custom-checkbox")]', click=True)
-#        browser.input(xpath="//input[@name='gdpr_consent']", click=True)
+        browser.click(xpath='//div[contains(@class, "custom-checkbox")]')
     time.sleep(1)
-    browser.input(xpath='//button[text()="Get a demo"]', click=True)
+    browser.click(xpath='//button[text()="Get a demo"]')
     time.sleep(4)
 
 
