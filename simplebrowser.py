@@ -33,7 +33,7 @@ class SimpleBrowser:
     @classmethod
     def __create_safari_driver(cls, device):
         driver = webdriver.Safari()
-        driver.set_window_size(1920, 1080)
+        driver.set_window_size(1440, 900)
         return driver
 
     @classmethod
@@ -139,7 +139,9 @@ class SimpleBrowser:
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
+        time.sleep(0.1)
         l.send_keys(keys)
+        time.sleep(0.1)
         return l
 
     def close_windows(self):
@@ -150,7 +152,7 @@ class SimpleBrowser:
             self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
 
-    def mark_divs(self, browser):
+    def mark_divs(self):
         for d in self.driver.find_elements_by_xpath("//div"):
             self.driver.execute_script(
                 "arguments[0]['style']['border']='1px solid black';", d)
