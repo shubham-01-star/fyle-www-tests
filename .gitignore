@@ -18,3 +18,4 @@ build/
 dist/
 fylesdk.egg-info/
 linkedin.py
+reload.sql

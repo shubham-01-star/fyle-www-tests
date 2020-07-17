@@ -132,18 +132,12 @@ class SimpleBrowser:
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         if click:
-            # TODO: under certain conditions, we need to resort to JS click. this is not ideal. someday we should fix this
-            # - siva
-            jsclick = (ltype == 'checkbox' or ltag == 'li')
-            if jsclick:
-                self.driver.execute_script("arguments[0].click();", l)
-                time.sleep(0.5)
-            else:
-                l = self.wait.until(
-                    EC.element_to_be_clickable((By.XPATH, xpath)))
-                l.click()
+            l = self.wait.until(
+                EC.element_to_be_clickable((By.XPATH, xpath)))
+            l.click()
         if keys:
             l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            l.click()
             l.send_keys(keys)
         return l
 

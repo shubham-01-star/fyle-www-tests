@@ -13,7 +13,7 @@ def base_url():
 @pytest.fixture(scope='module')
 def module_browser(base_url):
     browser = os.getenv('BROWSER', 'chrome')
-    device = None
+    device = os.getenv('DEVICE', None)
     logger.debug('creating browser %s, device %s', browser, device)
     module_browser = SimpleBrowser(browser=browser, device=device)
     module_browser.get(base_url)

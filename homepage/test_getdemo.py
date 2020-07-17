@@ -14,6 +14,7 @@ def browser(module_browser, base_url):
     return module_browser
 
 def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phone=None, company_size=None, agree=None):
+    time.sleep(0.2)
     if email:
         browser.input(xpath="//input[@name='email']", keys=email)
     if firstname:
@@ -26,7 +27,8 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         browser.input(xpath="//input[@id='number_of_employees']", click=True)
         browser.input(xpath=f"//li[@data-value='{company_size}']", click=True)
     if agree:
-        browser.input(xpath="//input[@name='gdpr_consent']", click=True)
+        browser.input(xpath='//div[contains(@class, "custom-checkbox")]', click=True)
+#        browser.input(xpath="//input[@name='gdpr_consent']", click=True)
     time.sleep(1)
     browser.input(xpath='//button[text()="Get a demo"]', click=True)
     time.sleep(4)
