@@ -174,3 +174,6 @@ class SimpleBrowser:
 
     def get_current_url(self):
         return self.driver.current_url
+
+    def set_window_size(self, width, height):
+        self.driver.set_window_size(width, height)
