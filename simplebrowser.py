@@ -17,39 +17,33 @@ logger = logging.getLogger(__name__)
 class SimpleBrowser:
 
     @classmethod
-    def __create_chrome_driver(cls, device):
+    def __create_chrome_driver(cls, width, height):
+        assert width
+        assert height
         options = Options()
-        if device == 'nexus':
-            mobile_emulation = {
-                "deviceMetrics": {"width": 360, "height": 640, "pixelRatio": 3.0},
-                "userAgent": "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"}
-            options.add_experimental_option(
-                "mobileEmulation", mobile_emulation)
-        else:
-            options.add_argument("--window-size=1920,1080")
+        options.add_argument("--window-size={width},{height}")
         driver = webdriver.Chrome(options=options)
         return driver
 
     @classmethod
-    def __create_safari_driver(cls, device):
+    def __create_safari_driver(cls, width, height):
         driver = webdriver.Safari()
-        driver.set_window_size(1440, 900)
+        driver.set_window_size(width, height)
         return driver
 
     @classmethod
-    def __create_driver(cls, browser, device):
+    def __create_driver(cls, browser, width, height):
         assert browser in ['chrome', 'safari',
                            'firefox', None], 'unsupported browser'
-        assert device in ['nexus', None], 'unsupported device'
         driver = None
         for i in range(0, 3):
             try:
                 if browser == 'safari':
                     driver = SimpleBrowser.__create_safari_driver(
-                        device=device)
+                        width=width, height=height)
                 if browser == 'chrome' or not browser:
                     driver = SimpleBrowser.__create_chrome_driver(
-                        device=device)
+                        width=width, height=height)
             except SessionNotCreatedException as e:
                 logger.exception('couldnt create session properly')
                 time.sleep(4)
@@ -57,10 +51,10 @@ class SimpleBrowser:
                 break
         return driver
 
-    def __init__(self, browser='chrome', device=None):
+    def __init__(self, browser, width, height):
         self.browser = browser
         self.driver = SimpleBrowser.__create_driver(
-            browser=browser, device=device)
+            browser=browser, width=width, height=height)
         assert self.driver, 'unable to initialize browser properly'
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
