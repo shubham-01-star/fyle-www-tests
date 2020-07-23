@@ -171,3 +171,6 @@ class SimpleBrowser:
 
     def is_tablet(self):
         return self.get_width() >= 425 and self.get_width() < 1024
+
+    def get_current_url(self):
+        return self.driver.current_url
