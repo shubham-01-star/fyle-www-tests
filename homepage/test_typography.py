@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture
 def browser(module_browser, base_url):
-    assert module_browser.is_desktop(), 'this test can only be run on desktops'
     module_browser.get(base_url)
     return module_browser
 

@@ -37,7 +37,7 @@ def assert_other_section(browser, section):
         if is_logo_section:
             assert font_size == '16px', 'Font size of logo section is wrong'
         else:
-            assert font_size == '20px', f'Font size of h2 is wrong for {text}'
+            assert font_size == '24px', f'Font size of h2 is wrong for {text}'
     assert font_weight == '700', f'Font weight of h2 is wrong for {text}'
 
 def assert_typography(browser):
