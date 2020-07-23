@@ -30,4 +30,6 @@ def module_browser(base_url):
    sb = SimpleBrowser(browser=browser, width=width, height=height)
    sb.get(base_url)
    sb.click(xpath="//span[contains(@class, 'banner-close')]")
-   return sb
+   yield sb
+   logger.debug('shutting down browser')
+   del sb
