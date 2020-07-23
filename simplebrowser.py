@@ -156,3 +156,18 @@ class SimpleBrowser:
         for d in self.driver.find_elements_by_xpath("//div"):
             self.driver.execute_script(
                 "arguments[0]['style']['border']='1px solid black';", d)
+
+    def get_width(self):
+        return self.driver.get_window_size()['width']
+
+    def get_height(self):
+        return self.driver.get_window_size()['height']
+
+    def is_desktop(self):
+        return self.get_width() >= 1024
+
+    def is_mobile(self):
+        return self.get_width() < 425
+
+    def is_tablet(self):
+        return self.get_width() >= 425 and self.get_width() < 1024
