@@ -21,7 +21,13 @@ class SimpleBrowser:
         assert width
         assert height
         options = Options()
-        options.add_argument("--window-size={width},{height}")
+        options.add_argument(f'--window-size={width},{height}')
+        # if width < 450:
+        #     mobile_emulation = {
+        #         'deviceMetrics': 
+        #             { 'width': width, 'height': height, 'pixelRatio': 3.0}
+        #     }
+        #     options.add_experimental_option("mobileEmulation", mobile_emulation)
         driver = webdriver.Chrome(options=options)
         return driver
 
