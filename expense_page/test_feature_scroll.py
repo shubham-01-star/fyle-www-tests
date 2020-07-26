@@ -22,5 +22,5 @@ def test_feature_scroll(browser):
     time.sleep(2)
     e = browser.find(xpath="//section[@id='expense-reporting']")
     if abs(e.location['y'] - browser.current_scroll_position()) <= 30:
-        result=True
+        result = True
     assert result, 'Not scrolling to the section'
