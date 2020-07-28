@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
@@ -10,6 +11,7 @@ import os
 import time
 import logging
 import random
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -177,3 +179,15 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
+
+    def get_from_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def hover(self, elem, scroll=False):
+        ltag = elem.tag_name.lower() if elem.tag_name else None
+        assert ltag in ['input', 'li', 'button', 'span',
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+        actions = ActionChains(self.driver)
+        actions.move_to_element(elem)
+        actions.perform()
+        return elem
