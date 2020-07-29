@@ -191,3 +191,9 @@ class SimpleBrowser:
         actions.move_to_element(elem)
         actions.perform()
         return elem
+
+    def back(self):
+        return self.driver.back()
+
+    def find_by_css(self, css):
+        return self.driver.find_element_by_css_selector(css)
