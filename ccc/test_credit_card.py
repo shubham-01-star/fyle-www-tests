@@ -40,6 +40,14 @@ def margin_bottom_of(element, value):
     return element.value_of_css_property('margin-bottom') == value
 
 
+def padding_of(element, value):
+	return element.value_of_css_property('padding') == value
+
+
+def margin_of(element, value):
+	return element.value_of_css_property('margin') == value
+
+
 #end of common utils
 
 def play_ccc_hero_video(browser):
@@ -214,3 +222,34 @@ def test_space_logo_h2(browser):
 def test_space_card_h2(browser):
     h2 = browser.find("//section[contains(@class, 'explore-fyle-beyond')]//h2")
     assert padding_bottom_of(h2, '20px')
+
+
+def test_hero_space(browser):
+	hero = browser.find("//section[contains(@class, 'feature-pages-hero')]")
+	assert margin_top_of(hero, '30px'), 'Margin top of hero is wrong'
+	assert padding_of(hero, '40px 0px'), 'Padding of hero section is wrong'
+
+
+def test_space_logo_section(browser):
+	section = browser.find("//section[contains(@class, 'customer-logos-v2')]")
+	assert padding_top_of(section, '40px') and padding_bottom_of(section, '80px'), 'Padding of logo section is wrong'
+
+
+def test_padding_sneak_peek(browser):
+	section = browser.find("//section[contains(@class, 'software-sneak-peek-section')]")
+	assert padding_of(section, '40px 0px')
+
+
+def test_badges_padding(browser):
+	section = browser.find("//section[contains(@class, 'fyle-recognition-badges ')]")
+	assert padding_of(section, '40px 0px')
+
+
+def test_testimonial_padding(browser):
+	section = browser.find("//section[contains(@class, 'customer-testimonial')]")
+	assert padding_of(section, '80px 0px 134px')
+
+
+def test_explore_features_padding(browser):
+	section = browser.find("//section[contains(@class, 'explore-fyle-beyond')]")
+	assert padding_of(section, '40px 0px') and margin_top_of(section, '40px')
