@@ -1,7 +1,8 @@
-import time
-from simplebrowser import SimpleBrowser
 import logging
+import time
+
 import pytest
+
 from common.asserts import assert_typography
 from common.utils import resize_browser
 
