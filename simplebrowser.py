@@ -5,17 +5,9 @@ import time
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options
-<<<<<<< HEAD
-import os
-import time
-import logging
-import random
-import json
-=======
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
->>>>>>> master
 
 logger = logging.getLogger(__name__)
 
