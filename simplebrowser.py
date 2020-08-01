@@ -1,16 +1,21 @@
+import logging
+import random
+import time
+
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options
+<<<<<<< HEAD
 import os
 import time
 import logging
 import random
 import json
+=======
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+>>>>>>> master
 
 logger = logging.getLogger(__name__)
 
@@ -23,12 +28,6 @@ class SimpleBrowser:
         assert height
         options = Options()
         options.add_argument(f'--window-size={width},{height}')
-        # if width < 450:
-        #     mobile_emulation = {
-        #         'deviceMetrics': 
-        #             { 'width': width, 'height': height, 'pixelRatio': 3.0}
-        #     }
-        #     options.add_experimental_option("mobileEmulation", mobile_emulation)
         driver = webdriver.Chrome(options=options)
         return driver
 
@@ -43,7 +42,7 @@ class SimpleBrowser:
         assert browser in ['chrome', 'safari',
                            'firefox', None], 'unsupported browser'
         driver = None
-        for i in range(0, 3):
+        for _ in range(0, 3):
             try:
                 if browser == 'safari':
                     driver = SimpleBrowser.__create_safari_driver(
@@ -51,7 +50,7 @@ class SimpleBrowser:
                 if browser == 'chrome' or not browser:
                     driver = SimpleBrowser.__create_chrome_driver(
                         width=width, height=height)
-            except SessionNotCreatedException as e:
+            except SessionNotCreatedException:
                 logger.exception('couldnt create session properly')
                 time.sleep(4)
             if driver:
@@ -91,7 +90,8 @@ class SimpleBrowser:
         return self.driver.execute_script("return window.pageYOffset")
 
     def scroll_down_page(self, max_speed=300):
-        current_scroll_position, new_height= 0, 1
+        current_scroll_position = 0
+        new_height = 1
         while current_scroll_position <= new_height:
             delta = random.randint(1, max_speed)
             current_scroll_position += delta
@@ -108,7 +108,7 @@ class SimpleBrowser:
                 pos = 0
             self.driver.execute_script(f'window.scrollTo(0, {pos});')
             time.sleep(random.uniform(0.0, 1.0))
- 
+
     def find(self, xpath, scroll=False):
         l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
         if scroll:
@@ -178,6 +178,3 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
-
-    def get_from_local_storage(self, key):
-        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))

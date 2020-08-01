@@ -1,13 +1,13 @@
-from simplebrowser import SimpleBrowser
 import logging
 import os
-import time
+
+from simplebrowser import SimpleBrowser
 
 logger = logging.getLogger(__name__)
 
 resolutions = {
-    'desktop_1': {'width': 1536, 'height': 864 },
-    'mobile_1': {'width': 414, 'height': 896 }
+    'desktop_1': {'width': 1536, 'height': 864},
+    'mobile_1': {'width': 414, 'height': 896}
 }
 
 def create_browser():

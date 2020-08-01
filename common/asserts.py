@@ -1,7 +1,4 @@
-import time
-from simplebrowser import SimpleBrowser
 import logging
-import pytest
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +7,6 @@ def assert_hero_section(browser, section):
     assert len(h1s) == 1, 'Hero section should have 1 h1'
     h1 = h1s[0]
     font_size = h1.value_of_css_property('font-size')
-    font_weight = h1.value_of_css_property('font-weight')
     if browser.is_desktop():
         assert font_size == '50px', 'Hero section h1 font size is wrong'
     else:
@@ -47,9 +43,3 @@ def assert_typography(browser):
     assert_hero_section(browser=browser, section=hero_section)
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
-
-def assert_nothing_sticking_out(browser):    
-    # TODO: logic for this needs to be written
-    # Walk each section and ensure for every parent, children's boundaries are completely contained 
-    # within parents' boundaries 
-    pass
