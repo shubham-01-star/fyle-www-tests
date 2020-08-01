@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
@@ -170,3 +171,10 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
+
+    def get_from_local_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+    
+    def get_computed_style(self, xpath, key, scroll=False):
+        l = self.find(xpath, scroll)
+        return l.value_of_css_property(key)

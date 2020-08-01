@@ -22,19 +22,26 @@ def test_bcp_redirection(browser):
 
 # check toggle of compare plans table
 def test_compareplan_table(browser):
-    e_hidden = browser.find(xpath="//div[contains(@class, 'feature-table') and contains(@class, 'd-none')]")
+    table_display = browser.get_computed_style(xpath="//div[contains(@class, 'feature-table')]", key="display")
+    assert table_display == 'none', 'Compare all plans table is already open, by default'
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    e_visible = browser.find(xpath="//div[contains(@class, 'feature-table') and not(contains(@class, 'd-none'))]")
-    assert e_hidden and e_visible, 'Not opening compare all plans table'
+    table_display = browser.get_computed_style(xpath="//div[contains(@class, 'feature-table')]", key="display")
+    assert table_display == 'flex', 'Compare all plans table is not opening'
 
-# check the ctas present inside the table open correct forms
+# check the download plans cta present inside the compare all plans table
 def test_download_cta(browser):
+    time.sleep(3)
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     browser.click(xpath="//button[contains(text(), 'Download all plans')]")
-    download_modal = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
-    assert download_modal and download_modal.is_displayed(), 'All feature modal is missing'
-    browser.click(xpath="//button[contains(@class, 'close')]")
-    assert download_modal.is_displayed() == False, 'All feature modal is still open'
+    download_form_display = browser.get_computed_style(xpath="//form[@id='contact-us-form-feature-download']", key="display")
+    assert download_form_display == 'block', 'All feature download form is not open'
+
+def test_demo_cta(browser):
+    time.sleep(3)
+    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
+    browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
+    demo_form_display = browser.get_computed_style(xpath="//form[@id='contact-us-form']", key="display")
+    assert demo_form_display == 'block', 'Demo form is not open'
 
 # check pricing for US and India
 def test_pricing(browser):
