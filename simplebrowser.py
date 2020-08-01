@@ -179,5 +179,5 @@ class SimpleBrowser:
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
 
-    def get_from_storage(self, key):
+    def get_from_local_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
