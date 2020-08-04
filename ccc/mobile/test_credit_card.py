@@ -59,9 +59,7 @@ def test_space_h3_subtext(browser):
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_space_travel_benefits(browser):
     travel_benefits_row = browser.find("//div[contains(@class, 'travel-request-benefits')]")
-    row_padding_top = travel_benefits_row.value_of_css_property('padding-top')
-    row_padding_bottom = travel_benefits_row.value_of_css_property('padding-bottom')
-    assert row_padding_top == '40px' and row_padding_bottom == '20px', 'Padding top or bottom is wrong'
+    assert padding_top_of(travel_benefits_row, '40px') and padding_bottom_of(row_padding_bottom, '20px'), 'Padding top or bottom is wrong'
 
 
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
@@ -74,7 +72,7 @@ def test_space_benefit_text(browser):
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_space_feature_solution(browser):
     feature_solution_row = browser.find("//div[contains(@class, 'feature-pages-solution')]")
-    assert padding_top_of(feature_solution_row, '30px'), f'Padding top is incorrect, the correct value is 40px, but {row_padding_top} found'
+    assert padding_top_of(feature_solution_row, '30px'), f'Padding top is incorrect, the correct value is 30px, but {row_padding_top} found'
 
 
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)

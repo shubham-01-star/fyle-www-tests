@@ -50,21 +50,17 @@ def margin_of(element, value):
 
 #end of common utils
 
-def play_ccc_hero_video(browser):
+def test_ccc_video(browser):
     time.sleep(1)
     browser.click(xpath="//div[contains(@class, 'play-button')]")
     time.sleep(5)
-
-
-def test_ccc_video(browser):
-    play_ccc_hero_video(browser)
     e = browser.find(xpath="//div[contains(@class, 'feature-hero-video')]//iframe")
     assert e and e.is_displayed(), 'Video not played'
 
 
 def test_video_thumbnail(browser):
     browser.find("//div[contains(@class, 'feature-hero-video')]//img", scroll=True)
-    img = browser.driver.find_elements_by_xpath("//div[contains(@class, 'feature-hero-video')]//div[contains(@class, 'youtube')]//img")
+    img = browser.find("//div[contains(@class, 'feature-hero-video')]//div[contains(@class, 'youtube')]//img")
     script = "return(typeof arguments[0].naturalWidth!=\"undefined\" && arguments[0].naturalWidth>0)"
     time.sleep(1)
     e = browser.driver.execute_script(script, img[0])
@@ -77,7 +73,6 @@ def test_customer_logo(browser):
 
     if country == 'India':
         logo_div = browser.find("//div[contains(@class, 'customer-logo-non-india') and contains(@class, 'd-none')]")
-        logger.info(logo_div)
         assert logo_div, 'Found an US image in Indian IP'
     else:
         logo_div = browser.find("//div[contains(@class, 'customer-logo-india') and contains(@class, 'd-none')]")
@@ -132,14 +127,14 @@ def test_space_h2_logo(browser):
     assert check_spacing(h2, logo, 40), 'Spacing between h2 and logo is wrong'
 
 
-def test_cards_url(browser):
+def test_cards_url(browser, base_url):
     links = []
     urls = [
-        'https://ww2.fylehq.com/travel-expense-management',
-        'https://ww2.fylehq.com/expense-management/expense-analytics',
-        'https://ww2.fylehq.com/expense-policy',
-        'https://ww2.fylehq.com/expense-report-software',
-        'https://ww2.fylehq.com/expense-management'
+        '/travel-expense-management',
+        '/expense-management/expense-analytics',
+        '/expense-policy',
+        '/expense-report-software',
+        '/expense-management'
     ]
     cards = browser.find_many("//section[contains(@class, 'explore-fyle-beyond')]//div[contains(@class, 'feature-blocks')]//a")
 
@@ -148,7 +143,7 @@ def test_cards_url(browser):
 
     for i in range(len(links)):
         browser.get(links[i])
-        assert urls[i] == browser.get_current_url()
+        assert (base_url + urls[i]) == browser.get_current_url()
         browser.back()
 
 

@@ -183,10 +183,10 @@ class SimpleBrowser:
     def get_from_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
-    def hover(self, elem, scroll=False):
+    def hover(self, elem):
         ltag = elem.tag_name.lower() if elem.tag_name else None
-        assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+        assert ltag in ['li', 'button', 'span',
+                        'a', 'div'], 'xpath did not return proper element'
         actions = ActionChains(self.driver)
         actions.move_to_element(elem)
         actions.perform()
