@@ -2,6 +2,8 @@ import time
 import logging
 import pytest
 
+from common.asserts import assert_customer_logo
+
 logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope='function')
@@ -64,15 +66,7 @@ def test_video_thumbnail(browser):
 
 
 def test_customer_logo(browser):
-    ip_info = browser.get_from_storage('ipInfo')
-    country = ip_info['country']
-
-    if country == 'India':
-        logo_div = browser.find("//div[contains(@class, 'customer-logo-non-india') and contains(@class, 'd-none')]")
-        assert logo_div, 'Found an US image in Indian IP'
-    else:
-        logo_div = browser.find("//div[contains(@class, 'customer-logo-india') and contains(@class, 'd-none')]")
-        assert logo_div, 'Found an Indian image in other IP'
+    assert_customer_logo(browser=browser)
 
 
 def test_badges(browser):

@@ -43,3 +43,16 @@ def assert_typography(browser):
     assert_hero_section(browser=browser, section=hero_section)
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
+
+def assert_customer_logo(browser):
+    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.refresh()
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
+
+    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
+    browser.refresh()
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
