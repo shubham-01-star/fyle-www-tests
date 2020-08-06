@@ -1,8 +1,8 @@
-import os
-import time
-from simplebrowser import SimpleBrowser
 import logging
+import time
+
 import pytest
+
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -53,4 +53,3 @@ def test_success(browser):
     time.sleep(2)
     e = browser.find(xpath="//h3[contains(text(), 'Thank')]")
     assert e and e.is_displayed(), 'Not displaying thank you message'
-

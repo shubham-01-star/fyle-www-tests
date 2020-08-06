@@ -73,3 +73,13 @@ To run only one specific test:
 ```    
 python -m pytest homepage/test_getdemo.py::test_success
 ```
+
+# Contributing
+
+Please raise PRs for contributing to tests. Run pylint checks and they're clean before raising a PR. Example:
+
+```
+PYTHONPATH="." pylint homepage/
+```
+
+Include the output of the above command (against your directory) as part of the PR description. If there are any errors or warnings, the PR will not be approved.
