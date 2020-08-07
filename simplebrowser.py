@@ -174,6 +174,12 @@ class SimpleBrowser:
 
     def get_from_local_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_local_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_local_storage(self):
+        self.driver.execute_script("window.localStorage.clear();")
     
     def get_computed_style(self, xpath, key, scroll=False):
         l = self.find(xpath, scroll)
@@ -185,4 +191,3 @@ class SimpleBrowser:
     def scroll_into_view(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
-

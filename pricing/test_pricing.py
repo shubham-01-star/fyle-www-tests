@@ -14,7 +14,7 @@ def browser(module_browser, base_url):
     module_browser.get(base_url + "/pricing")
     return module_browser
 
-# check pricing page is redirecting to bcp page 
+# check pricing page is redirecting to bcp page
 def test_bcp_redirection(browser):
     browser.click(xpath="//a[contains(text(), 'Click here')]")
     bcp_h1 = browser.find(xpath="//h1")
@@ -95,5 +95,14 @@ def test_collapsible_faq(browser):
     browser.click(xpath="//div[@id='faq-1-heading']")
     assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsing on click'
 
-# check lazy loading of images
-# def test_img_lazy_load(browser):
+@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
+def test_collapsible_details(browser):
+    browser.click(xpath="//a[@id='show-hide-standard']")
+    details_display = browser.get_computed_style(xpath="//a[@id='standard-collapse']", key="display")
+    assert details_display == 'block', 'Show details is not opening the collapsible'
+
+@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
+def test_sticky_table_header(browser):
+    browser.scroll_into_view(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]")
+    header_position = browser.get_computed_style(xpath="//div[contains(@class, 'table-head')]", key="position")
+    assert header_position == 'sticky', 'Compare all plans table header is not sticky'
