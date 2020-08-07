@@ -1,7 +1,6 @@
 import time
 import logging
 import pytest
-from simplebrowser import SimpleBrowser
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -139,7 +138,6 @@ def test_reimbursement_template(browser):
     ]
     template_list = browser.find_many(
         xpath="//h3[contains(text(), 'Reimbursement Claim Sheet Templates')]//parent::div//a[contains(@class, 'template-card')]")
-   
     for i, template in enumerate(template_list):
         time.sleep(2)
         template.click()
