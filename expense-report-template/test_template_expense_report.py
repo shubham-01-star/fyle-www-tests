@@ -2,6 +2,7 @@ import time
 import logging
 import pytest
 from common.utils import resize_browser
+from common.forms import submit_download_excel_form
 
 logger = logging.getLogger(__name__)
 
@@ -30,21 +31,6 @@ def test_download_for_excel_form_modal(browser):
     close_button.click()
     time.sleep(2)
     assert not report_modal.is_displayed(), "modal is not closed"
-
-def submit_download_excel_form(browser, email=None, firstname=None, lastname=None, company_size=None, agree=None):
-    browser.click(xpath="//a[@id='download-excel']")
-    if firstname:
-        browser.input(xpath="//form[contains(@id, 'content-download-form')]//input[@name='firstname']", keys=firstname)
-    if lastname:
-        browser.input(xpath="//form[contains(@id, 'content-download-form')]//input[@name='lastname']", keys=lastname)
-    if email:
-        browser.input(xpath="//form[contains(@id, 'content-download-form')]//input[@name='email']", keys=email)
-    if company_size:
-        browser.click(xpath="//form[contains(@id, 'content-download-form')]//input[@id='number_of_employees']")
-        browser.click(xpath=f"//form[contains(@id, 'content-download-form')]//li[@data-value='{company_size}']")
-    if agree:
-        browser.click(xpath="//form[contains(@id, 'content-download-form')]//div[contains(@class, 'custom-checkbox')]")
-    browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[text()='Download']")
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_required_fields(browser):
