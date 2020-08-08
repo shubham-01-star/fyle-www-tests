@@ -21,12 +21,14 @@ def test_bcp_redirection(browser):
     assert 'Business continuity at Fyle:' in bcp_h1.text, 'Redirection to bcp failed'
 
 # check all 3 pricing cards have cta which open demo form
-# def test_cards_cta(browser):
-#     card_ctas =  browser.find_many("//div[contains(@class, 'card-footer')]")
-#     outside_card = browser.find("//body")
-#     for cta in card_ctas:
-#         cta.click()
-#         outside_card.click()
+def test_cards_cta(browser):
+    card_ctas = browser.find_many("//div[contains(@class, 'card-footer')]")
+    close_form = browser.find("//button[contains(@class, 'close')]")
+    for cta in card_ctas:
+        cta.click()
+        time.sleep(3)
+        close_form.click()
+        time.sleep(3)
 
 # check pricing: Indian prices should be shown
 def test_pricing_text(browser):
