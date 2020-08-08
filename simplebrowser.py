@@ -191,3 +191,6 @@ class SimpleBrowser:
     def scroll_into_view(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
+    
+    def refresh(self):
+        return self.driver.refresh()

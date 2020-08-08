@@ -28,27 +28,28 @@ def test_bcp_redirection(browser):
 #         cta.click()
 #         outside_card.click()
 
-# check pricing for US and India
-def test_pricing(browser):
-    ip_info = browser.get_from_local_storage('ipInfo')
-    country = ip_info['country']
+# check pricing: US prices should be shown
+def test_pricing_text(browser):
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
+    browser.refresh()
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
+    assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Pricing is incorrect for non-India'
+    standard_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-outline-primary') and contains(text(), 'Get started')]")
+    business_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-primary') and contains(text(), 'Get a demo')]")
+    assert standard_card_cta and business_card_cta, 'Pricing cards cta text is wrong'
 
-    assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Pricing is incorrect for non-India ip'
-
-# check annual/monthly toggle functionality
+# check annual/monthly toggle functionality: default should be annually
 def test_pricing_toggle(browser):
-    ip_info = browser.get_from_local_storage('ipInfo')
-    logger.info(ip_info)
-    country = ip_info['country']
+    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
+    browser.refresh()
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
-
+    assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Default annual pricing is incorrect for non-India'
     annual_price_active = browser.find(xpath="//label[contains(text(), 'Annually') and contains(@class, 'switch-active-text-color')]")
     annual_price_active.click()
     monthly_price_active = browser.find(xpath="//label[contains(text(), 'Monthly') and contains(@class, 'switch-active-text-color')]")
-    assert monthly_price_active and standard_price.text == '$6.99' and business_price.text == '$11.99'
+    assert monthly_price_active and standard_price.text == '$6.99' and business_price.text == '$11.99', 'Toggle pricing button is not working'
 
 # check toggle of compare plans table
 def test_compareplan_table(browser):
@@ -80,7 +81,8 @@ def test_scroll_top(browser):
     time.sleep(3)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     time.sleep(3)
-    assert browser.current_scroll_position() == 412, 'Scroll top is not working'
+    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]")
+    assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
 def test_collapsible_faq(browser):

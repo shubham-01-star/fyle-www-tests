@@ -28,14 +28,16 @@ def test_bcp_redirection(browser):
 #         cta.click()
 #         outside_card.click()
 
-# check pricing for US and India
-def test_pricing(browser):
-    ip_info = browser.get_from_local_storage('ipInfo')
-    country = ip_info['country']
+# check pricing: Indian prices should be shown
+def test_pricing_text(browser):
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.refresh()
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
-
-    assert standard_price.text == 'Custom Pricing' and business_price.text == 'Custom Pricing', 'Pricing text is incorrect'
+    assert standard_price.text == 'Custom pricing' and business_price.text == 'Custom pricing', 'Pricing is incorrect for India'
+    standard_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-outline-primary') and contains(text(), 'Contact us')]")
+    business_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-primary') and contains(text(), 'Contact us')]")
+    assert standard_card_cta and business_card_cta, 'Pricing cards cta text is wrong'
     
 # check toggle of compare plans table
 def test_compareplan_table(browser):
@@ -67,7 +69,8 @@ def test_scroll_top(browser):
     time.sleep(3)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     time.sleep(3)
-    assert browser.current_scroll_position() == 412, 'Scroll top is not working'
+    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]")
+    assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
 def test_collapsible_faq(browser):
