@@ -170,3 +170,7 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
+
+    def get_computed_style(self, xpath, key, scroll=False):
+        l = self.find(xpath, scroll)
+        return l.value_of_css_property(key)
