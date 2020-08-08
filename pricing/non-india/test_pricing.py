@@ -91,6 +91,7 @@ def test_collapsible_faq(browser):
     browser.click(xpath="//div[@id='faq-1-heading']")
     assert faq_answer.is_displayed(), 'FAQ answer is not opening on click'
     browser.click(xpath="//div[@id='faq-1-heading']")
+    time.sleep(2)
     assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsing on click'
 
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
