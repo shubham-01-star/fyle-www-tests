@@ -35,25 +35,8 @@ def test_pricing(browser):
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
 
-    if country == 'India':
-        assert standard_price.text == 'Custom Pricing' and business_price.text == 'Custom Pricing', 'Pricing text is incorrect'
-    else:
-        assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Pricing is incorrect for non-India ip'
-
-# check annual/monthly toggle functionality
-def test_pricing_toggle(browser):
-    ip_info = browser.get_from_local_storage('ipInfo')
-    logger.info(ip_info)
-    country = ip_info['country']
-    standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
-    business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
-
-    if country != 'India':
-        annual_price_active = browser.find(xpath="//label[contains(text(), 'Annually') and contains(@class, 'switch-active-text-color')]")
-        annual_price_active.click()
-        monthly_price_active = browser.find(xpath="//label[contains(text(), 'Monthly') and contains(@class, 'switch-active-text-color')]")
-        assert monthly_price_active and standard_price.text == '$6.99' and business_price.text == '$11.99'
-
+    assert standard_price.text == 'Custom Pricing' and business_price.text == 'Custom Pricing', 'Pricing text is incorrect'
+    
 # check toggle of compare plans table
 def test_compareplan_table(browser):
     table_display = browser.get_computed_style(xpath="//div[contains(@class, 'feature-table')]", key="display")
