@@ -5,6 +5,7 @@ import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -103,12 +104,15 @@ class SimpleBrowser:
             time.sleep(random.uniform(0.0, 1.0))
 
     def find(self, xpath, scroll=False):
-        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-        if scroll:
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
-            time.sleep(1)
-            l = self.wait.until(
-                EC.presence_of_element_located((By.XPATH, xpath)))
+        try:
+            l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            if scroll:
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
+                time.sleep(1)
+                l = self.wait.until(
+                    EC.presence_of_element_located((By.XPATH, xpath)))
+        except TimeoutException:
+            l = False
         return l
 
     def find_many(self, xpath):
@@ -194,3 +198,8 @@ class SimpleBrowser:
     
     def refresh(self):
         return self.driver.refresh()
+
+    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
