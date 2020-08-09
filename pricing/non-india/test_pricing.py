@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + "/pricing")
+    module_browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
+    module_browser.refresh()
     time.sleep(1)
     return module_browser
 
@@ -36,8 +38,6 @@ def test_cards_cta(browser):
 # check pricing: US prices should be shown
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_pricing_text(browser):
-    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
-    browser.refresh()
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
     assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Pricing is incorrect for non-India'
@@ -48,8 +48,6 @@ def test_pricing_text(browser):
 # check annual/monthly toggle functionality: default should be annually
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_pricing_toggle(browser):
-    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
-    browser.refresh()
     standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
     business_price = browser.find(xpath="//h1[contains(@class, 'business-price')]")
     assert business_price.text == '$8.99' and standard_price.text == '$4.99', 'Default annual pricing is incorrect for non-India'
