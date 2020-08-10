@@ -1,6 +1,8 @@
 import time
 import logging
 import pytest
+
+from common.asserts import assert_overflowing
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -28,4 +30,4 @@ def test_collpasing_section(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_overflowing(browser):
-    assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
+    assert_overflowing(browser=browser)

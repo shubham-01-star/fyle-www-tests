@@ -43,3 +43,6 @@ def assert_typography(browser):
     assert_hero_section(browser=browser, section=hero_section)
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
+
+def assert_overflowing(browser):
+    assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
