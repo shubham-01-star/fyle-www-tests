@@ -1,6 +1,6 @@
 import logging
 import random
-import time
+from time import sleep
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
@@ -45,7 +45,7 @@ class SimpleBrowser:
                         width=width, height=height)
             except SessionNotCreatedException:
                 logger.exception('couldnt create session properly')
-                time.sleep(4)
+                sleep(4)
             if driver:
                 break
         return driver
@@ -59,12 +59,12 @@ class SimpleBrowser:
         self.wait = WebDriverWait(self.driver, self.timeout)
 
     def close(self):
-        time.sleep(1)
+        sleep(1)
         driver = self.driver
         self.driver = None
         if driver:
             driver.close()
-        time.sleep(2)
+        sleep(2)
 
     def __del__(self):
         logger.debug('destructor called')
@@ -89,7 +89,7 @@ class SimpleBrowser:
             delta = random.randint(1, max_speed)
             current_scroll_position += delta
             self.driver.execute_script(f'window.scrollTo(0, {current_scroll_position});')
-            time.sleep(random.uniform(0.0, 1.0))
+            sleep(random.uniform(0.0, 1.0))
             new_height = self.current_height()
 
     def scroll_up_page(self, max_speed=300):
@@ -100,14 +100,18 @@ class SimpleBrowser:
             if pos < 0:
                 pos = 0
             self.driver.execute_script(f'window.scrollTo(0, {pos});')
-            time.sleep(random.uniform(0.0, 1.0))
+            sleep(random.uniform(0.0, 1.0))
+
+    def scroll_down(self, pixels_to_scroll):
+        self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
+        sleep(random.uniform(0.0, 1.0))
 
     def find(self, xpath, scroll=False):
         try:
             l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
             if scroll:
                 self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
-                time.sleep(1)
+                sleep(1)
                 l = self.wait.until(
                     EC.presence_of_element_located((By.XPATH, xpath)))
         except TimeoutException:
@@ -137,9 +141,9 @@ class SimpleBrowser:
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
-        time.sleep(0.1)
+        sleep(0.1)
         l.send_keys(keys)
-        time.sleep(0.1)
+        sleep(0.1)
         return l
 
     def close_windows(self):

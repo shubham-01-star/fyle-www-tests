@@ -3,7 +3,9 @@ import logging
 import pytest
 
 from common.utils import resize_browser
-from common.asserts import assert_cards_redirection, assert_cta_click_and_modal_show
+from common.asserts import assert_cards_redirection
+from common.asserts import assert_cta_click_and_modal_show
+from common.asserts import assert_collapsible_feature_comparison_table
 
 logger = logging.getLogger(__name__)
 
@@ -23,29 +25,8 @@ def test_hero_section_cta(browser):
     assert_cta_click_and_modal_show(browser, cta_xpath)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_table(browser):
-    section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
-    assert section, 'G2 rating table not found'
-    divs = browser.find_many(xpath='//div[contains(@class, "accordion-toggle")]')
-    num = 1
-    for div in divs:
-        div_class_names = div.get_attribute('class')
-        feature_contents = browser.find(xpath=f'//div[contains(@id, "feature-main-row{num}")]')
-        assert feature_contents, 'Feature contents are not present'
-
-        # Check if the feature section is initially collapsed
-        # If it's collapsed, then check if it's opening up and it's sub-sections are displayed or not
-        # Else it's open, then check if it's collapsing successfully
-        if 'accordion-toggle' in div_class_names and 'collapsed' in div_class_names:
-            div.click()
-            sleep(3)
-            assert feature_contents.is_displayed(), f'Unable to see contents of feature: {div.text}'
-        else:
-            div.click()
-            sleep(3)
-            assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
-        num += 1
-        sleep(2)
+def test_g2_review_table(browser):
+    assert_collapsible_feature_comparison_table(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_bottom_section_cards(browser):
