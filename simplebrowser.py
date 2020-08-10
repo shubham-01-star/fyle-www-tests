@@ -233,5 +233,5 @@ class SimpleBrowser:
     def set_local_storage(self, key, value):
         self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
 
-    def clear_local_storage(self, key):
+    def clear_local_storage(self):
         self.driver.execute_script("window.localStorage.clear();")
