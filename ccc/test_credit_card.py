@@ -60,11 +60,9 @@ def test_ccc_video(browser):
 
 def test_video_thumbnail(browser):
     browser.find("//div[contains(@class, 'feature-hero-video')]//img", scroll=True)
+    time.sleep(2)
     img = browser.find("//div[contains(@class, 'feature-hero-video')]//div[contains(@class, 'youtube')]//img")
-    script = "return(typeof arguments[0].naturalWidth!=\"undefined\" && arguments[0].naturalWidth>0)"
-    time.sleep(1)
-    e = browser.driver.execute_script(script, img[0])
-    assert e, 'Image not loaded'
+    assert img.is_displayed(), 'Video thumbnail image not loaded'
 
 
 def test_customer_logo(browser):
@@ -142,15 +140,19 @@ def test_cards_url(browser, base_url):
 
 
 def test_modal_open(browser):
-    cta = browser.click("//section[contains(@class, 'long-background')]//a[contains(@id, 'best-expense-video-id')]")
-    modal = browser.find("//div[contains(@id, 'contact-us-modal') and contains(@style, 'display: block;')]")
-    assert cta and modal, 'Modal is not opened'
+    browser.click("//section[contains(@class, 'long-background')]//a[contains(@id, 'best-expense-video-id')]")
+    time.sleep(2)
+    modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
+    time.sleep(0.5)
+    assert modal.is_displayed(), 'Modal is not opened'
 
 
 def test_modal_open_bottom(browser):
-    cta = browser.find_by_css(".explore-fyle-beyond .container:last-child").click()
-    modal = browser.find("//div[contains(@id, 'contact-us-modal') and contains(@style, 'display: block;')]")
-    assert cta and modal, 'Modal is not opened'
+    browser.click("//section[contains(@class, 'explore-fyle-beyond')]//a[contains(@class, 'new-contact-us-demo-form')]")
+    time.sleep(2)
+    modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
+    time.sleep(0.5)
+    assert modal.is_displayed(), 'Modal is not opened'
 
 
 def test_sneak_peek_bottom_features(browser):

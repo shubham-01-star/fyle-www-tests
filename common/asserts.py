@@ -1,5 +1,5 @@
-import logging
 import time
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -48,12 +48,14 @@ def assert_typography(browser):
 def assert_customer_logo(browser):
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     browser.refresh()
+    time.sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     browser.refresh()
+    time.sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
@@ -78,21 +80,21 @@ def get_active_index(carousel_items):
     return active_index
 
 def assert_customer_testimonial(browser):
+    time.sleep(3)
     carousel_items = browser.find_many("//div[contains(@class, 'carousel-item')]")
     carousel_length = len(carousel_items)
     current_active_index = get_active_index(carousel_items)
 
-    browser.scroll_down(2600)
-    time.sleep(3)
+    time.sleep(1)
     browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
     time.sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
 
     browser.refresh()
+    time.sleep(1)
     carousel_items = browser.find_many("//div[contains(@class, 'carousel-item')]")
-    browser.scroll_down(2600)
-    time.sleep(3)
+    time.sleep(1)
     browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
     time.sleep(1)
     active_index = get_active_index(carousel_items)
