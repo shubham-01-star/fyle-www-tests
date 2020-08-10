@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    time.sleep(0.5)
+    sleep(0.5)
     module_browser.get(base_url + '/templates/expense-reports')
     return module_browser
 
@@ -49,7 +49,7 @@ def test_success_download_form(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_redirection_of_h2_cards(browser):
-    time.sleep(2)
+    sleep(2)
     card_link = 'https://ww2.fylehq.com/expense-report-software'
     card_blocks = [
         "//h2[contains(text(), 'See how expense reports should be done in 2020.')]//parent::a[contains(@class, 'report-template-style')]",
@@ -57,17 +57,17 @@ def test_redirection_of_h2_cards(browser):
         "//h2[contains(text(), 'Log mileage & scan receipts on the same app.')]//parent::a[contains(@class, 'report-template-style')]"
     ]
     for i, card_block in enumerate(card_blocks):
-        time.sleep(2)
+        sleep(2)
         card = browser.find(xpath=card_block, scroll=True)
         card.click()
         assert browser.get_current_url() == card_link, f"{ i+1 } card link redirection is not successful"
-        time.sleep(2)
+        sleep(2)
         browser.back()
         browser.close_windows()
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_expense_report_and_mileage_log_template_urls(browser):
-    time.sleep(2)
+    sleep(2)
     template_links = [
         'https://templates.office.com/en-us/expense-report-tm04099206',
         'https://templates.office.com/en-us/Travel-expense-report-form-TM03463093',
@@ -77,18 +77,18 @@ def test_expense_report_and_mileage_log_template_urls(browser):
     template_list = browser.find_many(
         xpath="//h3[not(contains(text(), 'Reimbursement Claim Sheet Templates'))]//parent::div//a[contains(@class, 'template-card')]")
     for i, template in enumerate(template_list):
-        time.sleep(2)
+        sleep(2)
         template.click()
-        time.sleep(2)
+        sleep(2)
         browser.switch_tab_next(1)
-        time.sleep(5)
+        sleep(5)
         assert browser.get_current_url() == template_links[i], "Expense report/ mileage log template url is not correct"
         browser.close_windows()
-        time.sleep(2)
+        sleep(2)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_reimbursement_template(browser):
-    time.sleep(2)
+    sleep(2)
     template_links = [
         'https://d2myx53yhj7u4b.cloudfront.net/sites/default/files/IC-ExpenseSheet.xlsx',
         'https://d2myx53yhj7u4b.cloudfront.net/sites/default/files/IC-MonthlyIncomeAndExpense.xlsx'
@@ -96,11 +96,11 @@ def test_reimbursement_template(browser):
     template_list = browser.find_many(
         xpath="//h3[contains(text(), 'Reimbursement Claim Sheet Templates')]//parent::div//a[contains(@class, 'template-card')]")
     for i, template in enumerate(template_list):
-        time.sleep(2)
+        sleep(2)
         template.click()
-        time.sleep(5)
+        sleep(5)
         last_downloaded_filename = browser.get_downLoadeded_filename()
-        time.sleep(5)
+        sleep(5)
         assert last_downloaded_filename == template_links[i], "Reibursement template downloaded is not correct"
         browser.close_windows()
         

@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    time.sleep(0.5)
+    sleep(0.5)
     module_browser.get(base_url + '/resources/webinars/good-travel-management-partnership-fyle')
     return module_browser
 
