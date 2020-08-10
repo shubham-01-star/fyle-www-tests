@@ -3,6 +3,7 @@ import logging
 import pytest
 
 from common.asserts import assert_overflowing, assert_customer_testimonial, assert_customer_logo, assert_cta_click_and_modal_show
+from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,19 @@ def browser(module_browser, base_url, request):
     time.sleep(0.5)
     module_browser.get(base_url + "/expense-management")
     return module_browser
+
+# check demo form (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_feature_scroll(browser):
