@@ -179,6 +179,9 @@ class SimpleBrowser:
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
 
+    def check_horizontal_overflow(self):
+        return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+
     def get_from_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
@@ -199,6 +202,11 @@ class SimpleBrowser:
 
     def refresh(self):
         return self.driver.refresh()
+
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
+        return l
 
     def scroll_down(self, pixels_to_scroll):
         self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
@@ -226,8 +234,3 @@ class SimpleBrowser:
 
     def clear_local_storage(self, key):
         self.driver.execute_script("window.localStorage.clear();")
-    
-    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
-    def force_click(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].click();", l)

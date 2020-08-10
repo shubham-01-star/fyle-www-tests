@@ -37,6 +37,7 @@ def assert_other_section(browser, section):
             assert font_size == '24px', f'Font size of h2 is wrong for {text}'
     assert font_weight == '700', f'Font weight of h2 is wrong for {text}'
 
+# Commented out the other sections typography because of inconsistencies
 def assert_typography(browser):
     sections = browser.find_many(xpath='//section')
     hero_section = sections[0]
@@ -53,6 +54,9 @@ def assert_thank_you_modal(browser, ty_message):
     assert ty_img and ty_img.is_displayed(), "Thank image is not correct"
     ty_text = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//span[contains(@class, 'ty-box')]").text
     assert ty_text == ty_message, "Thank you message is not correct"
+    
+def assert_overflowing(browser):
+    assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
@@ -107,3 +111,9 @@ def assert_customer_testimonial(browser):
     time.sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
+
+def assert_cta_click_and_modal_show(browser, cta_xpath):
+    browser.click(xpath=cta_xpath)
+    time.sleep(2)
+    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
+    assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
