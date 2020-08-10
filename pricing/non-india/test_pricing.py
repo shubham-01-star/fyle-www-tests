@@ -128,9 +128,11 @@ def test_collapsible_faq(browser):
 # check table header for compare all plans is sticky or not
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_sticky_table_header(browser):
-    browser.scroll_into_view(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]")
-    header_position = browser.get_computed_style(xpath="//div[contains(@class, 'table-head')]", key="position")
-    assert header_position == 'sticky', 'Compare all plans table header is not sticky'
+    browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
+    time.sleep(3)
+    browser.find(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]", scroll=True)
+    header_position = browser.find(xpath="//div[contains(@class, 'table-head')]")
+    assert header_position.value_of_css_property('position') == 'sticky', 'Compare all plans table header is not sticky'
 
 # check collapsible pricing card details in mobile
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)

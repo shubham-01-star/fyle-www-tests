@@ -201,17 +201,8 @@ class SimpleBrowser:
     def clear_local_storage(self, key):
         self.driver.execute_script("window.localStorage.clear();")
     
-    def get_computed_style(self, xpath, key, scroll=False):
-        l = self.find(xpath, scroll)
-        return l.value_of_css_property(key)
-    
     def scroll_down(self, pixels_to_scroll):
         self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
-    
-    # remove; used for scroll true in find
-    def scroll_into_view(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
     
     def refresh(self):
         return self.driver.refresh()
