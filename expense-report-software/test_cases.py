@@ -13,10 +13,14 @@ def browser(module_browser, base_url, request):
     module_browser.get(base_url + "/expense-report-software")
     return module_browser
 
-#OTHER TEST CASES WHICH ARE REQUIRED TO BE ADDED HERE
-#- Hero section cta check
+#OTHER TEST CASES WHICH ARE PENDING TO BE ADDED HERE
 #- Company logos section
 #- Testimonial section
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_hero_section_cta(browser):
+    cta_xpath = '//section[contains(@class, "new-hero")]//div[not(contains(@class, "demo-button-until-banner"))]/a'
+    assert_cta_click_and_modal_show(browser, cta_xpath)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_table(browser):
