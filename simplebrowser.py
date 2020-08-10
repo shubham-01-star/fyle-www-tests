@@ -116,7 +116,8 @@ class SimpleBrowser:
         return l
 
     def find_many(self, xpath):
-        m = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
+        m = self.wait.until(
+            EC.presence_of_all_elements_located((By.XPATH, xpath)))
         return m
 
     def click(self, xpath, scroll=False):
@@ -176,7 +177,22 @@ class SimpleBrowser:
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
 
-    def get_from_local_storage(self, key):
+    def back(self):
+        return self.driver.back()
+
+    def switch_tab_next(self, number):
+        return self.driver.switch_to.window(self.driver.window_handles[number])
+
+    # method to get the downloaded file name
+    def get_downLoadeded_filename(self):
+        self.driver.execute_script("window.open()")
+        # switch to new tab
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        # navigate to chrome downloads
+        self.driver.get('chrome://downloads')
+        return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+
+        def get_from_local_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
     def set_local_storage(self, key, value):
