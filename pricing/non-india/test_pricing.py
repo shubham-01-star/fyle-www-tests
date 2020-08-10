@@ -48,9 +48,11 @@ def test_bcp_redirection(browser):
 def test_cards_cta(browser):
     card_ctas = browser.find_many("//div[contains(@class, 'card-footer')]")
     close_form = browser.find("//button[contains(@class, 'close')]")
-    for cta in card_ctas:
+    demo_form = browser.find(xpath="//form[@id='contact-us-form']")
+    for i, cta in enumerate(card_ctas):
         cta.click()
         time.sleep(3)
+        assert demo_form and demo_form.is_displayed(), f'Demo form is not opening in {i} card'
         close_form.click()
         time.sleep(3)
 

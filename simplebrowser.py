@@ -192,7 +192,7 @@ class SimpleBrowser:
         self.driver.get('chrome://downloads')
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
 
-        def get_from_local_storage(self, key):
+    def get_from_local_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
     def set_local_storage(self, key, value):
