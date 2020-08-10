@@ -176,6 +176,7 @@ class SimpleBrowser:
 
     def check_horizontal_overflow(self):
         return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+
     def get_from_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
