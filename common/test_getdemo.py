@@ -1,9 +1,6 @@
 import logging
 import time
-
 import pytest
-
-# from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
 
