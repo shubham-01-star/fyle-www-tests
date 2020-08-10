@@ -14,6 +14,9 @@ def assert_hero_section(browser, section):
     h2s = section.find_elements_by_xpath('.//h2')
     assert len(h2s) == 0, 'Hero section should have no h2s'
 
+def assert_hero_image(browser):
+    hero_image = browser.find(xpath='//section[contains(@class,  "new-hero")]//img')
+    assert hero_image.is_displayed() == False, 'Hero image is being shown in mobile'
 
 def assert_other_section(browser, section):
     cl = section.get_attribute('class')
