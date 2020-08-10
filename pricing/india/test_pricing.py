@@ -1,8 +1,6 @@
 import logging
 import time
-
 import pytest
-
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -12,8 +10,17 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + "/pricing")
-    time.sleep(1)
+    module_browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    module_browser.refresh()
+    time.sleep(5)
     return module_browser
+
+# check customer logo section (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_customer_logo(browser):
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
 # check pricing page is redirecting to bcp page
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -44,32 +51,32 @@ def test_pricing_text(browser):
     standard_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-outline-primary') and contains(text(), 'Contact us')]")
     business_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-primary') and contains(text(), 'Contact us')]")
     assert standard_card_cta and business_card_cta, 'Pricing cards cta text is wrong'
-    
+
 # check toggle of compare plans table
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_compareplan_table(browser):
-    table_display = browser.get_computed_style(xpath="//div[contains(@class, 'feature-table')]", key="display")
-    assert table_display == 'none', 'Compare all plans table is already open, by default'
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    table_display = browser.get_computed_style(xpath="//div[contains(@class, 'feature-table')]", key="display")
-    assert table_display == 'flex', 'Compare all plans table is not opening'
+    table = browser.find(xpath="//div[contains(@class, 'feature-table')]")
+    assert table and table.is_displayed() is False, 'Compare all plans table is already open, by default'
+    browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
+    assert table and table.is_displayed(), 'Compare all plans table is not opening'
 
 # check the ctas present inside the compare all plans table
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_download_cta(browser):
     time.sleep(3)
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    browser.click(xpath="//button[contains(text(), 'Download all plans')]")
-    download_form_display = browser.get_computed_style(xpath="//form[@id='contact-us-form-feature-download']", key="display")
-    assert download_form_display == 'block', 'All feature download form is not open'
+    browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
+    browser.force_click(xpath="//button[contains(text(), 'Download all plans')]")
+    time.sleep(3)
+    download_form = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
+    assert download_form and download_form.is_displayed(), 'All feature download form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_demo_cta(browser):
     time.sleep(3)
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
-    demo_form_display = browser.get_computed_style(xpath="//form[@id='contact-us-form']", key="display")
-    assert demo_form_display == 'block', 'Demo form is not open'
+    demo_form = browser.find(xpath="//form[@id='contact-us-form']")
+    assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_scroll_top(browser):
@@ -86,12 +93,12 @@ def test_scroll_top(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collapsible_faq(browser):
     faq_answer = browser.find(xpath="//div[@id='faq-1-content']")
-    assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsed by default'
+    assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsed by default'
     browser.click(xpath="//div[@id='faq-1-heading']")
     assert faq_answer.is_displayed(), 'FAQ answer is not opening on click'
     browser.click(xpath="//div[@id='faq-1-heading']")
     time.sleep(2)
-    assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsing on click'
+    assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsing on click'
 
 # check table header for compare all plans is sticky or not
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)

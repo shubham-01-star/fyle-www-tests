@@ -1,9 +1,8 @@
 import logging
 import time
-
 import pytest
-
 from common.utils import resize_browser
+from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
 
@@ -12,10 +11,30 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + "/pricing")
-    module_browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"Not India"}')
+    module_browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     module_browser.refresh()
-    time.sleep(1)
+    time.sleep(5)
     return module_browser
+
+# check customer logo section (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_logo(browser):
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
+
+# check demo form (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
 
 # check pricing page is redirecting to bcp page
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -60,7 +79,7 @@ def test_pricing_toggle(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_compareplan_table(browser):
     table = browser.find(xpath="//div[contains(@class, 'feature-table')]")
-    assert table and table.is_displayed() == False, 'Compare all plans table is already open, by default'
+    assert table and table.is_displayed() is False, 'Compare all plans table is already open, by default'
     browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
     assert table and table.is_displayed(), 'Compare all plans table is not opening'
 
@@ -97,12 +116,12 @@ def test_scroll_top(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collapsible_faq(browser):
     faq_answer = browser.find(xpath="//div[@id='faq-1-content']")
-    assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsed by default'
+    assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsed by default'
     browser.click(xpath="//div[@id='faq-1-heading']")
     assert faq_answer.is_displayed(), 'FAQ answer is not opening on click'
     browser.click(xpath="//div[@id='faq-1-heading']")
     time.sleep(2)
-    assert faq_answer.is_displayed() == False, 'FAQ answer is not collapsing on click'
+    assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsing on click'
 
 # check table header for compare all plans is sticky or not
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -115,5 +134,5 @@ def test_sticky_table_header(browser):
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_collapsible_details(browser):
     browser.force_click(xpath="//a[@id='show-hide-standard']")
-    details = browser.find(xpath="//a[@id='standard-collapse']")
+    details = browser.find(xpath="//div[@id='standard-collapse']")
     assert details and details.is_displayed(), 'Show details is not opening the collapsible'
