@@ -1,12 +1,14 @@
 import logging
 import random
 import time
+import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 
 logger = logging.getLogger(__name__)
@@ -111,7 +113,8 @@ class SimpleBrowser:
         return l
 
     def find_many(self, xpath):
-        m = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
+        m = self.wait.until(
+            EC.presence_of_all_elements_located((By.XPATH, xpath)))
         return m
 
     def click(self, xpath, scroll=False):
@@ -173,8 +176,47 @@ class SimpleBrowser:
 
     def check_horizontal_overflow(self):
         return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+    def get_from_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_storage(self):
+        self.driver.execute_script("window.localStorage.clear();")
+
+    def hover(self, elem):
+        ltag = elem.tag_name.lower() if elem.tag_name else None
+        assert ltag in ['li', 'button', 'span',
+                        'a', 'div'], 'xpath did not return proper element'
+        actions = ActionChains(self.driver)
+        actions.move_to_element(elem)
+        actions.perform()
+        return elem
+
+    def refresh(self):
+        return self.driver.refresh()
 
     def force_click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].click();", l)
         return l
+
+    def scroll_down(self, pixels_to_scroll):
+        self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
+
+    def back(self):
+        return self.driver.back()
+
+    def switch_tab_next(self, number):
+        return self.driver.switch_to.window(self.driver.window_handles[number])
+
+    # method to get the downloaded file name
+    def get_downLoadeded_filename(self):
+        self.driver.execute_script("window.open()")
+        # switch to new tab
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        # navigate to chrome downloads
+        self.driver.get('chrome://downloads')
+        return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+
