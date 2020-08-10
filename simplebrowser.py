@@ -127,7 +127,7 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
-        time.sleep(2)
+        sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
