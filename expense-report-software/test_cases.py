@@ -1,4 +1,3 @@
-from time import sleep
 import logging
 import pytest
 
@@ -6,6 +5,8 @@ from common.utils import resize_browser
 from common.asserts import assert_cards_redirection
 from common.asserts import assert_cta_click_and_modal_show
 from common.asserts import assert_collapsible_feature_comparison_table
+from common.asserts import assert_customer_logo
+from common.asserts import assert_customer_testimonial
 
 logger = logging.getLogger(__name__)
 
@@ -15,18 +16,22 @@ def browser(module_browser, base_url, request):
     module_browser.get(base_url + "/expense-report-software")
     return module_browser
 
-#OTHER TEST CASES WHICH ARE PENDING TO BE ADDED HERE
-#- Company logos section
-#- Testimonial section
-
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_hero_section_cta(browser):
     cta_xpath = '//section[contains(@class, "new-hero")]//div[not(contains(@class, "demo-button-until-banner"))]/a'
     assert_cta_click_and_modal_show(browser, cta_xpath)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_customer_logo_section(browser):
+    assert_customer_logo(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_g2_review_table(browser):
     assert_collapsible_feature_comparison_table(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_customer_testimonial_section(browser):
+    assert_customer_testimonial(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_bottom_section_cards(browser):

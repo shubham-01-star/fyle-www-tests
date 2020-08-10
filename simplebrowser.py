@@ -1,6 +1,7 @@
 import logging
 import random
 from time import sleep
+import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
@@ -8,6 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 
 logger = logging.getLogger(__name__)
@@ -179,6 +181,31 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
+
+    def get_from_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_storage(self):
+        self.driver.execute_script("window.localStorage.clear();")
+
+    def hover(self, elem):
+        ltag = elem.tag_name.lower() if elem.tag_name else None
+        assert ltag in ['li', 'button', 'span',
+                        'a', 'div'], 'xpath did not return proper element'
+        actions = ActionChains(self.driver)
+        actions.move_to_element(elem)
+        actions.perform()
+        return elem
+
+    def refresh(self):
+        return self.driver.refresh()
+
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
 
     def back(self):
         return self.driver.back()
