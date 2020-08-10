@@ -19,9 +19,9 @@ def browser(module_browser, base_url, request):
 def test_customer_logo(browser):
     assert_customer_logo(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_customer_testimonial(browser):
-#     assert_customer_testimonial(browser)
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_customer_testimonial(browser):
+    assert_customer_testimonial(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_typography(browser):

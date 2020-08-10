@@ -5,6 +5,7 @@ import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -104,12 +105,15 @@ class SimpleBrowser:
             time.sleep(random.uniform(0.0, 1.0))
 
     def find(self, xpath, scroll=False):
-        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-        if scroll:
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
-            time.sleep(1)
-            l = self.wait.until(
-                EC.presence_of_element_located((By.XPATH, xpath)))
+        try:
+            l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            if scroll:
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
+                time.sleep(1)
+                l = self.wait.until(
+                    EC.presence_of_element_located((By.XPATH, xpath)))
+        except TimeoutException:
+            l = False
         return l
 
     def find_many(self, xpath):
@@ -119,6 +123,7 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
+        time.sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
@@ -195,10 +200,6 @@ class SimpleBrowser:
     def refresh(self):
         return self.driver.refresh()
 
-    def force_click(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].click();", l)
-
     def scroll_down(self, pixels_to_scroll):
         self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
 
@@ -216,3 +217,17 @@ class SimpleBrowser:
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+
+    def get_from_local_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_local_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_local_storage(self, key):
+        self.driver.execute_script("window.localStorage.clear();")
+    
+    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
