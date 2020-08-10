@@ -1,3 +1,4 @@
+from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
@@ -43,3 +44,19 @@ def assert_typography(browser):
     assert_hero_section(browser=browser, section=hero_section)
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
+
+def assert_cards_redirection(browser, cards, redirect_to_urls):
+    assert len(cards) > 0, 'Wrong xpath given for cards'
+    for card in cards:
+        card.click()
+        sleep(1)
+        browser.switch_tab_next(1)
+        assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
+        browser.close_windows()
+        sleep(1)
+
+def assert_cta_click_and_modal_show(browser, cta_xpath):
+    browser.click(xpath=cta_xpath)
+    sleep(2)
+    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
+    assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
