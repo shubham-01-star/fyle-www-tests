@@ -203,11 +203,6 @@ class SimpleBrowser:
     def refresh(self):
         return self.driver.refresh()
 
-    def force_click(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].click();", l)
-        return l
-
     def scroll_down(self, pixels_to_scroll):
         self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
 
@@ -232,5 +227,14 @@ class SimpleBrowser:
     def set_local_storage(self, key, value):
         self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
 
-    def clear_local_storage(self, key):
+    def clear_local_storage(self):
         self.driver.execute_script("window.localStorage.clear();")
+<<<<<<< HEAD
+=======
+
+    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
+        return l
+>>>>>>> 2f76eda2a00c52bd29e09a1a65b366e486c7a6b8
