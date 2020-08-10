@@ -2,7 +2,7 @@ import time
 import logging
 import pytest
 
-from common.asserts import assert_overflowing
+from common.asserts import assert_overflowing, assert_customer_testimonial, assert_customer_logo, assert_cta_click_and_modal_show
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -30,4 +30,17 @@ def test_collpasing_section(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_overflowing(browser):
-    assert_overflowing(browser)
+    assert_overflowing(browser=browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_customer_testimonial(browser):
+    assert_customer_testimonial(browser=browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_customer_logo(browser):
+    assert_customer_logo(browser=browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_bottom_section_cta(browser):
+    cta_xpath = '//section[contains(@class, "feature-bottom-section")]//a'
+    assert_cta_click_and_modal_show(browser, cta_xpath)

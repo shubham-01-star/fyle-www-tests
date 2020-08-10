@@ -103,3 +103,9 @@ def assert_customer_testimonial(browser):
     time.sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
+
+def assert_cta_click_and_modal_show(browser, cta_xpath):
+    browser.click(xpath=cta_xpath)
+    time.sleep(2)
+    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
+    assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
