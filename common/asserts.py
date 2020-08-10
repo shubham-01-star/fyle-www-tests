@@ -48,11 +48,9 @@ def assert_collapsible_feature_comparison_table(browser):
     section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
     assert section, 'Collapsible table not found'
     divs = browser.find_many(xpath='//div[contains(@class, "accordion-toggle")]')
-    num = 1
-    for div in divs:
+    for i, div in enumerate(divs):
         div_class_names = div.get_attribute('class')
-        feature_contents = browser.find(xpath=f'//div[contains(@id, "feature-main-row{num}")]')
-        assert feature_contents, 'Sub-contents are not present'
+        sub_contents_div_xpath = f'//div[contains(@id, "feature-main-row{i+1}")]'
 
         # Check if the feature section is initially collapsed
         # If it's collapsed, then check if it's opening up and it's sub-sections are displayed or not
@@ -60,30 +58,31 @@ def assert_collapsible_feature_comparison_table(browser):
         if 'accordion-toggle' in div_class_names and 'collapsed' in div_class_names:
             div.click()
             sleep(3)
+            feature_contents = browser.find(xpath=sub_contents_div_xpath)
             assert feature_contents.is_displayed(), f'Unable to see contents of feature: {div.text}'
         else:
             div.click()
             sleep(3)
+            feature_contents = browser.find(xpath=sub_contents_div_xpath)
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
-        browser.scroll_down(10)
-        num += 1
-        sleep(2)
+        browser.scroll_down(50)
+        sleep(3)
 
 def assert_cards_redirection(browser, cards, redirect_to_urls):
     assert len(cards) > 0, 'Wrong xpath given for cards'
     for card in cards:
-        sleep(1)
         card.click()
-        sleep(1)
+        sleep(2)
         browser.switch_tab_next(1)
         assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
         browser.close_windows()
-        sleep(1)
+        sleep(2)
 
 def assert_cta_click_and_modal_show(browser, cta_xpath):
     browser.click(xpath=cta_xpath)
-    sleep(2)
-    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
+    sleep(3)
+    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]', scroll=True)
+    sleep(3)
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
 
 def assert_customer_logo(browser):
