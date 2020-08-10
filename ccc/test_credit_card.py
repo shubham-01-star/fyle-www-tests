@@ -6,6 +6,7 @@ from common.asserts import assert_customer_logo
 from common.asserts import assert_badges
 from common.asserts import assert_customer_testimonial
 from common.asserts import assert_typography
+from common.asserts import assert_overflowing
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -83,6 +84,9 @@ def test_badges(browser):
 def test_customer_testimonial(browser):
     assert_customer_testimonial(browser=browser)
 
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert_overflowing(browser=browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_sneak_peek(browser):
