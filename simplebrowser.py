@@ -111,7 +111,8 @@ class SimpleBrowser:
         return l
 
     def find_many(self, xpath):
-        m = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
+        m = self.wait.until(
+            EC.presence_of_all_elements_located((By.XPATH, xpath)))
         return m
 
     def click(self, xpath, scroll=False):
