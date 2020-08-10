@@ -127,6 +127,7 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
+        time.sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
@@ -182,6 +183,9 @@ class SimpleBrowser:
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
 
+    def check_horizontal_overflow(self):
+        return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+
     def get_from_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
@@ -206,6 +210,7 @@ class SimpleBrowser:
     def force_click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].click();", l)
+        return l
 
     def back(self):
         return self.driver.back()
@@ -221,3 +226,12 @@ class SimpleBrowser:
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+
+    def get_from_local_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_local_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_local_storage(self, key):
+        self.driver.execute_script("window.localStorage.clear();")

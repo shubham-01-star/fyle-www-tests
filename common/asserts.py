@@ -36,6 +36,7 @@ def assert_other_section(browser, section):
             assert font_size == '24px', f'Font size of h2 is wrong for {text}'
     assert font_weight == '700', f'Font weight of h2 is wrong for {text}'
 
+# Commented out the other sections typography because of inconsistencies
 def assert_typography(browser):
     sections = browser.find_many(xpath='//section')
     hero_section = sections[0]
@@ -84,6 +85,9 @@ def assert_cta_click_and_modal_show(browser, cta_xpath):
     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]', scroll=True)
     sleep(3)
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
+
+def assert_overflowing(browser):
+    assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')

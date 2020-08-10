@@ -7,6 +7,10 @@ from common.asserts import assert_cta_click_and_modal_show
 from common.asserts import assert_collapsible_feature_comparison_table
 from common.asserts import assert_customer_logo
 from common.asserts import assert_customer_testimonial
+from common.asserts import assert_overflowing
+from common.test_getdemo import assert_bad_email
+from common.test_getdemo import assert_missing_firstname
+from common.test_getdemo import assert_success
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +19,19 @@ def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + "/expense-report-software")
     return module_browser
+
+# Check demo form (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_hero_section_cta(browser):
@@ -48,3 +65,7 @@ def test_bottom_section_cards(browser):
 def test_bottom_section_cta(browser):
     cta_xpath = '//section[contains(@class, "feature-bottom-section")]//a'
     assert_cta_click_and_modal_show(browser, cta_xpath)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert_overflowing(browser)
