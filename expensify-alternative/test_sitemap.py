@@ -1,14 +1,14 @@
-import time
-from simplebrowser import SimpleBrowser
-import logging
-import pytest
-from common.utils import resize_browser
+# import time
+# from simplebrowser import SimpleBrowser
+# import logging
+# import pytest
+# from common.utils import resize_browser
 
-@pytest.fixture(scope='function')
-def browser(module_browser, base_url, request):
-    resize_browser(browser=module_browser, resolution=request.param)
-    module_browser.get(base_url + '/alternative/expensify')
-    return module_browser
+# @pytest.fixture(scope='function')
+# def browser(module_browser, base_url, request):
+#     resize_browser(browser=module_browser, resolution=request.param)
+#     module_browser.get(base_url + '/alternative/expensify')
+#     return module_browser
 
 # @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 # def test_sitemap_url(browser):

@@ -1,10 +1,8 @@
 import time
-from simplebrowser import SimpleBrowser
 import logging
 import pytest
 from common.utils import resize_browser
 from common.asserts import assert_hero_image
-from common.asserts import assert_typography
 
 logger = logging.getLogger(__name__)
 
