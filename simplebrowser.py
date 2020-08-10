@@ -199,3 +199,10 @@ class SimpleBrowser:
 
     def find_by_css(self, css):
         return self.driver.find_element_by_css_selector(css)
+
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
+
+    def scroll_down(self, pixels_to_scroll):
+        self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')

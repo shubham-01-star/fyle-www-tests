@@ -3,6 +3,8 @@ import logging
 import pytest
 
 from common.asserts import assert_customer_logo
+from common.asserts import assert_badges
+from common.asserts import assert_customer_testimonial
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +72,11 @@ def test_customer_logo(browser):
 
 
 def test_badges(browser):
-    total_badges = browser.find_many("//div[contains(@class, 'fyle-badge')]")
-    hidden_badges = browser.find_many("//div[contains(@class, 'fyle-badge') and contains(@style, 'display: none;')]")
-    assert (len(total_badges) - len(hidden_badges)) == 1, 'Badges aren\'t properly displayed.'
+    assert_badges(browser=browser)
+
+
+def test_customer_testimonial(browser):
+    assert_customer_testimonial(browser=browser)
 
 
 def test_sneak_peek(browser):
