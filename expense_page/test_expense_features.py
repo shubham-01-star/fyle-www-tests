@@ -21,13 +21,13 @@ def test_feature_scroll(browser):
     e = browser.find(xpath="//section[@id='expense-reporting']")
     assert abs(e.location['y'] - browser.current_scroll_position()) <= 30, 'Not scrolling to the Expense Reporting feature'
 
-@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collpasing_section(browser):
     for i in range(1, 11):
-        section = browser.click(xpath=f"//a[@id='feature-{i}']")
+        section = browser.force_click(xpath=f"//a[@id='feature-{i}']", scroll=True)
         class_list = section.get_attribute('class')
         assert class_list.count('collapse-closed collapsed'), 'Collapsing of sections should work'
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_overflowing(browser):
-    assert_overflowing(browser=browser)
+    assert_overflowing(browser)

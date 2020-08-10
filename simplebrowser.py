@@ -173,3 +173,8 @@ class SimpleBrowser:
 
     def check_horizontal_overflow(self):
         return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
+        return l
