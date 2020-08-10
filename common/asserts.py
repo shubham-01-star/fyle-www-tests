@@ -47,3 +47,58 @@ def assert_typography(browser):
     assert_hero_section(browser=browser, section=hero_section)
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
+
+def assert_customer_logo(browser):
+    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.refresh()
+    time.sleep(3)
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
+
+    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
+    browser.refresh()
+    time.sleep(3)
+    indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
+    us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
+    assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
+
+def assert_badges(browser):
+    total_badges = browser.find_many("//div[contains(@class, 'fyle-badge')]")
+    visible_badge = 0
+    for badge in total_badges:
+        if badge.is_displayed():
+            visible_badge += 1
+    assert visible_badge == 1, 'Badges aren\'t displayed properly.'
+
+
+def get_active_index(carousel_items):
+    active_item = []
+    for i, item in enumerate(carousel_items):
+        if "active" in item.get_attribute("class"):
+            active_item.append(item)
+            active_index = i
+    no_of_active_items = len(active_item)
+    assert no_of_active_items != 0 and no_of_active_items <= 1, 'UI broken in customer testimonial section'
+    return active_index
+
+def assert_customer_testimonial(browser):
+    time.sleep(3)
+    carousel_items = browser.find_many("//div[contains(@class, 'carousel-item')]")
+    carousel_length = len(carousel_items)
+    current_active_index = get_active_index(carousel_items)
+
+    time.sleep(1)
+    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
+    time.sleep(1)
+    active_index = get_active_index(carousel_items)
+    assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
+
+    browser.refresh()
+    time.sleep(1)
+    carousel_items = browser.find_many("//div[contains(@class, 'carousel-item')]")
+    time.sleep(1)
+    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
+    time.sleep(1)
+    active_index = get_active_index(carousel_items)
+    assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'

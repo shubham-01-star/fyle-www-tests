@@ -2,7 +2,7 @@ import logging
 import pytest
 import time
 from common.utils import resize_browser
-from common.asserts import assert_hero_image, assert_typography
+from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_badges, assert_customer_testimonial
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +53,7 @@ def test_redirection(browser):
     time.sleep(3)
     current_url = browser.get_current_url()
     assert current_url == 'https://ww2.fylehq.com/alternative/expensify', 'Not redirecting to the right page'
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_customer_logo(browser):
+    assert_customer_logo(browser=browser)
