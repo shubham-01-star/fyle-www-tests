@@ -25,3 +25,7 @@ def test_collpasing_section(browser):
         section = browser.click(xpath=f"//a[@id='feature-{i}']")
         class_list = section.get_attribute('class')
         assert class_list.count('collapse-closed collapsed'), 'Collapsing of sections should work'
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'

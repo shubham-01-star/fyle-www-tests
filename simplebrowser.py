@@ -170,3 +170,6 @@ class SimpleBrowser:
 
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
+
+    def check_horizontal_overflow(self):
+        return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
