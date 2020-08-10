@@ -186,4 +186,3 @@ class SimpleBrowser:
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
-

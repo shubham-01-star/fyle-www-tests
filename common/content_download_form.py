@@ -20,6 +20,7 @@ def submit_content_download_form(browser, email=None, firstname=None, lastname=N
         browser.click(xpath=f"//form[contains(@id, 'content-download-form')]//li[@data-value='{company_size}']")
     if agree:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//div[contains(@class, 'custom-checkbox')]")
+    time.sleep(1)
     if '/templates/expense-reports' in browser.get_current_url():
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[text()='Download']")
     else:
@@ -52,6 +53,7 @@ def assert_download_for_excel_form_modal(browser):
 
 def assert_required_fields(browser):
     submit_content_download_form(browser)
+    time.sleep(1)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     firstname_error = browser.find(xpath="//label[@for='content-download-form-first-name'][@class='error']")
     lastname_error = browser.find(xpath="//label[@for='content-download-form-last-name'][@class='error']")
@@ -73,7 +75,7 @@ def assert_invalid_names(browser):
 
 def assert_bad_email(browser):
     submit_content_download_form(browser, email='test')
-    time.sleep(1)
+    time.sleep(2)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
