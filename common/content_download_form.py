@@ -36,6 +36,7 @@ def assert_content_download_inline_form(browser):
     assert sub_text and sub_text.is_displayed(), "Form sub-heading is not displayed"
 
 def assert_download_for_excel_form_modal(browser):
+    time.sleep(1)
     download_modal_cta = browser.find(xpath="//a[contains(@id, 'download-excel')]")
     download_modal_cta.click()
     time.sleep(2)
