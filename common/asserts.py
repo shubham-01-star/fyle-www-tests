@@ -44,9 +44,35 @@ def assert_typography(browser):
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
 
+def assert_collapsible_feature_comparison_table(browser):
+    section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
+    assert section, 'Collapsible table not found'
+    divs = browser.find_many(xpath='//div[contains(@class, "accordion-toggle")]')
+    num = 1
+    for div in divs:
+        div_class_names = div.get_attribute('class')
+        feature_contents = browser.find(xpath=f'//div[contains(@id, "feature-main-row{num}")]')
+        assert feature_contents, 'Sub-contents are not present'
+
+        # Check if the feature section is initially collapsed
+        # If it's collapsed, then check if it's opening up and it's sub-sections are displayed or not
+        # Else it's open, then check if it's collapsing successfully
+        if 'accordion-toggle' in div_class_names and 'collapsed' in div_class_names:
+            div.click()
+            sleep(3)
+            assert feature_contents.is_displayed(), f'Unable to see contents of feature: {div.text}'
+        else:
+            div.click()
+            sleep(3)
+            assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
+        browser.scroll_down(10)
+        num += 1
+        sleep(2)
+
 def assert_cards_redirection(browser, cards, redirect_to_urls):
     assert len(cards) > 0, 'Wrong xpath given for cards'
     for card in cards:
+        sleep(1)
         card.click()
         sleep(1)
         browser.switch_tab_next(1)
