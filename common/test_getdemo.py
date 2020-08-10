@@ -43,7 +43,8 @@ def assert_missing_firstname(browser):
 # @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_success(browser):
     open_getdemo_form(browser)
-    submit_getdemo_form(browser, email='megatron@fyle.in', firstname='Megatron', lastname='Transformer', phone='123456789', company_size='Under 5', agree=True)
     time.sleep(2)
+    submit_getdemo_form(browser, email='megatron@fyle.in', firstname='Megatron', lastname='Transformer', phone='123456789', company_size='Under 5', agree=True)
+    time.sleep(5)
     e = browser.find(xpath="//h3[contains(text(), 'Thank')]")
     assert e and e.is_displayed(), 'Not displaying thank you message'
