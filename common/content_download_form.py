@@ -1,6 +1,5 @@
 import time
 import logging
-from common.asserts import assert_content_download_thank_you_page
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +36,6 @@ def assert_content_download_inline_form(browser):
 
 def assert_download_for_excel_form_modal(browser):
     download_modal_cta = browser.find(xpath="//a[contains(@id, 'download-excel')]")
-    time.sleep(2)
     download_modal_cta.click()
     time.sleep(2)
     report_modal = browser.find(xpath="//div[contains(@id, 'expense-report-modal')]")
@@ -67,6 +65,7 @@ def assert_required_fields(browser):
 
 def assert_invalid_names(browser):
     submit_content_download_form(browser, firstname='test1', lastname='test2')
+    time.sleep(1)
     firstname_error = browser.find(xpath="//label[@for='content-download-form-first-name'][@class='error']")
     lastname_error = browser.find(xpath="//label[@for='content-download-form-last-name'][@class='error']")
     assert firstname_error and firstname_error.is_displayed(), "No error displayed for invalid firstname"
@@ -74,17 +73,17 @@ def assert_invalid_names(browser):
 
 def assert_bad_email(browser):
     submit_content_download_form(browser, email='test')
+    time.sleep(1)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
 def assert_non_business_email(browser):
-    time.sleep(1)
     submit_content_download_form(browser, email='test@gmail.com', firstname='test', lastname='test', company_size='Under 5', agree=True)
     time.sleep(5)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
-def assert_success_download_form(browser):
+def assert_success_download_form(browser, title=None, email=None, content_url=None):
     submit_content_download_form(browser, email='test@fyle.in', firstname='test', lastname='test', company_size='Under 5', agree=True)
     time.sleep(5)
     if '/templates/expense-reports' in browser.get_current_url():
@@ -94,6 +93,23 @@ def assert_success_download_form(browser):
         browser.close_windows()
         assert last_downloaded_filename == 'https://cdn2.hubspot.net/hubfs/3906991/simple-expense-report-template.xlsx', "Downloaded file is not correct"
     else:
-        assert_content_download_thank_you_page(browser,'Realtime visibility into T&E for Zivame','test@fyle.in','https://cdn2.hubspot.net/hubfs/3906991/Case%20Study%20/Fyle-Zivame-Case-Study.pdf')
+        assert_content_download_thank_you_page(browser, title, email, content_url)
         browser.back()
 
+def assert_content_download_thank_you_page(browser, title, email, content_url):
+    url = browser.get_current_url()
+    assert '/thank-you' in url, "Thank you page is not displayed"
+    page_title = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//span[contains(@class, 'thank-you-page-title')]").text
+    assert title == page_title, "Content title is not correct"
+    user_email = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//span[contains(@class, 'thank-you-page-email')]").text
+    assert email == user_email, "User email is not correct"
+    url_link = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//a[contains(@id, 'download-link')]")
+    url_link.click()
+    browser.switch_tab_next(1)
+    time.sleep(2)
+    assert browser.get_current_url() == content_url, "Content download link is correct"
+    browser.close_windows()
+    random_cards = browser.find_many(xpath="//section[contains(@class, 'random-card-section')]//a//h4")
+    for i, resource in enumerate(random_cards):
+        time.sleep(2)
+        assert resource.text != title, "Random cards are not properly generated"

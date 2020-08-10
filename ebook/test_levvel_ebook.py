@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     time.sleep(0.5)
-    module_browser.get(base_url + '/case-study/zivame-ecommerce-expense-management')
+    module_browser.get(base_url + '/resources/ebooks/levvel-t&e-report')
     return module_browser
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -35,4 +35,4 @@ def test_non_business_email(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_success_download_form(browser):
-    assert_success_download_form(browser)
+    assert_success_download_form(browser, 'Travel & Expense Management Report by Levvel Research', 'test@fyle.in', 'https://cdn2.hubspot.net/hubfs/3906991/Paystream%202018%20Travel%20and%20Expense%20Management%20report.pdf')

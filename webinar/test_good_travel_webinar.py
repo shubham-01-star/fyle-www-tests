@@ -35,4 +35,4 @@ def test_non_business_email(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_success_download_form(browser):
-    assert_success_download_form(browser)
+    assert_success_download_form(browser, 'Automating T&E Management for SMBs in 2019', 'test@fyle.in', 'https://fyle-1.wistia.com/medias/0nakpa8v7g')

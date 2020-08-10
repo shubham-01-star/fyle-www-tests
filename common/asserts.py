@@ -45,20 +45,3 @@ def assert_typography(browser):
     for other_section in other_sections:
         assert_other_section(browser=browser, section=other_section)
 
-def assert_content_download_thank_you_page(browser, title, email, content_url):
-    url = browser.get_current_url()
-    assert '/thank-you' in url, "Thank you page is not displayed"
-    page_title = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//span[contains(@class, 'thank-you-page-title')]").text
-    assert title == page_title, "Content title is not correct"
-    user_email = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//span[contains(@class, 'thank-you-page-email')]").text
-    assert email == user_email, "User email is not correct"
-    url_link = browser.find(xpath="//section[contains(@class, 'resource-thank-you')]//a[contains(@id, 'download-link')]")
-    url_link.click()
-    browser.switch_tab_next(1)
-    time.sleep(2)
-    assert browser.get_current_url() == content_url, "Content download link is correct"
-    browser.close_windows()
-    random_cards = browser.find_many(xpath="//section[contains(@class, 'random-card-section')]//a//h4")
-    for i, resource in enumerate(random_cards):
-        time.sleep(2)
-        assert resource.text != title, "Random cards are not properly generated"
