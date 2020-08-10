@@ -3,10 +3,10 @@ import time
 import pytest
 from common.utils import resize_browser
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
+from common.asserts import assert_customer_testimonial, assert_typography
 
 logger = logging.getLogger(__name__)
 
-# base url; read about @pytest.fixture
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
@@ -35,6 +35,11 @@ def test_missing_firstname(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_success(browser):
     assert_success(browser)
+
+# (common sections)
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_customer_testimonial(browser):
+    assert_customer_testimonial(browser=browser)
 
 # check pricing page is redirecting to bcp page
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -88,9 +93,11 @@ def test_compareplan_table(browser):
 def test_download_cta(browser):
     time.sleep(3)
     browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
+    time.sleep(3)
     browser.force_click(xpath="//button[contains(text(), 'Download all plans')]")
     time.sleep(3)
     download_form = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
+    time.sleep(3)
     assert download_form and download_form.is_displayed(), 'All feature download form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
@@ -98,6 +105,7 @@ def test_demo_cta(browser):
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     time.sleep(3) 
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
+    time.sleep(3)
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     time.sleep(3)
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'

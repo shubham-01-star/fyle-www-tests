@@ -2,10 +2,10 @@ import logging
 import time
 import pytest
 from common.utils import resize_browser
+from common.asserts import assert_customer_testimonial, assert_typography
 
 logger = logging.getLogger(__name__)
 
-# base url; read about @pytest.fixture
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
@@ -17,10 +17,28 @@ def browser(module_browser, base_url, request):
 
 # check customer logo section (common section)
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_customer_logo(browser):
+def test_logo(browser):
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
-    assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
+    assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
+
+# check demo form (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
+
+# (common sections)
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_customer_testimonial(browser):
+    assert_customer_testimonial(browser=browser)
 
 # check pricing page is redirecting to bcp page
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
@@ -66,9 +84,11 @@ def test_compareplan_table(browser):
 def test_download_cta(browser):
     time.sleep(3)
     browser.force_click(xpath="//button[contains(text(), 'Compare all plans')]")
+    time.sleep(3)
     browser.force_click(xpath="//button[contains(text(), 'Download all plans')]")
     time.sleep(3)
     download_form = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
+    time.sleep(3)
     assert download_form and download_form.is_displayed(), 'All feature download form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
@@ -76,6 +96,7 @@ def test_demo_cta(browser):
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     time.sleep(3) 
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
+    time.sleep(3)
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     time.sleep(3)
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
@@ -83,7 +104,7 @@ def test_demo_cta(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_scroll_top(browser):
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    time.sleep(2)
+    time.sleep(3)
     browser.scroll_down(100)
     time.sleep(3)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
