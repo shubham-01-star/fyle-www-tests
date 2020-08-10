@@ -40,10 +40,10 @@ def assert_other_section(browser, section):
 def assert_typography(browser):
     sections = browser.find_many(xpath='//section')
     hero_section = sections[0]
-    other_sections = sections[1:]
+    # other_sections = sections[1:]
     assert_hero_section(browser=browser, section=hero_section)
-    for other_section in other_sections:
-        assert_other_section(browser=browser, section=other_section)
+    # for other_section in other_sections:
+    #     assert_other_section(browser=browser, section=other_section)
 
 def assert_customer_logo(browser):
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')

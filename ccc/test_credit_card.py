@@ -5,6 +5,7 @@ import pytest
 from common.asserts import assert_customer_logo
 from common.asserts import assert_badges
 from common.asserts import assert_customer_testimonial
+from common.asserts import assert_typography
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,8 @@ def test_video_thumbnail(browser):
     img = browser.find("//div[contains(@class, 'feature-hero-video')]//div[contains(@class, 'youtube')]//img")
     assert img.is_displayed(), 'Video thumbnail image not loaded'
 
+def test_typography(browser):
+    assert_typography(browser)
 
 def test_customer_logo(browser):
     assert_customer_logo(browser=browser)
@@ -141,17 +144,15 @@ def test_cards_url(browser, base_url):
 
 def test_modal_open(browser):
     browser.click("//section[contains(@class, 'long-background')]//a[contains(@id, 'best-expense-video-id')]")
-    time.sleep(2)
+    time.sleep(3)
     modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
-    time.sleep(0.5)
     assert modal.is_displayed(), 'Modal is not opened'
 
 
 def test_modal_open_bottom(browser):
     browser.click("//section[contains(@class, 'explore-fyle-beyond')]//a[contains(@class, 'new-contact-us-demo-form')]")
-    time.sleep(2)
+    time.sleep(3)
     modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
-    time.sleep(0.5)
     assert modal.is_displayed(), 'Modal is not opened'
 
 
