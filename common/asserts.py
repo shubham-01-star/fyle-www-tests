@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from time import sleep
+=======
+import time
+>>>>>>> master
 import logging
 
 logger = logging.getLogger(__name__)
