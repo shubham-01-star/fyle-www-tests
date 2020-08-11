@@ -1,7 +1,6 @@
 import logging
-import time
-
 from common.asserts import assert_thank_you_modal
+
 logger = logging.getLogger(__name__)
 
 def open_getdemo_form(browser):

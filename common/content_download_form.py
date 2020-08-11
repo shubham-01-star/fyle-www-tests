@@ -102,5 +102,5 @@ def assert_content_download_thank_you_page(browser, title, email, content_url):
     assert browser.get_current_url() == content_url, "Content download link is correct"
     browser.close_windows()
     random_cards = browser.find_many(xpath="//section[contains(@class, 'random-card-section')]//a//h4")
-    for i, resource in enumerate(random_cards):
+    for resource in random_cards:
         assert resource.text != title, "Random cards are not properly generated"

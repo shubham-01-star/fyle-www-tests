@@ -17,7 +17,7 @@ def assert_hero_section(browser, section):
 
 def assert_hero_image(browser):
     hero_image = browser.find(xpath='//section[contains(@class,  "new-hero")]//img')
-    assert hero_image.is_displayed() == False, 'Hero image is being shown in mobile'
+    assert hero_image.is_displayed() is False, 'Hero image is being shown in mobile'
 
 def assert_other_section(browser, section):
     cl = section.get_attribute('class')
@@ -59,7 +59,7 @@ def assert_thank_you_modal(browser, ty_message, demoform=None):
     assert ty_img and ty_img.is_displayed(), "Thank image is not correct"
     ty_text = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//span[contains(@class, 'ty-box')]").text
     assert ty_text == ty_message, "Thank you message is not correct"
-    
+
 def assert_collapsible_feature_comparison_table(browser):
     section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
     assert section, 'Collapsible table not found'

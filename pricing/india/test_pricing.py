@@ -99,7 +99,7 @@ def test_download_cta(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_demo_cta(browser):
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    time.sleep(3) 
+    time.sleep(3)
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
     time.sleep(3)
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
