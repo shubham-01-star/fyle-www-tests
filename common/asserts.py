@@ -103,14 +103,14 @@ def assert_overflowing(browser):
     assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
@@ -142,7 +142,7 @@ def assert_customer_testimonial(browser):
     current_active_index = get_active_index(carousel_items)
 
     sleep(1)
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
+    browser.click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
     sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
@@ -152,7 +152,7 @@ def assert_customer_testimonial(browser):
     carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
     sleep(1)
 
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
+    browser.click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
     sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
