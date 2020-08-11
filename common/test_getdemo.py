@@ -20,10 +20,10 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         browser.input(xpath="//input[@name='phone']", keys=phone)
     if company_size:
         browser.click(xpath="//input[@id='number_of_employees']")
-        browser.click(xpath=f"//li[@data-value='{company_size}']")
+        browser.click(xpath=f"//li[@value='{company_size}']")
     if agree:
         browser.click(xpath='//div[contains(@class, "custom-checkbox")]')
-    browser.click(xpath='//button[text()="Get a demo"]')
+    browser.click(xpath='//button[text()=" Get a demo "]')
 
 # @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_bad_email(browser):
@@ -43,7 +43,7 @@ def assert_missing_firstname(browser):
 def assert_success(browser):
     open_getdemo_form(browser)
     time.sleep(2)
-    submit_getdemo_form(browser, email='megatron@fyle.in', firstname='Megatron', lastname='Transformer', phone='123456789', company_size='Under 5', agree=True)
+    submit_getdemo_form(browser, email='test@fyle.in', firstname='test', lastname='test', phone='123456789', company_size='Under 5', agree=True)
     time.sleep(5)
     e = browser.find(xpath="//h3[contains(text(), 'Thank')]")
     assert e and e.is_displayed(), 'Not displaying thank you message'
