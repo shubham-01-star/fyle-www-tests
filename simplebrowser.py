@@ -127,14 +127,20 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
-        sleep(2)
+        sleep(1)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
+        sleep(4)
         return l
+    
+    def click_element(self, element):        
+        element.click()
+        sleep(3)
+        return element
 
     def input(self, xpath, keys, scroll=False):
         l = self.find(xpath, scroll)
@@ -225,6 +231,7 @@ class SimpleBrowser:
         self.driver.switch_to.window(self.driver.window_handles[-1])
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
+        sleep(6)
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
 
     def get_from_local_storage(self, key):
