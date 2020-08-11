@@ -1,6 +1,5 @@
 import logging
 import time
-import pytest
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,12 @@ import logging
 import time
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_customer_testimonial, assert_typography
+from common.asserts import assert_customer_testimonial
+from common.asserts import assert_typography
+from common.test_getdemo import assert_bad_email
+from common.test_getdemo import assert_missing_firstname
+from common.test_getdemo import assert_success
+from common.asserts import assert_overflowing
 
 logger = logging.getLogger(__name__)
 
@@ -142,3 +147,7 @@ def test_collapsible_details(browser):
     details = browser.find(xpath="//div[@id='standard-collapse']")
     time.sleep(3)
     assert details and details.is_displayed(), 'Show details is not opening the collapsible'
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert_overflowing(browser)
