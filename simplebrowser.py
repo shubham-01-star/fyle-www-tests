@@ -127,8 +127,6 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
-        # if self.is_mobile():
-        #     self.scroll_down(80)
         sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
@@ -138,8 +136,8 @@ class SimpleBrowser:
         l.click()
         sleep(3)
         return l
-    
-    def click_element(self, element):        
+
+    def click_element(self, element):
         element.click()
         sleep(3)
         return element

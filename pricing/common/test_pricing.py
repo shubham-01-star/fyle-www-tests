@@ -51,40 +51,44 @@ def test_cards_cta(browser):
     close_form = browser.find("//button[contains(@class, 'close')]")
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     for i, cta in enumerate(card_ctas):
-        cta.click_element()
-        # sleep to be removed when a common fn is available for click in simplebrowser
-        # time.sleep(2)
+        browser.click_element(cta)
         assert demo_form and demo_form.is_displayed(), f'Demo form is not opening in card no. {i}'
-        close_form.click_element()
-        # sleep to be removed when a common fn is available for click in simplebrowser
-        # time.sleep(2)
+        browser.click_element(close_form)
 
 # check toggle of compare plans table
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_compareplan_table(browser):
     table = browser.find(xpath="//div[contains(@class, 'feature-table')]")
     assert table and table.is_displayed() is False, 'Compare all plans table is already open, by default'
+    # scrolling so that element is not hidden behind sticky cta
+    browser.find(xpath="//a[@id='show-hide-enterprise']", scroll=True)
     browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     assert table and table.is_displayed(), 'Compare all plans table is not opening'
 
 # check the ctas present inside the compare all plans table
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_download_cta(browser):
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
-    browser.click(xpath="//button[contains(text(), 'Download all plans')]")
+    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    browser.scroll_down(-200)
+    browser.click_element(open_table_btn)
+    cta = browser.find(xpath="//button[contains(text(), 'Download all plans')]", scroll=True)
+    browser.scroll_down(-200)
+    browser.click_element(cta)
     download_form = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
     assert download_form and download_form.is_displayed(), 'All feature download form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_demo_cta(browser):
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]") 
+    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_scroll_top(browser):
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
+    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    browser.scroll_down(-200)
+    browser.click_element(open_table_btn)
     browser.scroll_down(100)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     # sleep required for scrolling up to the hero section
@@ -97,7 +101,9 @@ def test_scroll_top(browser):
 def test_collapsible_faq(browser):
     faq_answer = browser.find(xpath="//div[@id='faq-1-content']", scroll=True)
     assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsed by default'
-    browser.click(xpath="//div[@id='faq-1-heading']")
+    faq_question = browser.find(xpath="//div[@id='faq-1-heading']", scroll=True)
+    browser.scroll_down(-200)
+    browser.click_element(faq_question)
     assert faq_answer.is_displayed(), 'FAQ answer is not opening on click'
     browser.click(xpath="//div[@id='faq-1-heading']")
     # sleep required for transition/closing of collapsible
@@ -107,7 +113,9 @@ def test_collapsible_faq(browser):
 # check table header for compare all plans is sticky or not
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_sticky_table_header(browser):
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
+    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    browser.scroll_down(-200)
+    browser.click_element(open_table_btn)
     browser.find(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]", scroll=True)
     header_position = browser.find(xpath="//div[contains(@class, 'table-head')]")
     assert header_position.value_of_css_property('position') == 'sticky', 'Compare all plans table header is not sticky'
@@ -115,8 +123,9 @@ def test_sticky_table_header(browser):
 # check collapsible pricing card details in mobile
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_collapsible_details(browser):
-    # scrolling to heading on card so that element to be clicked is visible
-    # browser.find(xpath="//h2[contains(@class, 'standard-price')]", scroll=True)
-    browser.click(xpath="//a[@id='show-hide-standard']", scroll=True)
+    see_details = browser.find(xpath="//a[@id='show-hide-standard']", scroll=True)
+    # scrolling up so that element is not hidden behind navbar
+    browser.scroll_down(-100)
+    browser.click_element(see_details)
     details = browser.find(xpath="//div[@id='standard-collapse']")
     assert details and details.is_displayed(), 'Show details is not opening the collapsible'
