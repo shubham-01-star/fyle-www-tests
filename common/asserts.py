@@ -15,6 +15,9 @@ def assert_hero_section(browser, section):
     h2s = section.find_elements_by_xpath('.//h2')
     assert len(h2s) == 0, 'Hero section should have no h2s'
 
+def assert_hero_image(browser):
+    hero_image = browser.find(xpath='//section[contains(@class,  "new-hero")]//img')
+    assert hero_image.is_displayed() == False, 'Hero image is being shown in mobile'
 
 def assert_other_section(browser, section):
     cl = section.get_attribute('class')
@@ -46,7 +49,58 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
+def assert_thank_you_modal(browser, ty_message):
+    e = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]")
+    assert e and e.is_displayed, "Thank you modal is not displayed"
+    sleep(3)
+    ty_img = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//div[not(contains(@class, 'demo-form-thank-you-img'))]")
+    assert ty_img and ty_img.is_displayed(), "Thank image is not correct"
+    ty_text = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//span[contains(@class, 'ty-box')]").text
+    assert ty_text == ty_message, "Thank you message is not correct"
+    
+def assert_collapsible_feature_comparison_table(browser):
+    section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
+    assert section, 'Collapsible table not found'
+    divs = browser.find_many(xpath='//div[contains(@class, "accordion-toggle")]')
+    for i, div in enumerate(divs):
+        div_class_names = div.get_attribute('class')
+        sub_contents_div_xpath = f'//div[contains(@id, "feature-main-row{i+1}")]'
+
+        # Check if the feature section is initially collapsed
+        # If it's collapsed, then check if it's opening up and it's sub-sections are displayed or not
+        # Else it's open, then check if it's collapsing successfully
+        if 'accordion-toggle' in div_class_names and 'collapsed' in div_class_names:
+            div.click()
+            sleep(3)
+            feature_contents = browser.find(xpath=sub_contents_div_xpath)
+            assert feature_contents.is_displayed(), f'Unable to see contents of feature: {div.text}'
+        else:
+            div.click()
+            sleep(3)
+            feature_contents = browser.find(xpath=sub_contents_div_xpath)
+            assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
+        browser.scroll_down(50)
+        sleep(3)
+
+def assert_cards_redirection(browser, cards, redirect_to_urls):
+    assert len(cards) > 0, 'Wrong xpath given for cards'
+    for card in cards:
+        card.click()
+        sleep(2)
+        browser.switch_tab_next(1)
+        assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
+        browser.close_windows()
+        sleep(2)
+
+def assert_cta_click_and_modal_show(browser, cta_xpath):
+    browser.click(xpath=cta_xpath)
+    sleep(3)
+    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]', scroll=True)
+    sleep(3)
+    assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
+
 def assert_overflowing(browser):
+    sleep(3)
     assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
@@ -71,7 +125,6 @@ def assert_badges(browser):
         if badge.is_displayed():
             visible_badge += 1
     assert visible_badge == 1, 'Badges aren\'t displayed properly.'
-
 
 def get_active_index(carousel_items):
     active_item = []
@@ -100,8 +153,8 @@ def assert_customer_testimonial(browser):
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
 
-def assert_cta_click_and_modal_show(browser, cta_xpath):
-    browser.click(xpath=cta_xpath)
-    sleep(2)
-    form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
-    assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
+# def assert_cta_click_and_modal_show(browser, cta_xpath):
+#     browser.click(xpath=cta_xpath)
+#     sleep(2)
+#     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
+#     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
