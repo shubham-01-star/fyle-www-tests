@@ -85,8 +85,8 @@ def assert_svb_contact_form_invalid_phone_length_max(browser):
     assert phone_error and phone_error.is_displayed(), "No error displayed for invalid phone maxlength"
 
 def assert_svb_contact_form_success(browser):
+    sleep(1)
     submit_svb_top_email_form(browser, email='test@fyle.in')
-    sleep(5)
     submit_svb_contact_form(browser, name='test', phone='123456789', company_size='Under 5')
     ty_message = 'Sit back and relax. Our Customer Success team will soon reach out to you and set up a call.'
     assert_thank_you_modal(browser, ty_message)

@@ -52,7 +52,7 @@ def assert_typography(browser):
 def assert_thank_you_modal(browser, ty_message):
     e = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]")
     assert e and e.is_displayed, "Thank you modal is not displayed"
-    time.sleep(3)
+    sleep(3)
     ty_img = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//div[not(contains(@class, 'demo-form-thank-you-img'))]")
     assert ty_img and ty_img.is_displayed(), "Thank image is not correct"
     ty_text = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//span[contains(@class, 'ty-box')]").text
