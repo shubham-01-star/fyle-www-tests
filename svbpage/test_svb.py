@@ -23,37 +23,37 @@ def test_customer_logo(browser):
 def test_customer_testimonial(browser):
     assert_customer_testimonial(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_page_overflow(browser):
-#     assert_overflowing(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_page_overflow(browser):
+    assert_overflowing(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_typography(browser):
-#     assert_typography(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_typography(browser):
+    assert_typography(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_required_fields_top(browser):
-#     assert_required_fields_top(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_required_fields_top(browser):
+    assert_required_fields_top(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_bad_email_top(browser):
-#     assert_bad_email_top(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email_top(browser):
+    assert_bad_email_top(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_non_business_email_top(browser):
-#     assert_non_business_email_top(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_non_business_email_top(browser):
+    assert_non_business_email_top(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_success_form_top(browser):
-#     assert_success_form_top(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success_form_top(browser):
+    assert_success_form_top(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_svb_contact_form_required_fields(browser):
-#     assert_svb_contact_form_required_fields(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_svb_contact_form_required_fields(browser):
+    assert_svb_contact_form_required_fields(browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_svb_contact_form_invalid_name(browser):
-#     assert_svb_contact_form_invalid_name(browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_svb_contact_form_invalid_name(browser):
+    assert_svb_contact_form_invalid_name(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_svb_contact_form_invalid_phone(browser):
