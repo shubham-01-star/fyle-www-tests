@@ -1,10 +1,11 @@
 import logging
 import random
-import time
+from time import sleep
 import json
 
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -46,7 +47,7 @@ class SimpleBrowser:
                         width=width, height=height)
             except SessionNotCreatedException:
                 logger.exception('couldnt create session properly')
-                time.sleep(4)
+                sleep(4)
             if driver:
                 break
         return driver
@@ -60,12 +61,12 @@ class SimpleBrowser:
         self.wait = WebDriverWait(self.driver, self.timeout)
 
     def close(self):
-        time.sleep(1)
+        sleep(1)
         driver = self.driver
         self.driver = None
         if driver:
             driver.close()
-        time.sleep(2)
+        sleep(2)
 
     def __del__(self):
         logger.debug('destructor called')
@@ -90,7 +91,7 @@ class SimpleBrowser:
             delta = random.randint(1, max_speed)
             current_scroll_position += delta
             self.driver.execute_script(f'window.scrollTo(0, {current_scroll_position});')
-            time.sleep(random.uniform(0.0, 1.0))
+            sleep(random.uniform(0.0, 1.0))
             new_height = self.current_height()
 
     def scroll_up_page(self, max_speed=300):
@@ -101,15 +102,22 @@ class SimpleBrowser:
             if pos < 0:
                 pos = 0
             self.driver.execute_script(f'window.scrollTo(0, {pos});')
-            time.sleep(random.uniform(0.0, 1.0))
+            sleep(random.uniform(0.0, 1.0))
+
+    def scroll_down(self, pixels_to_scroll):
+        self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
+        sleep(random.uniform(0.0, 1.0))
 
     def find(self, xpath, scroll=False):
-        l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
-        if scroll:
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
-            time.sleep(1)
-            l = self.wait.until(
-                EC.presence_of_element_located((By.XPATH, xpath)))
+        try:
+            l = self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            if scroll:
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", l)
+                sleep(1)
+                l = self.wait.until(
+                    EC.presence_of_element_located((By.XPATH, xpath)))
+        except TimeoutException:
+            l = False
         return l
 
     def find_many(self, xpath):
@@ -119,6 +127,7 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
+        sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
@@ -135,9 +144,9 @@ class SimpleBrowser:
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
-        time.sleep(0.1)
+        sleep(0.1)
         l.send_keys(keys)
-        time.sleep(0.1)
+        sleep(0.1)
         return l
 
     def close_windows(self):
@@ -174,6 +183,9 @@ class SimpleBrowser:
     def set_window_size(self, width, height):
         self.driver.set_window_size(width, height)
 
+    def check_horizontal_overflow(self):
+        return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+
     def get_from_storage(self, key):
         return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
 
@@ -198,9 +210,7 @@ class SimpleBrowser:
     def force_click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].click();", l)
-
-    def scroll_down(self, pixels_to_scroll):
-        self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
+        return l
 
     def back(self):
         return self.driver.back()
@@ -216,3 +226,18 @@ class SimpleBrowser:
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+
+    def get_from_local_storage(self, key):
+        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
+
+    def set_local_storage(self, key, value):
+        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
+
+    def clear_local_storage(self):
+        self.driver.execute_script("window.localStorage.clear();")
+
+    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
+    def force_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        self.driver.execute_script("arguments[0].click();", l)
+        return l

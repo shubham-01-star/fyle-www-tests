@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,24 +15,24 @@ def assert_required_fields(browser):
     submit_chrome_uninstall_form(browser)
     email_error = browser.find(xpath="//label[@for='feedback-email'][@class='error']")
     feedback_error = browser.find(xpath="//label[@for='uninstall-description'][@class='error']")
-    time.sleep(1)
+    sleep(1)
     assert email_error and email_error.is_displayed(), 'No error displayed for missing email'
     assert feedback_error and feedback_error.is_displayed(), 'No error displayed for missing feedback'
 
 def assert_invalid_email(browser):
     submit_chrome_uninstall_form(browser, email="test")
     email_error = browser.find(xpath="//label[@for='feedback-email'][@class='error']")
-    time.sleep(1)
+    sleep(1)
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
 # def assert_non_business_email(browser):
 #     submit_chrome_uninstall_form(browser, email="test@gmail.com")
 #     email_error = browser.find(xpath="//label[@for='feedback-email'][@class='error']")
-#     time.sleep(5)
+#     sleep(5)
 #     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
 def assert_success_chrome_uninstall_form(browser):
     submit_chrome_uninstall_form(browser, email="test@fyle.in", feedback='test feedback')
-    time.sleep(5)
+    sleep(5)
     ty_message = browser.find(xpath="//form[contains(@id, 'send-feedback')]//p[contains(@class, 'feedback-submit')]")
     assert ty_message and ty_message.is_displayed(), 'No error displayed for invalid email'
