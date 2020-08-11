@@ -1,8 +1,9 @@
 import logging
-import pytest
 import time
+import pytest
 from common.utils import resize_browser
-from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_badges, assert_customer_testimonial
+from common.asserts import assert_hero_image, assert_typography, assert_customer_logo
+from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
 
@@ -57,3 +58,16 @@ def test_redirection(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_customer_logo(browser):
     assert_customer_logo(browser=browser)
+
+# check demo form (common section)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
