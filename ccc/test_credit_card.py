@@ -8,6 +8,7 @@ from common.asserts import assert_customer_testimonial
 from common.asserts import assert_typography
 from common.asserts import assert_overflowing
 from common.utils import resize_browser
+from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +89,18 @@ def test_customer_testimonial(browser):
 def test_overflowing(browser):
     assert_overflowing(browser=browser)
 
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email(browser):
+    assert_bad_email(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname(browser):
+    assert_missing_firstname(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success(browser):
+    assert_success(browser)
+
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_sneak_peek(browser):
     sneak_peak_tabs = browser.find_many("//div[contains(@class, 'tab-section')]//a[contains(@class, 'nav-link')]")
@@ -131,25 +144,28 @@ def test_space_h2_logo(browser):
     logo = browser.find("//section[contains(@class, 'customer-logos-v2')]//div[contains(@class, 'col')]//div[not(contains(@class, 'd-none'))]")
     assert check_spacing(h2, logo, 40), 'Spacing between h2 and logo is wrong'
 
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_cards_url(browser, base_url):
-    links = []
-    urls = [
-        '/travel-expense-management',
-        '/expense-management/expense-analytics',
-        '/expense-policy',
-        '/expense-report-software',
-        '/expense-management'
-    ]
-    cards = browser.find_many("//section[contains(@class, 'explore-fyle-beyond')]//div[contains(@class, 'feature-blocks')]//a")
+# @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+# def test_cards_url(browser, base_url):
+#     urls = [
+#         '/travel-expense-management',
+#         '/expense-management/expense-analytics',
+#         '/expense-policy',
+#         '/expense-report-software',
+#         '/expense-management'
+#     ]
+#     arrows = browser.find_many("//section[contains(@class, 'explore-fyle-beyond')]//div[contains(@class, 'feature-blocks')]//a//img")
 
-    for i, card in enumerate(cards):
-        links.append(card.get_attribute('href'))
+#     for i, arrow in enumerate(arrows):
+#         #links.append(card.get_attribute('href'))
+#         browser.click_element(arrow)
+#         assert (base_url + urls[i]) == browser.get_current_url()
+#         browser.back()
+#         time.sleep(3)
 
-    for i, link in enumerate(links):
-        browser.get(link)
-        assert (base_url + urls[i]) == browser.get_current_url()
-        browser.back()
+#     # for i, link in enumerate(links):
+#     #     browser.get(link)
+#     #     assert (base_url + urls[i]) == browser.get_current_url()
+#     #     browser.back()
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_modal_open(browser):

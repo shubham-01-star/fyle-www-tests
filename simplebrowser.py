@@ -125,7 +125,7 @@ class SimpleBrowser:
         l = self.find(xpath, scroll)
         time.sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
-        assert ltag in ['input', 'li', 'button', 'span',
+        assert ltag in ['input', 'li', 'button', 'span', 'img',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
@@ -235,3 +235,21 @@ class SimpleBrowser:
         l = self.find(xpath, scroll)
         self.driver.execute_script("arguments[0].click();", l)
         return l
+
+    def action_click(self, xpath, scroll=False):
+        l = self.find(xpath, scroll)
+        time.sleep(2)
+        ltag = l.tag_name.lower() if l.tag_name else None
+        assert ltag in ['input', 'li', 'button', 'span', 'img',
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+        l = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, xpath)))
+        move = ActionChains(self.driver).move_to_element_with_offset(l, 1, 1)
+        time.sleep(2)
+        move.click().perform()
+        return l
+
+    def click_element(self, element):
+        time.sleep(3)
+        element.click()
+        return element

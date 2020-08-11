@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
@@ -52,14 +52,14 @@ def assert_overflowing(browser):
 def assert_customer_logo(browser):
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     browser.refresh()
-    time.sleep(3)
+    sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
     browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     browser.refresh()
-    time.sleep(3)
+    sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert us_logo.is_displayed() and not indian_logo.is_displayed(), 'Found an Indian image in US IP'
@@ -84,28 +84,24 @@ def get_active_index(carousel_items):
     return active_index
 
 def assert_customer_testimonial(browser):
-    time.sleep(3)
     carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
     carousel_length = len(carousel_items)
     current_active_index = get_active_index(carousel_items)
 
-    time.sleep(1)
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
-    time.sleep(1)
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]", scroll=True)
+    right_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
+    browser.click_element(right_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
 
-    browser.refresh()
-    time.sleep(1)
-    carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
-    time.sleep(1)
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
-    time.sleep(1)
+    current_active_index = active_index
+    left_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
+    browser.click_element(left_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
 
 def assert_cta_click_and_modal_show(browser, cta_xpath):
     browser.click(xpath=cta_xpath)
-    time.sleep(2)
+    sleep(2)
     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
