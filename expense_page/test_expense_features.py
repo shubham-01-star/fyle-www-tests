@@ -39,7 +39,7 @@ def test_feature_scroll(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collpasing_section(browser):
     for i in range(1, 11):
-        time.sleep(2)
+        sleep(2)
         browser.find(xpath=f"//a[@id='feature-{i}']/ancestor::section", scroll=True)
         section = browser.click(xpath=f"//a[@id='feature-{i}']")
         class_list = section.get_attribute('class')
