@@ -16,7 +16,7 @@ def submit_svb_contact_form(browser, name=None, phone=None, company_size=None):
         browser.input(xpath="//form[contains(@id, 'svb-contact-form')]//input[@name='phone']", keys=phone)
     if company_size:
         browser.click(xpath="//form[contains(@id, 'svb-contact-form')]//input[@id='number_of_employees']")
-        browser.click(xpath=f"//form[contains(@id, 'svb-contact-form')]//li[@data-value='{company_size}']")
+        browser.click(xpath=f"//form[contains(@id, 'svb-contact-form')]//li[@value='{company_size}']")
     browser.click(xpath="//form[contains(@id, 'svb-contact-form')]//button[text()='Redeem Your Offer']")
 
 def assert_required_fields_top(browser):
@@ -31,7 +31,7 @@ def assert_bad_email_top(browser):
 
 def assert_non_business_email_top(browser):
     submit_svb_top_email_form(browser, email='test@gmail.com')
-    email_error = browser.find(xpath="//label[@for='svb-email'][@id='svb-email-form-top-email-label'][@class='error']")
+    email_error = browser.find(xpath="//label[@for='svb-email'][@id='svb-email-form-top-email-label'][@class='error email-error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
 def assert_success_form_top(browser):

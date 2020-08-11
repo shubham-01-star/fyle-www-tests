@@ -16,7 +16,7 @@ def submit_content_download_form(browser, email=None, firstname=None, lastname=N
         browser.input(xpath="//form[contains(@id, 'content-download-form')]//input[@name='email']", keys=email)
     if company_size:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//input[@id='number_of_employees']")
-        browser.click(xpath=f"//form[contains(@id, 'content-download-form')]//li[@data-value='{company_size}']")
+        browser.click(xpath=f"//form[contains(@id, 'content-download-form')]//li[@value='{company_size}']")
     if agree:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//div[contains(@class, 'custom-checkbox')]")
     if '/templates/expense-reports' in browser.get_current_url():
@@ -68,12 +68,13 @@ def assert_invalid_names(browser):
 
 def assert_bad_email(browser):
     submit_content_download_form(browser, email='test')
+    sleep(3)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
 def assert_non_business_email(browser):
     submit_content_download_form(browser, email='test@gmail.com', firstname='test', lastname='test', company_size='Under 5', agree=True)
-    email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
+    email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error email-error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
 def assert_success_download_form(browser, title=None, email=None, content_url=None):
@@ -84,6 +85,7 @@ def assert_success_download_form(browser, title=None, email=None, content_url=No
         browser.close_windows()
         assert last_downloaded_filename == 'https://cdn2.hubspot.net/hubfs/3906991/simple-expense-report-template.xlsx', "Downloaded file is not correct"
     else:
+        sleep(1)
         assert_content_download_thank_you_page(browser, title, email, content_url)
         browser.back()
 

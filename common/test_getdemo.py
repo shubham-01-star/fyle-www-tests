@@ -20,26 +20,23 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         browser.input(xpath="//input[@name='phone']", keys=phone)
     if company_size:
         browser.click(xpath="//input[@id='number_of_employees']")
-        browser.click(xpath=f"//li[@data-value='{company_size}']")
+        browser.click(xpath=f"//li[@value='{company_size}']")
     if agree:
         browser.click(xpath='//div[contains(@class, "custom-checkbox")]')
-    browser.click(xpath='//button[text()="Get a demo"]')
+    browser.click(xpath="//button[text()='Get a demo']")
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_bad_email(browser):
     open_getdemo_form(browser)
     submit_getdemo_form(browser, email='foo')
     e = browser.find(xpath="//label[@for='demo-email'][@class='error']")
     assert e and e.is_displayed(), 'No error displayed for invalid email'
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_missing_firstname(browser):
     open_getdemo_form(browser)
     submit_getdemo_form(browser, email='megatron@fyle.in')
     e = browser.find(xpath="//label[@for='demo-first-name'][@class='error demo-first-name-error']")
     assert e and e.is_displayed(), 'No error displayed for missing firstname'
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_success(browser):
     open_getdemo_form(browser)
     time.sleep(2)

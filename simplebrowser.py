@@ -130,7 +130,7 @@ class SimpleBrowser:
         sleep(1)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+            'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
@@ -147,7 +147,7 @@ class SimpleBrowser:
         ltag = l.tag_name.lower() if l.tag_name else None
         # logger.info('found element with tag %s', ltag)
         assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+            'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
         sleep(0.1)
@@ -222,6 +222,7 @@ class SimpleBrowser:
         return self.driver.back()
 
     def switch_tab_next(self, number):
+        sleep(2)
         return self.driver.switch_to.window(self.driver.window_handles[number])
 
     # method to get the downloaded file name

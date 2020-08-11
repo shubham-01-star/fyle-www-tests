@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + '/alternative/expensify')
+    sleep(2)
     return module_browser
 
 # check for hero image in mobile
