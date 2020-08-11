@@ -42,7 +42,7 @@ def assert_download_for_excel_form_modal(browser):
     assert h3_head and h3_head.is_displayed(), "Modal h3 heading is not displayed"
     sub_text = browser.find(xpath="//p[contains(@id, 'report-subtext')]")
     assert sub_text and sub_text.is_displayed(), "Modal sub-heading is not displayed"
-    close_button = browser.find(xpath="//div[contains(@id, 'expense-report-modal')]//button[contains(@class, 'close')]")
+    close_button = browser.find(xpath="//div[contains(@id, 'expense-report-modal')]//button[contains(@class, 'close')]", scroll=True)
     browser.click_element(close_button)
     assert not report_modal.is_displayed(), "modal is not closed"
 

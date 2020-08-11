@@ -144,7 +144,6 @@ def assert_customer_testimonial(browser):
     browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
     sleep(1)
     active_index = get_active_index(carousel_items)
-    logger.info(active_index, (current_active_index + 1) % carousel_length)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
 
     browser.refresh()
