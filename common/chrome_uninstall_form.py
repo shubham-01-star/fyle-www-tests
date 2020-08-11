@@ -25,14 +25,14 @@ def assert_invalid_email(browser):
     sleep(1)
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
-# def assert_non_business_email(browser):
-#     submit_chrome_uninstall_form(browser, email="test@gmail.com")
-#     email_error = browser.find(xpath="//label[@for='feedback-email'][@class='error']")
-#     sleep(5)
-#     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
+def assert_non_business_email(browser):
+    submit_chrome_uninstall_form(browser, email="test@gmail.com", feedback="test feedback")
+    email_error = browser.find(xpath="//label[@for='feedback-email'][@class='error email-error']")
+    sleep(5)
+    assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
 def assert_success_chrome_uninstall_form(browser):
     submit_chrome_uninstall_form(browser, email="test@fyle.in", feedback='test feedback')
     sleep(5)
-    ty_message = browser.find(xpath="//form[contains(@id, 'send-feedback')]//p[contains(@class, 'feedback-submit')]")
-    assert ty_message and ty_message.is_displayed(), 'No error displayed for invalid email'
+    ty_message = browser.find(xpath="//form[contains(@id, 'send-feedback')]//p[contains(@class, 'feedback-submit')]", scroll=True)
+    assert ty_message and ty_message.is_displayed(), 'Thank you message is not displayed'
