@@ -20,14 +20,14 @@ def submit_content_download_form(browser, email=None, firstname=None, lastname=N
         browser.click(xpath=f"//form[contains(@id, 'content-download-form')]//li[@data-value='{company_size}']")
     if agree:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//div[contains(@class, 'custom-checkbox')]")
-    time.sleep(1)
+    sleep(2)
     if '/templates/expense-reports' in browser.get_current_url():
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[text()='Download']")
     else:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[contains(@id, 'form-button')]")
 
 def assert_content_download_inline_form(browser):
-    sleep(1)
+    sleep(2)
     download_form = browser.find(xpath="//form[contains(@id, 'content-download-form')]")
     assert download_form.is_displayed(), "inline form is not present"
     h3_head = browser.find(xpath="//h3[contains(@id, 'report-heading')]")
@@ -36,7 +36,7 @@ def assert_content_download_inline_form(browser):
     assert sub_text and sub_text.is_displayed(), "Form sub-heading is not displayed"
 
 def assert_download_for_excel_form_modal(browser):
-    time.sleep(1)
+    sleep(1)
     download_modal_cta = browser.find(xpath="//a[contains(@id, 'download-excel')]")
     download_modal_cta.click()
     sleep(2)
@@ -53,8 +53,9 @@ def assert_download_for_excel_form_modal(browser):
     assert not report_modal.is_displayed(), "modal is not closed"
 
 def assert_required_fields(browser):
+    sleep(1)
     submit_content_download_form(browser)
-    time.sleep(1)
+    sleep(2)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     firstname_error = browser.find(xpath="//label[@for='content-download-form-first-name'][@class='error']")
     lastname_error = browser.find(xpath="//label[@for='content-download-form-last-name'][@class='error']")
@@ -67,35 +68,40 @@ def assert_required_fields(browser):
     assert consent_error and consent_error.is_displayed(), "No error displayed for missing checkbox"
 
 def assert_invalid_names(browser):
-    submit_content_download_form(browser, firstname='test1', lastname='test2')
     sleep(1)
+    submit_content_download_form(browser, firstname='test1', lastname='test2')
+    sleep(2)
     firstname_error = browser.find(xpath="//label[@for='content-download-form-first-name'][@class='error']")
     lastname_error = browser.find(xpath="//label[@for='content-download-form-last-name'][@class='error']")
     assert firstname_error and firstname_error.is_displayed(), "No error displayed for invalid firstname"
     assert lastname_error and lastname_error.is_displayed(), "No error displayed for invalid lastname"
 
 def assert_bad_email(browser):
+    sleep(1)
     submit_content_download_form(browser, email='test')
     sleep(2)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for invalid email'
 
 def assert_non_business_email(browser):
+    sleep(1)
     submit_content_download_form(browser, email='test@gmail.com', firstname='test', lastname='test', company_size='Under 5', agree=True)
     sleep(5)
     email_error = browser.find(xpath="//label[@for='content-download-form-email'][@class='error']")
     assert email_error and email_error.is_displayed(), 'No error displayed for non business email'
 
 def assert_success_download_form(browser, title=None, email=None, content_url=None):
+    sleep(3)
     submit_content_download_form(browser, email='test@fyle.in', firstname='test', lastname='test', company_size='Under 5', agree=True)
     sleep(5)
     if '/templates/expense-reports' in browser.get_current_url():
         sleep(2)
         last_downloaded_filename = browser.get_downLoadeded_filename()
-        sleep(4)
+        sleep(5)
         browser.close_windows()
         assert last_downloaded_filename == 'https://cdn2.hubspot.net/hubfs/3906991/simple-expense-report-template.xlsx', "Downloaded file is not correct"
     else:
+        sleep(2)
         assert_content_download_thank_you_page(browser, title, email, content_url)
         browser.back()
 
