@@ -4,7 +4,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 def open_download_feature_form(browser):
-    sleep(2)
     browser.find(xpath="//section[contains(@class, 'download-feature-list-section')]", scroll=True)
     browser.click(xpath="//button[contains(@class, 'feature-list-download-btn')]")
     sleep(1)
@@ -20,10 +19,10 @@ def submit_download_feature_form(browser, email=None, firstname=None, lastname=N
         browser.input(xpath="//div[contains(@class, 'compare-feature-body')]//input[@name='phone']", keys=phone)
     if company_size:
         browser.click(xpath="//div[contains(@class, 'compare-feature-body')]//input[@id='number_of_employees-feature-download']")
-        browser.click(xpath=f"//div[contains(@class, 'compare-feature-body')]//li[@data-value='{company_size}']")
+        browser.click(xpath=f"//div[contains(@class, 'compare-feature-body')]//li[@value='{company_size}']")
     if agree:
         browser.click(xpath="//div[contains(@class, 'compare-feature-body')]//div[contains(@class, 'custom-checkbox')]")
-    browser.click(xpath="//div[contains(@class, 'compare-feature-body')]//button[text()='Download']")
+    browser.click(xpath="//div[contains(@class, 'compare-feature-body')]//button[text()=' Download ']")
 
 def assert_bad_email_download_feature_form(browser):
     open_download_feature_form(browser)
@@ -39,7 +38,7 @@ def assert_missing_firstname_download_feature_form(browser):
 
 def assert_success_download_feature_form(browser):
     open_download_feature_form(browser)
-    submit_download_feature_form(browser, email='test@fyle.in', firstname='Test', lastname='test', phone='123456789', company_size='Under 5', agree=True)
+    submit_download_feature_form(browser, email='test@fyle.in', firstname='test', lastname='test', phone='123456789', company_size='Under 5', agree=True)
     sleep(2)
     e = browser.find(xpath="//h3[contains(text(), 'Thank')]")
     assert e and e.is_displayed(), 'Not displaying thank you message'
