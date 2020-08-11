@@ -136,13 +136,12 @@ def get_active_index(carousel_items):
 
 def assert_customer_testimonial(browser):
     sleep(3)
-    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]", scroll=True)
-    carousel_items = browser.find_many(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
+    carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
     carousel_length = len(carousel_items)
     current_active_index = get_active_index(carousel_items)
 
     sleep(1)
-    browser.click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right carousel-control')]")
+    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
     sleep(1)
     active_index = get_active_index(carousel_items)
     logger.info(active_index, (current_active_index + 1) % carousel_length)
@@ -150,10 +149,10 @@ def assert_customer_testimonial(browser):
 
     browser.refresh()
     sleep(1)
-    carousel_items = browser.find_many(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
+    carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
     sleep(1)
 
-    browser.click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left carousel-control')]")
+    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
     sleep(1)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'

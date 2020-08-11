@@ -1,3 +1,4 @@
+from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,6 +23,7 @@ def submit_content_download_form(browser, email=None, firstname=None, lastname=N
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[text()='Download']")
     else:
         browser.click(xpath="//form[contains(@id, 'content-download-form')]//button[contains(@id, 'form-button')]")
+    sleep(1)
 
 def assert_content_download_inline_form(browser):
     download_form = browser.find(xpath="//form[contains(@id, 'content-download-form')]")
@@ -77,6 +79,7 @@ def assert_non_business_email(browser):
 def assert_success_download_form(browser, title=None, email=None, content_url=None):
     submit_content_download_form(browser, email='test@fyle.in', firstname='test', lastname='test', company_size='Under 5', agree=True)
     if '/templates/expense-reports' in browser.get_current_url():
+        sleep(2)
         last_downloaded_filename = browser.get_downLoadeded_filename()
         browser.close_windows()
         assert last_downloaded_filename == 'https://cdn2.hubspot.net/hubfs/3906991/simple-expense-report-template.xlsx', "Downloaded file is not correct"

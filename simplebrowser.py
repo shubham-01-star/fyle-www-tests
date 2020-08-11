@@ -134,7 +134,7 @@ class SimpleBrowser:
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
-        sleep(4)
+        sleep(3)
         return l
     
     def click_element(self, element):        
@@ -231,7 +231,7 @@ class SimpleBrowser:
         self.driver.switch_to.window(self.driver.window_handles[-1])
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
-        sleep(6)
+        sleep(5)
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
 
     def get_from_local_storage(self, key):

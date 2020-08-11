@@ -88,6 +88,7 @@ def test_reimbursement_template(browser):
         xpath="//h3[contains(text(), 'Reimbursement Claim Sheet Templates')]//parent::div//a[contains(@class, 'template-card')]")
     for i, template in enumerate(template_list):
         browser.click_element(template)
+        sleep(2)
         last_downloaded_filename = browser.get_downLoadeded_filename()
         assert last_downloaded_filename == template_links[i], "Reibursement template downloaded is not correct"
         browser.close_windows()
