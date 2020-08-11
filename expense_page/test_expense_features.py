@@ -4,6 +4,7 @@ import pytest
 
 from common.asserts import assert_overflowing, assert_customer_testimonial, assert_customer_logo, assert_cta_click_and_modal_show
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
+from common.download_feature_list_form import assert_bad_email_download_feature_form, assert_missing_firstname_download_feature_form, assert_success_download_feature_form
 from common.utils import resize_browser
 
 logger = logging.getLogger(__name__)
@@ -38,9 +39,24 @@ def test_feature_scroll(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collpasing_section(browser):
     for i in range(1, 11):
-        section = browser.force_click(xpath=f"//a[@id='feature-{i}']", scroll=True)
+        time.sleep(2)
+        browser.find(xpath=f"//a[@id='feature-{i}']/ancestor::section", scroll=True)
+        section = browser.click(xpath=f"//a[@id='feature-{i}']")
         class_list = section.get_attribute('class')
         assert class_list.count('collapse-closed collapsed'), 'Collapsing of sections should work'
+
+# check download feature list form
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_bad_email_download_feature_form(browser):
+    assert_bad_email_download_feature_form(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_missing_firstname_download_feature_form(browser):
+    assert_missing_firstname_download_feature_form(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_success_download_feature_form(browser):
+    assert_success_download_feature_form(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_overflowing(browser):

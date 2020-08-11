@@ -99,6 +99,7 @@ def assert_cta_click_and_modal_show(browser, cta_xpath):
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
 
 def assert_overflowing(browser):
+    sleep(3)
     assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
