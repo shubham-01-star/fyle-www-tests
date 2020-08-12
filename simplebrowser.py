@@ -127,13 +127,19 @@ class SimpleBrowser:
 
     def click(self, xpath, scroll=False):
         l = self.find(xpath, scroll)
-        sleep(2)
+        sleep(1)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+            'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
+        sleep(3)
+        return l
+
+    def click_element(self, element):
+        l = element.click()
+        sleep(3)
         return l
 
     def input(self, xpath, keys, scroll=False):
@@ -141,7 +147,7 @@ class SimpleBrowser:
         ltag = l.tag_name.lower() if l.tag_name else None
         # logger.info('found element with tag %s', ltag)
         assert ltag in ['input', 'li', 'button', 'span',
-                        'a', 'div', 'textarea'], 'xpath did not return proper element'
+            'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
         sleep(0.1)
@@ -186,15 +192,6 @@ class SimpleBrowser:
     def check_horizontal_overflow(self):
         return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
 
-    def get_from_storage(self, key):
-        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
-
-    def set_storage(self, key, value):
-        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
-
-    def clear_storage(self):
-        self.driver.execute_script("window.localStorage.clear();")
-
     def hover(self, elem):
         ltag = elem.tag_name.lower() if elem.tag_name else None
         assert ltag in ['li', 'button', 'span',
@@ -207,15 +204,11 @@ class SimpleBrowser:
     def refresh(self):
         return self.driver.refresh()
 
-    def force_click(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].click();", l)
-        return l
-
     def back(self):
         return self.driver.back()
 
     def switch_tab_next(self, number):
+        sleep(2)
         return self.driver.switch_to.window(self.driver.window_handles[number])
 
     # method to get the downloaded file name
@@ -225,6 +218,7 @@ class SimpleBrowser:
         self.driver.switch_to.window(self.driver.window_handles[-1])
         # navigate to chrome downloads
         self.driver.get('chrome://downloads')
+        sleep(5)
         return self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
 
     def get_from_local_storage(self, key):
@@ -235,9 +229,3 @@ class SimpleBrowser:
 
     def clear_local_storage(self):
         self.driver.execute_script("window.localStorage.clear();")
-
-    # required for mobile devices(https://stackoverflow.com/questions/48665001/can-not-click-on-a-element-elementclickinterceptedexception-in-splinter-selen)
-    def force_click(self, xpath, scroll=False):
-        l = self.find(xpath, scroll)
-        self.driver.execute_script("arguments[0].click();", l)
-        return l

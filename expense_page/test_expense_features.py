@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import logging
 import pytest
 
@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    time.sleep(0.5)
     module_browser.get(base_url + "/expense-management")
+    sleep(4)
     return module_browser
 
 # check demo form (common section)
@@ -32,14 +32,14 @@ def test_success(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_feature_scroll(browser):
     browser.click(xpath="//section[@class='feature-hero']//a[text()='Expense Reporting']")
-    time.sleep(2)
+    sleep(2)
     e = browser.find(xpath="//section[@id='expense-reporting']")
     assert abs(e.location['y'] - browser.current_scroll_position()) <= 30, 'Not scrolling to the Expense Reporting feature'
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_collpasing_section(browser):
     for i in range(1, 11):
-        time.sleep(2)
+        sleep(2)
         browser.find(xpath=f"//a[@id='feature-{i}']/ancestor::section", scroll=True)
         section = browser.click(xpath=f"//a[@id='feature-{i}']")
         class_list = section.get_attribute('class')
@@ -72,5 +72,6 @@ def test_customer_logo(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_bottom_section_cta(browser):
-    cta_xpath = '//section[contains(@class, "feature-bottom-section")]//a'
-    assert_cta_click_and_modal_show(browser, cta_xpath)
+    cta_section_xpath = '//section[contains(@class, "feature-bottom-section")]'
+    cta_xpath = f'{cta_section_xpath}//a'
+    assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath)

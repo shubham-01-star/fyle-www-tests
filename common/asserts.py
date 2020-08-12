@@ -17,7 +17,7 @@ def assert_hero_section(browser, section):
 
 def assert_hero_image(browser):
     hero_image = browser.find(xpath='//section[contains(@class,  "new-hero")]//img')
-    assert hero_image.is_displayed() == False, 'Hero image is being shown in mobile'
+    assert hero_image.is_displayed() is False, 'Hero image is being shown in mobile'
 
 def assert_other_section(browser, section):
     cl = section.get_attribute('class')
@@ -49,15 +49,17 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
-def assert_thank_you_modal(browser, ty_message):
+def assert_thank_you_modal(browser, ty_message, demoform=None):
     e = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]")
     assert e and e.is_displayed, "Thank you modal is not displayed"
-    sleep(3)
-    ty_img = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//div[not(contains(@class, 'demo-form-thank-you-img'))]")
+    if demoform:
+        ty_img = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//div[contains(@class, 'demo-form-thank-you-img')]")
+    else:
+        ty_img = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//div[not(contains(@class, 'demo-form-thank-you-img'))]")
     assert ty_img and ty_img.is_displayed(), "Thank image is not correct"
     ty_text = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]//span[contains(@class, 'ty-box')]").text
     assert ty_text == ty_message, "Thank you message is not correct"
-    
+
 def assert_collapsible_feature_comparison_table(browser):
     section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
     assert section, 'Collapsible table not found'
@@ -70,48 +72,47 @@ def assert_collapsible_feature_comparison_table(browser):
         # If it's collapsed, then check if it's opening up and it's sub-sections are displayed or not
         # Else it's open, then check if it's collapsing successfully
         if 'accordion-toggle' in div_class_names and 'collapsed' in div_class_names:
-            div.click()
-            sleep(3)
+            browser.click_element(div)
             feature_contents = browser.find(xpath=sub_contents_div_xpath)
             assert feature_contents.is_displayed(), f'Unable to see contents of feature: {div.text}'
         else:
-            div.click()
-            sleep(3)
+            browser.click_element(div)
             feature_contents = browser.find(xpath=sub_contents_div_xpath)
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
         browser.scroll_down(50)
-        sleep(3)
 
-def assert_cards_redirection(browser, cards, redirect_to_urls):
+def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
+    cards = browser.find_many(xpath=cards_xpath)
     assert len(cards) > 0, 'Wrong xpath given for cards'
     for card in cards:
-        card.click()
-        sleep(2)
+        browser.click_element(card)
         browser.switch_tab_next(1)
         assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
         browser.close_windows()
+        if browser.is_desktop() is False:
+            browser.scroll_down(300)
         sleep(2)
 
-def assert_cta_click_and_modal_show(browser, cta_xpath):
+def assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath):
+    section = browser.find(xpath=cta_section_xpath, scroll=True)
+    assert section and section.is_displayed(), 'Section not found'
     browser.click(xpath=cta_xpath)
-    sleep(3)
     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]', scroll=True)
-    sleep(3)
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
 
 def assert_overflowing(browser):
-    sleep(3)
+    sleep(2)
     assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
@@ -137,23 +138,21 @@ def get_active_index(carousel_items):
     return active_index
 
 def assert_customer_testimonial(browser):
-    sleep(3)
     carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
     carousel_length = len(carousel_items)
     current_active_index = get_active_index(carousel_items)
 
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]", scroll=True)
     sleep(1)
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
-    sleep(1)
+    right_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]//span//img")
+    browser.click_element(right_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
 
-    browser.refresh()
-    sleep(1)
-    carousel_items = browser.find_many("//section[contains(@class, 'customer-testimonial')]//div[contains(@class, 'carousel-item')]")
-    sleep(1)
-
-    browser.force_click(xpath="//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
-    sleep(1)
+    current_active_index = active_index
+    left_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]//span//img")
+    browser.click_element(left_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
