@@ -72,5 +72,6 @@ def test_customer_logo(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_bottom_section_cta(browser):
-    cta_xpath = '//section[contains(@class, "feature-bottom-section")]//a'
-    assert_cta_click_and_modal_show(browser, cta_xpath)
+    cta_section_xpath = '//section[contains(@class, "feature-bottom-section")]'
+    cta_xpath = f'{cta_section_xpath}//a'
+    assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath)
