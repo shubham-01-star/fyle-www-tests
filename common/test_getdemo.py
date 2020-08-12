@@ -1,5 +1,5 @@
 import logging
-import time
+from common.asserts import assert_thank_you_modal
 
 logger = logging.getLogger(__name__)
 
@@ -25,25 +25,22 @@ def submit_getdemo_form(browser, email=None, firstname=None, lastname=None, phon
         browser.click(xpath='//div[contains(@class, "custom-checkbox")]')
     browser.click(xpath='//button[text()=" Get a demo "]')
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_bad_email(browser):
     open_getdemo_form(browser)
     submit_getdemo_form(browser, email='foo')
     e = browser.find(xpath="//label[@for='demo-email'][@class='error']")
     assert e and e.is_displayed(), 'No error displayed for invalid email'
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_missing_firstname(browser):
     open_getdemo_form(browser)
     submit_getdemo_form(browser, email='megatron@fyle.in')
     e = browser.find(xpath="//label[@for='demo-first-name'][@class='error demo-first-name-error']")
     assert e and e.is_displayed(), 'No error displayed for missing firstname'
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def assert_success(browser):
     open_getdemo_form(browser)
-    time.sleep(2)
     submit_getdemo_form(browser, email='test@fyle.in', firstname='test', lastname='test', phone='123456789', company_size='Under 5', agree=True)
-    time.sleep(5)
     e = browser.find(xpath="//h3[contains(text(), 'Thank')]")
     assert e and e.is_displayed(), 'Not displaying thank you message'
+    ty_message = 'Sit back and relax. Our Sales team will get in touch with you within the next 24 hours to schedule a detailed demo.'
+    assert_thank_you_modal(browser, ty_message, 'demoform')
