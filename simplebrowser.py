@@ -250,6 +250,6 @@ class SimpleBrowser:
         return l
 
     def click_element(self, element):
-        sleep(3)
         element.click()
+        sleep(3)
         return element

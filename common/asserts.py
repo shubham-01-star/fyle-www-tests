@@ -94,9 +94,7 @@ def assert_cards_redirection(browser, cards, redirect_to_urls):
 
 def assert_cta_click_and_modal_show(browser, cta_xpath):
     browser.click(xpath=cta_xpath)
-    sleep(3)
     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]', scroll=True)
-    sleep(3)
     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
 
 def assert_overflowing(browser):
@@ -142,19 +140,16 @@ def assert_customer_testimonial(browser):
     current_active_index = get_active_index(carousel_items)
 
     browser.find(xpath="//section[contains(@class, 'customer-testimonial')]", scroll=True)
+    sleep(1)
     right_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]")
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'right')]//span//img")
     browser.click_element(right_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + 1) % carousel_length), 'Right click operation is not working'
 
     current_active_index = active_index
     left_arrow = browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]")
+    browser.find(xpath="//section[contains(@class, 'customer-testimonial')]//div[contains(@id, 'customer-carousel')]//a[contains(@class, 'left')]//span//img")
     browser.click_element(left_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
-
-# def assert_cta_click_and_modal_show(browser, cta_xpath):
-#     browser.click(xpath=cta_xpath)
-#     sleep(2)
-#     form_modal = browser.find(xpath='//div[contains(@class, "modal-content")]')
-#     assert form_modal and form_modal.is_displayed(), 'Form modal not visible'
