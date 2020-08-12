@@ -142,11 +142,6 @@ class SimpleBrowser:
         sleep(3)
         return element
 
-    def click_element(self, element):
-        element.click()
-        sleep(3)
-        return element
-
     def input(self, xpath, keys, scroll=False):
         l = self.find(xpath, scroll)
         ltag = l.tag_name.lower() if l.tag_name else None

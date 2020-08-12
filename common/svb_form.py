@@ -1,3 +1,4 @@
+from time import sleep
 import logging
 from common.asserts import assert_thank_you_modal
 
@@ -8,6 +9,7 @@ def submit_svb_top_email_form(browser, email=None):
     if email:
         browser.input(xpath="//form[contains(@id, 'svb-email-form-top')]//input[@name='email']", keys=email)
     browser.click(xpath="//form[contains(@id, 'svb-email-form-top')]//button[text()='Get Started']")
+    sleep(2)
 
 def submit_svb_contact_form(browser, name=None, phone=None, company_size=None):
     if name:
@@ -18,6 +20,7 @@ def submit_svb_contact_form(browser, name=None, phone=None, company_size=None):
         browser.click(xpath="//form[contains(@id, 'svb-contact-form')]//input[@id='number_of_employees']")
         browser.click(xpath=f"//form[contains(@id, 'svb-contact-form')]//li[@value='{company_size}']")
     browser.click(xpath="//form[contains(@id, 'svb-contact-form')]//button[text()='Redeem Your Offer']")
+    sleep(2)
 
 def assert_required_fields_top(browser):
     submit_svb_top_email_form(browser)
