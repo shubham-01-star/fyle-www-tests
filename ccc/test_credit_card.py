@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + '/corporate-credit-cards')
-    time.sleep(3)
+    time.sleep(4)
     return module_browser
 
 #common utils

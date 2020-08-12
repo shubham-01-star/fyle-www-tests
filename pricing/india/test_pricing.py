@@ -11,7 +11,7 @@ def browser(module_browser, base_url, request):
     module_browser.get(base_url + "/pricing")
     module_browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     module_browser.refresh()
-    time.sleep(5)
+    time.sleep(4)
     return module_browser
 
 # check customer logo section (common section)

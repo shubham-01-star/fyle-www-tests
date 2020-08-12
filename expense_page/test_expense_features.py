@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    time.sleep(0.5)
     module_browser.get(base_url + "/expense-management")
+    time.sleep(4)
     return module_browser
 
 # check demo form (common section)
@@ -72,5 +72,6 @@ def test_customer_logo(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_bottom_section_cta(browser):
-    cta_xpath = '//section[contains(@class, "feature-bottom-section")]//a'
-    assert_cta_click_and_modal_show(browser, cta_xpath)
+    cta_section_xpath = '//section[contains(@class, "feature-bottom-section")]'
+    cta_xpath = f'{cta_section_xpath}//a'
+    assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath)

@@ -138,9 +138,9 @@ class SimpleBrowser:
         return l
 
     def click_element(self, element):
-        element.click()
+        l = element.click()
         sleep(3)
-        return element
+        return l
 
     def input(self, xpath, keys, scroll=False):
         l = self.find(xpath, scroll)
