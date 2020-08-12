@@ -69,10 +69,10 @@ def test_compareplan_table(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_download_cta(browser):
     open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
-    browser.scroll_down(-200)
+    browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
     cta = browser.find(xpath="//button[contains(text(), 'Download all plans')]", scroll=True)
-    browser.scroll_down(-200)
+    browser.scroll_up_or_down(-200)
     browser.click_element(cta)
     download_form = browser.find(xpath="//form[@id='contact-us-form-feature-download']")
     assert download_form and download_form.is_displayed(), 'All feature download form is not open'
@@ -87,9 +87,9 @@ def test_demo_cta(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_scroll_top(browser):
     open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
-    browser.scroll_down(-200)
+    browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
-    browser.scroll_down(100)
+    browser.scroll_up_or_down(100)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     # sleep required for scrolling up to the hero section
     time.sleep(3)
@@ -102,7 +102,7 @@ def test_collapsible_faq(browser):
     faq_answer = browser.find(xpath="//div[@id='faq-1-content']", scroll=True)
     assert faq_answer.is_displayed() is False, 'FAQ answer is not collapsed by default'
     faq_question = browser.find(xpath="//div[@id='faq-1-heading']", scroll=True)
-    browser.scroll_down(-200)
+    browser.scroll_up_or_down(-200)
     browser.click_element(faq_question)
     assert faq_answer.is_displayed(), 'FAQ answer is not opening on click'
     browser.click(xpath="//div[@id='faq-1-heading']")
@@ -114,7 +114,7 @@ def test_collapsible_faq(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_sticky_table_header(browser):
     open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
-    browser.scroll_down(-200)
+    browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
     browser.find(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]", scroll=True)
     header_position = browser.find(xpath="//div[contains(@class, 'table-head')]")
@@ -125,7 +125,7 @@ def test_sticky_table_header(browser):
 def test_collapsible_details(browser):
     see_details = browser.find(xpath="//a[@id='show-hide-standard']", scroll=True)
     # scrolling up so that element is not hidden behind navbar
-    browser.scroll_down(-100)
+    browser.scroll_up_or_down(-100)
     browser.click_element(see_details)
     details = browser.find(xpath="//div[@id='standard-collapse']")
     assert details and details.is_displayed(), 'Show details is not opening the collapsible'

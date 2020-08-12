@@ -79,7 +79,7 @@ def assert_collapsible_feature_comparison_table(browser):
             browser.click_element(div)
             feature_contents = browser.find(xpath=sub_contents_div_xpath)
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
-        browser.scroll_down(50)
+        browser.scroll_up_or_down(50)
 
 def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
     cards = browser.find_many(xpath=cards_xpath)
@@ -90,7 +90,7 @@ def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
         assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
         browser.close_windows()
         if browser.is_desktop() is False:
-            browser.scroll_down(300)
+            browser.scroll_up_or_down(300)
         sleep(2)
 
 def assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath):
