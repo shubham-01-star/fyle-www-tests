@@ -92,8 +92,6 @@ def test_scroll_top(browser):
     browser.scroll_down(100)
     browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]")
-    # sleep required for scrolling up to the hero section
-    time.sleep(2)
     assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
