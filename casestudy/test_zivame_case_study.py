@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    sleep(0.5)
     module_browser.get(base_url + '/case-study/zivame-ecommerce-expense-management')
+    sleep(4)
     return module_browser
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)

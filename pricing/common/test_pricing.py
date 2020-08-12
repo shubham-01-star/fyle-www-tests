@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     module_browser.get(base_url + "/pricing")
-    time.sleep(5)
+    time.sleep(4)
     return module_browser
 
 # check demo form (common section)

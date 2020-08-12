@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope='function')
 def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
-    time.sleep(0.5)
     module_browser.get(base_url + "/expense-management")
+    time.sleep(4)
     return module_browser
 
 # check demo form (common section)
