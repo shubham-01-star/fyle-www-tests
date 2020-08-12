@@ -12,6 +12,7 @@ def browser(module_browser, base_url, request):
     resize_browser(browser=module_browser, resolution=request.param)
     sleep(4)
     module_browser.get(base_url + '/resources/ebooks/levvel-t&e-report')
+    sleep(2)
     return module_browser
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)

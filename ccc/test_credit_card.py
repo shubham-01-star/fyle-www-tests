@@ -21,16 +21,13 @@ def browser(module_browser, base_url, request):
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_ccc_video(browser):
-    time.sleep(1)
     browser.click(xpath="//div[contains(@class, 'youtube-wrapper')]//div[contains(@class, 'youtube')]")
-    time.sleep(5)
     e = browser.find(xpath="//div[contains(@class, 'feature-hero-video')]//iframe")
     assert e and e.is_displayed(), 'Video not played'
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_video_thumbnail(browser):
     browser.find("//div[contains(@class, 'feature-hero-video')]//img", scroll=True)
-    time.sleep(2)
     img = browser.find("//div[contains(@class, 'feature-hero-video')]//div[contains(@class, 'youtube')]//img")
     assert img.is_displayed(), 'Video thumbnail image not loaded'
 
@@ -101,13 +98,11 @@ def test_sneak_peek(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_modal_open(browser):
     browser.click("//section[contains(@class, 'long-background')]//a[contains(@id, 'best-expense-video-id')]")
-    time.sleep(3)
     modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
     assert modal.is_displayed(), 'Modal is not opened'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_modal_open_bottom(browser):
     browser.click("//section[contains(@class, 'explore-fyle-beyond')]//a[contains(@class, 'new-contact-us-demo-form')]")
-    time.sleep(3)
     modal = browser.find("//div[contains(@id, 'contact-us-modal')]")
     assert modal.is_displayed(), 'Modal is not opened'
