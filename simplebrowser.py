@@ -129,7 +129,7 @@ class SimpleBrowser:
         l = self.find(xpath, scroll)
         sleep(2)
         ltag = l.tag_name.lower() if l.tag_name else None
-        assert ltag in ['input', 'li', 'button', 'span',
+        assert ltag in ['input', 'li', 'button', 'span', 'img',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
