@@ -85,13 +85,16 @@ def test_demo_cta(browser):
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
-def test_scroll_top(browser):
+def test_scroll_top_arrow(browser):
     open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
     browser.scroll_down(-200)
     browser.click_element(open_table_btn)
     browser.scroll_down(100)
-    browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
-    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]")
+    # sleep required for transition/page scroll-up
+    time.sleep(2)
+    arrow = browser.find(xpath="//a[contains(@class, 'scroll-top-arrow')]")
+    browser.click_element(arrow)
+    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]", scroll=True)
     assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
