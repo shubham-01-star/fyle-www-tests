@@ -17,7 +17,7 @@ def assert_hero_section(browser, section):
 
 def assert_hero_image(browser):
     hero_image = browser.find(xpath='//section[contains(@class,  "new-hero")]//img')
-    assert hero_image.is_displayed() == False, 'Hero image is being shown in mobile'
+    assert hero_image.is_displayed() is False, 'Hero image is being shown in mobile'
 
 def assert_other_section(browser, section):
     cl = section.get_attribute('class')
@@ -104,14 +104,14 @@ def assert_overflowing(browser):
     assert not browser.check_horizontal_overflow(), f'Horizontal Overflow is there in the page {browser.get_current_url()}'
 
 def assert_customer_logo(browser):
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"India"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")
     us_logo = browser.find("//div[contains(@class, 'customer-logo-non-india')]")
     assert indian_logo.is_displayed() and not us_logo.is_displayed(), 'Found an US image in Indian IP'
 
-    browser.set_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
+    browser.set_local_storage('ipInfo', '{"ip":"157.50.160.253","country":"United States"}')
     browser.refresh()
     sleep(3)
     indian_logo = browser.find("//div[contains(@class, 'customer-logo-india')]")

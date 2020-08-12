@@ -192,15 +192,6 @@ class SimpleBrowser:
     def check_horizontal_overflow(self):
         return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
 
-    def get_from_storage(self, key):
-        return json.loads(self.driver.execute_script("return window.localStorage.getItem(arguments[0]);", key))
-
-    def set_storage(self, key, value):
-        self.driver.execute_script("window.localStorage.setItem(arguments[0], arguments[1]);", key, value)
-
-    def clear_storage(self):
-        self.driver.execute_script("window.localStorage.clear();")
-
     def hover(self, elem):
         ltag = elem.tag_name.lower() if elem.tag_name else None
         assert ltag in ['li', 'button', 'span',
