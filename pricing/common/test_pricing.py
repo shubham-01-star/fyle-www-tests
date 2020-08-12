@@ -14,35 +14,35 @@ def browser(module_browser, base_url, request):
     time.sleep(4)
     return module_browser
 
-# check demo form (common section)
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_bad_email(browser):
-    assert_bad_email(browser)
+# # check demo form (common section)
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_bad_email(browser):
+#     assert_bad_email(browser)
 
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_missing_firstname(browser):
-    assert_missing_firstname(browser)
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_missing_firstname(browser):
+#     assert_missing_firstname(browser)
 
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_success(browser):
-    assert_success(browser)
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_success(browser):
+#     assert_success(browser)
 
-# check slide change in cutsomer testimonial (common section)
-@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
-def test_customer_testimonial(browser):
-    assert_customer_testimonial(browser=browser)
+# # check slide change in cutsomer testimonial (common section)
+# @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+# def test_customer_testimonial(browser):
+#     assert_customer_testimonial(browser=browser)
 
-# check page x-overflow (common method)
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
-    assert_overflowing(browser)
+# # check page x-overflow (common method)
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_overflowing(browser):
+#     assert_overflowing(browser)
 
-# check pricing page is redirecting to bcp page
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_bcp_redirection(browser):
-    browser.click(xpath="//a[contains(text(), 'Click here')]")
-    assert browser.get_current_url() == 'https://ww2.fylehq.com/business-continuity-plan-covid-19', 'Redirection to bcp failed'
-    browser.back()
+# # check pricing page is redirecting to bcp page
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_bcp_redirection(browser):
+#     browser.click(xpath="//a[contains(text(), 'Click here')]")
+#     assert browser.get_current_url() == 'https://ww2.fylehq.com/business-continuity-plan-covid-19', 'Redirection to bcp failed'
+#     browser.back()
 
 # check all 3 pricing cards have cta which open demo form (exit intent opening error)
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
@@ -85,15 +85,16 @@ def test_demo_cta(browser):
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
-def test_scroll_top(browser):
+def test_scroll_top_arrow(browser):
     open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
     browser.scroll_down(-200)
     browser.click_element(open_table_btn)
     browser.scroll_down(100)
-    browser.click(xpath="//a[contains(@class, 'scroll-top-arrow')]")
-    # sleep required for scrolling up to the hero section
-    time.sleep(3)
-    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]")
+    # sleep required for transition/page scroll-up
+    time.sleep(2)
+    arrow = browser.find(xpath="//a[contains(@class, 'scroll-top-arrow')]")
+    browser.click_element(arrow)
+    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]", scroll=True)
     assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
