@@ -38,6 +38,6 @@ def test_pricing_toggle(browser):
     business_price = browser.find(xpath="//h2[contains(@class, 'business-price')]")
     assert business_price.text == '$8.99' and standard_price.text == '$4.99', 'Default annual pricing is incorrect for non-India'
     annual_price_active = browser.find(xpath="//label[contains(text(), 'Annually') and contains(@class, 'switch-active-text-color')]")
-    annual_price_active.click_element()
+    browser.click_element(annual_price_active)
     monthly_price_active = browser.find(xpath="//label[contains(text(), 'Monthly') and contains(@class, 'switch-active-text-color')]")
     assert monthly_price_active and standard_price.text == '$6.99' and business_price.text == '$11.99', 'Toggle pricing button is not working'
