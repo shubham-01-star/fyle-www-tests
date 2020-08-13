@@ -31,6 +31,6 @@ def assert_non_business_email(browser):
 
 def assert_success_chrome_uninstall_form(browser):
     submit_chrome_uninstall_form(browser, email="test@fyle.in", feedback='test feedback')
-    ty_message = browser.find(xpath="//form[contains(@id, 'send-feedback')]//p[contains(@class, 'feedback-submit')]", scroll=True)
     browser.scroll_up_or_down(-100)
+    ty_message = browser.find(xpath="//p[contains(@class, 'feedback-submit')]", scroll=True)
     assert ty_message and ty_message.is_displayed(), 'Thank you message is not displayed'
