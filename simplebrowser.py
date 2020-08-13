@@ -104,7 +104,7 @@ class SimpleBrowser:
             self.driver.execute_script(f'window.scrollTo(0, {pos});')
             sleep(random.uniform(0.0, 1.0))
 
-    def scroll_down(self, pixels_to_scroll):
+    def scroll_up_or_down(self, pixels_to_scroll):
         self.driver.execute_script(f'window.scrollBy(0, {pixels_to_scroll});')
         sleep(random.uniform(0.0, 1.0))
 
