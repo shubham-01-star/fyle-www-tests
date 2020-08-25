@@ -49,6 +49,27 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
+
+def assert_spacing_between(browser, element1=None, element2=None, value=None):
+    space_between = str(browser.get_spacing_below(element1) + browser.get_spacing_top(element2))
+    assert space_between == value, "spacing between is not correct"
+
+def assert_spacing_below(browser, element=None, value=None):
+    space_below = str(browser.get_spacing_below(element))
+    assert space_below == value, "spacing below is not correct"
+
+def assert_spacing_top(browser, element=None, value=None):
+    space_top = str(browser.get_spacing_top(element))
+    assert space_top == value, "spacing top is not correct"
+
+def assert_spacing_right(browser, element=None, value=None):
+    space_top = str(browser.get_spacing_right(element))
+    assert space_top == value, "spacing right is not correct"
+
+def assert_spacing_left(browser, element=None, value=None):
+    space_top = str(browser.get_spacing_left(element))
+    assert space_top == value, "spacing left is not correct"
+
 def assert_thank_you_modal(browser, ty_message, demoform=None):
     e = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]")
     assert e and e.is_displayed, "Thank you modal is not displayed"

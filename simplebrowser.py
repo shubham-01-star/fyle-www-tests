@@ -173,6 +173,26 @@ class SimpleBrowser:
 
     def get_height(self):
         return self.driver.get_window_size()['height']
+    
+    def get_spacing_below(self, element):
+        padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
+        margin_below = int(element.value_of_css_property('margin-bottom').replace('px', ''))
+        return padding_below + margin_below
+    
+    def get_spacing_top(self, element):
+        padding_top = int(element.value_of_css_property('padding-top').replace('px', ''))
+        margin_top = int(element.value_of_css_property('margin-top').replace('px', ''))
+        return padding_top + margin_top
+    
+    def get_spacing_right(self, element):
+        padding_right = int(element.value_of_css_property('padding-right').replace('px', ''))
+        margin_right = int(element.value_of_css_property('margin-right').replace('px', ''))
+        return padding_right + margin_right
+    
+    def get_spacing_left(self, element):
+        padding_left = int(element.value_of_css_property('padding-left').replace('px', ''))
+        margin_left = int(element.value_of_css_property('margin-left').replace('px', ''))
+        return padding_left + margin_left
 
     def is_desktop(self):
         return self.get_width() >= 1024
