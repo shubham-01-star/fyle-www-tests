@@ -60,7 +60,7 @@ def assert_spacing_between(element1=None, element2=None, value=None):
     space_between = str(space_below + space_top)
     assert space_between == value, "spacing between is not correct"
 
-def assert_spacing_below(element=None, value=None):
+def assert_spacing_bottom(element=None, value=None):
     padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
     margin_below = int(element.value_of_css_property('margin-bottom').replace('px', ''))
     space_below = str(padding_below + margin_below)
