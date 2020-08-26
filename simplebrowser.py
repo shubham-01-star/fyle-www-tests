@@ -129,7 +129,7 @@ class SimpleBrowser:
         l = self.find(xpath, scroll)
         sleep(1)
         ltag = l.tag_name.lower() if l.tag_name else None
-        assert ltag in ['input', 'li', 'button', 'span', 
+        assert ltag in ['input', 'li', 'button', 'span',
                         'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
@@ -229,23 +229,3 @@ class SimpleBrowser:
 
     def clear_local_storage(self):
         self.driver.execute_script("window.localStorage.clear();")
-
-    def get_spacing_below(self, element):
-        padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
-        margin_below = int(element.value_of_css_property('margin-bottom').replace('px', ''))
-        return padding_below + margin_below
-
-    def get_spacing_top(self, element):
-        padding_top = int(element.value_of_css_property('padding-top').replace('px', ''))
-        margin_top = int(element.value_of_css_property('margin-top').replace('px', ''))
-        return padding_top + margin_top
-
-    def get_spacing_right(self, element):
-        padding_right = int(element.value_of_css_property('padding-right').replace('px', ''))
-        margin_right = int(element.value_of_css_property('margin-right').replace('px', ''))
-        return padding_right + margin_right
-
-    def get_spacing_left(self, element):
-        padding_left = int(element.value_of_css_property('padding-left').replace('px', ''))
-        margin_left = int(element.value_of_css_property('margin-left').replace('px', ''))
-        return padding_left + margin_left

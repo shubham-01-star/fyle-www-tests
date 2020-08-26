@@ -50,24 +50,38 @@ def assert_typography(browser):
     #     assert_other_section(browser=browser, section=other_section)
 
 
-def assert_spacing_between(browser, element1=None, element2=None, value=None):
-    space_between = str(browser.get_spacing_below(element1) + browser.get_spacing_top(element2))
+def assert_spacing_between(element1=None, element2=None, value=None):
+    padding_below = int(element1.value_of_css_property('padding-bottom').replace('px', ''))
+    margin_below = int(element1.value_of_css_property('margin-bottom').replace('px', ''))
+    space_below = padding_below + margin_below
+    padding_top = int(element2.value_of_css_property('padding-top').replace('px', ''))
+    margin_top = int(element2.value_of_css_property('margin-top').replace('px', ''))
+    space_top = padding_top + margin_top
+    space_between = str(space_below + space_top)
     assert space_between == value, "spacing between is not correct"
 
-def assert_spacing_below(browser, element=None, value=None):
-    space_below = str(browser.get_spacing_below(element))
+def assert_spacing_below(element=None, value=None):
+    padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
+    margin_below = int(element.value_of_css_property('margin-bottom').replace('px', ''))
+    space_below = str(padding_below + margin_below)
     assert space_below == value, "spacing below is not correct"
 
-def assert_spacing_top(browser, element=None, value=None):
-    space_top = str(browser.get_spacing_top(element))
+def assert_spacing_top(element=None, value=None):
+    padding_top = int(element.value_of_css_property('padding-top').replace('px', ''))
+    margin_top = int(element.value_of_css_property('margin-top').replace('px', ''))
+    space_top = str(padding_top + margin_top)
     assert space_top == value, "spacing top is not correct"
 
-def assert_spacing_right(browser, element=None, value=None):
-    space_top = str(browser.get_spacing_right(element))
+def assert_spacing_right(element=None, value=None):
+    padding_right = int(element.value_of_css_property('padding-right').replace('px', ''))
+    margin_right = int(element.value_of_css_property('margin-right').replace('px', ''))
+    space_top = str(padding_right + margin_right)
     assert space_top == value, "spacing right is not correct"
 
-def assert_spacing_left(browser, element=None, value=None):
-    space_top = str(browser.get_spacing_left(element))
+def assert_spacing_left(element=None, value=None):
+    padding_left = int(element.value_of_css_property('padding-left').replace('px', ''))
+    margin_left = int(element.value_of_css_property('margin-left').replace('px', ''))
+    space_top = str(padding_left + margin_left)
     assert space_top == value, "spacing left is not correct"
 
 def assert_thank_you_modal(browser, ty_message, demoform=None):
