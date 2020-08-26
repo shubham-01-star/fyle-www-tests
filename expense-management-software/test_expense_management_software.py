@@ -73,7 +73,7 @@ def test_competitor_section_spacing_mobile(browser):
         assert_spacing_right(subtext, '0')
         assert_spacing_left(subtext, '0')
 
-@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_competitor_section_card_redirection(browser):
     card_url = [
         'https://ww2.fylehq.com/alternative/concur',
@@ -81,35 +81,21 @@ def test_competitor_section_card_redirection(browser):
         'https://ww2.fylehq.com/alternative/expensify',
         'https://ww2.fylehq.com/alternative/chromeriver'
     ]
-    card_list = [
+    card_list_desktop = [
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'SAP Concur')]//parent::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Certify')]//parent::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Expensify')]//parent::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chromeriver')]//parent::a"
     ]
-    for i, card_xpath in enumerate(card_list):
-        card = browser.find(card_xpath, scroll=True)
-        browser.click_element(card)
-        assert browser.get_current_url() == card_url[i], "redirection url is not correct"
-        browser.back()
-
-@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
-def test_competitor_section_card_redirection_mobile(browser):
-    card_url = [
-        'https://ww2.fylehq.com/alternative/concur',
-        'https://ww2.fylehq.com/alternative/certify',
-        'https://ww2.fylehq.com/alternative/expensify',
-        'https://ww2.fylehq.com/alternative/chromeriver'
-    ]
-    card_list = [
+    card_list_mobile = [
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'SAP Concur')]/following-sibling::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Certify')]/following-sibling::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Expensify')]/following-sibling::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chromeriver')]/following-sibling::a"
     ]
-    for i, card_xpath in enumerate(card_list):
-        card = browser.find(card_xpath, scroll=True)
-        browser.scroll_up_or_down(-100)
-        browser.click_element(card)
-        assert browser.get_current_url() == card_url[i], "redirection url is not correct"
-        browser.back()
+    if browser.is_desktop():
+        card_list = card_list_desktop
+    else:
+        card_list = card_list_mobile
+    
+    assert_cards_redirection_same_tab(browser, card_list, card_url)

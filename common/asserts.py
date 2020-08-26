@@ -128,6 +128,14 @@ def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
             browser.scroll_up_or_down(300)
         sleep(2)
 
+def assert_cards_redirection_same_tab(browser, cards_list, url_list):
+    for i, card_xpath in enumerate(cards_list):
+        card = browser.find(card_xpath, scroll=True)
+        browser.scroll_up_or_down(-100)
+        browser.click_element(card)
+        assert browser.get_current_url() == url_list[i], "redirection url is not correct"
+        browser.back()
+
 def assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath):
     section = browser.find(xpath=cta_section_xpath, scroll=True)
     assert section and section.is_displayed(), 'Section not found'
