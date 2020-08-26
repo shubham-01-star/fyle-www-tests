@@ -39,11 +39,11 @@ def test_feature_scroll(browser):
 def test_collpasing_section(browser):
     for i in range(1, 11):
         sleep(2)
-        if(i!=2):
+        if i != 2:
             browser.find(xpath=f"//a[@id='feature-{i}']//ancestor::section", scroll=True)
             browser.click(xpath=f"//a[@id='feature-{i}']")
             class_list = browser.find(xpath=f"//a[@id='feature-{i}']").get_attribute('class')
-        assert ('collapse-closed collapsed') in class_list, 'Collapsing of sections should work'
+        assert 'collapse-closed collapsed' in class_list, 'Collapsing of sections should work'
 
 # check download feature list form
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
