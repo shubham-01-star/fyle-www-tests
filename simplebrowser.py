@@ -190,7 +190,8 @@ class SimpleBrowser:
         self.driver.set_window_size(width, height)
 
     def check_horizontal_overflow(self):
-        return self.driver.execute_script("return document.documentElement.scrollWidth>document.documentElement.clientWidth")
+        self.driver.execute_script("$(document).scrollLeft(1)")
+        return self.driver.execute_script("return $(document).scrollLeft() === 0")
 
     def hover(self, elem):
         ltag = elem.tag_name.lower() if elem.tag_name else None

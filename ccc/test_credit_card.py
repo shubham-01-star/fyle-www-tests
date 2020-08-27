@@ -20,6 +20,10 @@ def browser(module_browser, base_url, request):
     return module_browser
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert_overflowing(browser=browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_ccc_video(browser):
     browser.click(xpath="//div[contains(@class, 'youtube-wrapper')]//div[contains(@class, 'youtube')]")
     e = browser.find(xpath="//div[contains(@class, 'feature-hero-video')]//iframe")
@@ -46,10 +50,6 @@ def test_badges(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_customer_testimonial(browser):
     assert_customer_testimonial(browser=browser)
-
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
-    assert_overflowing(browser=browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_bad_email(browser):
