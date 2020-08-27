@@ -79,7 +79,8 @@ def test_download_cta(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_demo_cta(browser):
-    browser.click(xpath="//div[contains(text(), 'Compare all plans')]")
+    compare_cta  = browser.find("//div[contains(text(), 'Compare all plans')]", scroll=True)
+    browser.click_element(compare_cta)
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
