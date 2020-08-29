@@ -2,7 +2,7 @@ from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection_same_tab
+from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection
 
 logger = logging.getLogger(__name__)
 
@@ -73,17 +73,17 @@ def test_competitor_section_card_redirection(browser):
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'SAP Concur')]//parent::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Certify')]//parent::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Expensify')]//parent::a",
-        "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chromeriver')]//parent::a"
+        "//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chrome River')]//parent::a"
     ]
     card_list_mobile = [
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'SAP Concur')]/following-sibling::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Certify')]/following-sibling::a",
         "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Expensify')]/following-sibling::a",
-        "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chromeriver')]/following-sibling::a"
+        "//section[contains(@class, 'fyle-vs-competitors')]//div[contains(@class, 'competitor-cards')]//p[contains(text(), 'Chrome River')]/following-sibling::a"
     ]
     if browser.is_desktop():
         card_list = card_list_desktop
     else:
         card_list = card_list_mobile
     
-    assert_cards_redirection_same_tab(browser, card_list, card_url)
+    assert_cards_redirection(browser, card_list, card_url, same_tab=True)

@@ -116,25 +116,25 @@ def assert_collapsible_feature_comparison_table(browser):
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
         browser.scroll_up_or_down(50)
 
-def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
-    cards = browser.find_many(xpath=cards_xpath)
-    assert len(cards) > 0, 'Wrong xpath given for cards'
-    for card in cards:
-        browser.click_element(card)
-        browser.switch_tab_next(1)
-        assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
-        browser.close_windows()
-        if browser.is_desktop() is False:
-            browser.scroll_up_or_down(300)
-        sleep(2)
-
-def assert_cards_redirection_same_tab(browser, cards_list, url_list):
-    for i, card_xpath in enumerate(cards_list):
-        card = browser.find(card_xpath, scroll=True)
-        browser.scroll_up_or_down(-100)
-        browser.click_element(card)
-        assert browser.get_current_url() == url_list[i], "redirection url is not correct"
-        browser.back()
+def assert_cards_redirection(browser, cards_xpath, redirect_to_urls, same_tab=False):
+    if same_tab:
+        for i, card_elem in enumerate(cards_xpath):
+           card = browser.find(card_elem, scroll=True)
+           browser.scroll_up_or_down(-100)
+           browser.click_element(card)
+           assert browser.get_current_url() == redirect_to_urls[i], "Redirecting to wrong page"
+           browser.back()
+    else:
+        cards = browser.find_many(xpath=cards_xpath)
+        assert len(cards) > 0, 'Wrong xpath given for cards'
+        for card in cards:
+            browser.click_element(card)
+            browser.switch_tab_next(1)
+            assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
+            browser.close_windows()
+            if browser.is_desktop() is False:
+                browser.scroll_up_or_down(300)
+            sleep(2)
 
 def assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath):
     section = browser.find(xpath=cta_section_xpath, scroll=True)
