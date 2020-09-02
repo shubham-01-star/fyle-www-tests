@@ -2,7 +2,7 @@ import logging
 from time import sleep
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing
+from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing, assert_collapse_sneak_peek_desktop_spacing, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
@@ -41,9 +41,9 @@ def test_table(browser):
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
         num += 1
 
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_typography(browser):
-    assert_typography(browser=browser)
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_typography(browser):
+#     assert_typography(browser=browser)
 
 # check if the old url is being redirected to the new one
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
@@ -72,3 +72,30 @@ def test_success(browser):
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_overflowing(browser):
     assert_overflowing(browser=browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_collapse_sneak_peek_section_spacing_desktop(browser):
+    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
+    card_content_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]//div[contains(@class, 'card-content')]"
+    assert_collapse_sneak_peek_desktop_spacing(browser, card_header, card_content_xpath)
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_collapse_sneak_peek_section_desktop(browser):
+    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
+    card_body_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]"
+    assert_collapse_sneak_peek_desktop(browser, card_header, card_body_xpath)
+
+@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
+def test_collapse_sneak_peek_section_spacing_mobile(browser):
+    collapse_card = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-card')]")
+    card_divider = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'card-divider')]")
+    card_header = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'reimburse-collapse-header')]//h3")
+    card_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]//div[contains(@class, 'img-with-link')]"
+    assert_collapse_sneak_peek_mobile_spacing(browser, collapse_card, card_divider, card_header, card_xpath)
+
+@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
+def test_collapse_sneak_peek_section_mobile(browser):
+    card_header = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'reimburse-collapse-header')]")
+    card_opened =  browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-open')]//a[contains(@class, 'reimburse-collapse-header')]")
+    card_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]"
+    assert_collapse_sneak_peek_mobile(browser, card_header, card_opened, card_xpath)

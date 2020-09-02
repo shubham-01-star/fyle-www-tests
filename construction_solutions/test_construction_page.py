@@ -2,8 +2,7 @@ from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_overflowing, assert_customer_testimonial, assert_customer_logo, assert_typography, assert_cards_redirection
-
+from common.asserts import assert_overflowing, assert_typography, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_desktop_spacing
 logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope='function')
@@ -13,22 +12,23 @@ def browser(module_browser, base_url, request):
     sleep(4)
     return module_browser
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_overflowing(browser):
-#     assert_overflowing(browser=browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_overflowing(browser):
+    assert_overflowing(browser=browser)
 
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_typography(browser):
-#     assert_typography(browser=browser)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_typography(browser):
+    assert_typography(browser=browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
-def test_collapse_sneak_peek_section(browser):
-    collapse_card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
-   # collapse_card_body = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body')]")
-    for card in collapse_card_header:
-        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
-        browser.click_element(card)
-        e = browser.find("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body show')]")
-        assert e and e.is_displayed(), "collapse content is not displayed"
+def test_collapse_sneak_peek_section_spacing_desktop(browser):
+    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
+    card_content_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]//div[contains(@class, 'card-content')]"
+    assert_collapse_sneak_peek_desktop_spacing(browser, card_header, card_content_xpath)
 
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_collapse_sneak_peek_section_desktop(browser):
+    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
+    card_body_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]"
+    assert_collapse_sneak_peek_desktop(browser, card_header, card_body_xpath)
     
