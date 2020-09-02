@@ -23,8 +23,12 @@ def browser(module_browser, base_url, request):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_collapse_sneak_peek_section(browser):
-    collapse_card_list = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card')]")
-    # for card in collapse_card_list:
-    #     browser.scroll_up_or_down(300)
-    #     browser.click(card)
+    collapse_card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
+   # collapse_card_body = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body')]")
+    for card in collapse_card_header:
+        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
+        browser.click_element(card)
+        e = browser.find("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body show')]")
+        assert e and e.is_displayed(), "collapse content is not displayed"
+
     
