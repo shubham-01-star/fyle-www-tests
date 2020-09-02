@@ -130,7 +130,7 @@ class SimpleBrowser:
         sleep(1)
         ltag = l.tag_name.lower() if l.tag_name else None
         assert ltag in ['input', 'li', 'button', 'span',
-            'a', 'div', 'textarea'], 'xpath did not return proper element'
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(
             EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
@@ -147,7 +147,7 @@ class SimpleBrowser:
         ltag = l.tag_name.lower() if l.tag_name else None
         # logger.info('found element with tag %s', ltag)
         assert ltag in ['input', 'li', 'button', 'span',
-            'a', 'div', 'textarea'], 'xpath did not return proper element'
+                        'a', 'div', 'textarea'], 'xpath did not return proper element'
         l = self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         l.click()
         sleep(0.1)
