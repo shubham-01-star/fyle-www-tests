@@ -15,7 +15,7 @@ def browser(module_browser, base_url, request):
     return module_browser
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
+def test_page_overflow(browser):
     assert_overflowing(browser=browser)
 
 # check for hero image in mobile

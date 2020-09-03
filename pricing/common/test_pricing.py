@@ -16,7 +16,7 @@ def browser(module_browser, base_url, request):
 
 # check page x-overflow (common method)
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
+def test_page_overflow(browser):
     assert_overflowing(browser)
 
 # check demo form (common section)
