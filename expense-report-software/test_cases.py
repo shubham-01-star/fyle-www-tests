@@ -22,6 +22,10 @@ def browser(module_browser, base_url, request):
     sleep(4)
     return module_browser
 
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_page_overflow(browser):
+    assert_overflowing(browser)
+
 # Check demo form (common section)
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_bad_email(browser):
@@ -69,7 +73,3 @@ def test_bottom_section_cta(browser):
     cta_section_xpath = '//section[contains(@class, "feature-bottom-section")]'
     cta_xpath = f'{cta_section_xpath}//a'
     assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath)
-
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
-    assert_overflowing(browser)

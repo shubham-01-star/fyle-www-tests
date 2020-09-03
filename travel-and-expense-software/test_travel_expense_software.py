@@ -2,7 +2,7 @@ from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection
+from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection, assert_overflowing
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +12,10 @@ def browser(module_browser, base_url, request):
     module_browser.get(base_url + '/travel-and-expense-software')
     sleep(4)
     return module_browser
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_page_overflow(browser):
+    assert_overflowing(browser)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_competitor_section_spacing(browser):

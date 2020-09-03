@@ -16,6 +16,10 @@
 #     sleep(4)
 #     return module_browser
 
+# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+# def test_page_overflow(browser):
+#     assert_overflowing(browser=browser)
+
 # # check demo form (common section)
 # @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 # def test_bad_email(browser):
@@ -57,10 +61,6 @@
 # @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 # def test_success_download_feature_form(browser):
 #     assert_success_download_feature_form(browser)
-
-# @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-# def test_overflowing(browser):
-#     assert_overflowing(browser=browser)
 
 # @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 # def test_customer_testimonial(browser):
