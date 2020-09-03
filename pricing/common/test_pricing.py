@@ -14,6 +14,11 @@ def browser(module_browser, base_url, request):
     time.sleep(4)
     return module_browser
 
+# check page x-overflow (common method)
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_page_overflow(browser):
+    assert_overflowing(browser)
+
 # check demo form (common section)
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_bad_email(browser):
@@ -31,11 +36,6 @@ def test_success(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_customer_testimonial(browser):
     assert_customer_testimonial(browser=browser)
-
-# check page x-overflow (common method)
-@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
-def test_overflowing(browser):
-    assert_overflowing(browser)
 
 # check pricing page is redirecting to bcp page
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
