@@ -24,8 +24,8 @@ def test_logo(browser):
 # check pricing: Indian prices should be shown
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_pricing_text(browser):
-    standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
-    business_price = browser.find(xpath="//h2[contains(@class, 'business-price')]")
+    standard_price = browser.find(xpath="//p[contains(@class, 'standard-price')]")
+    business_price = browser.find(xpath="//p[contains(@class, 'business-price')]")
     assert standard_price.text == 'Custom pricing' and business_price.text == 'Custom pricing', 'Pricing is incorrect for India'
     standard_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-outline-primary') and contains(text(), 'Contact us')]")
     business_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-primary') and contains(text(), 'Contact us')]")

@@ -24,8 +24,8 @@ def test_logo(browser):
 # check pricing: US prices should be shown
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_pricing_text(browser):
-    standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
-    business_price = browser.find(xpath="//h2[contains(@class, 'business-price')]")
+    standard_price = browser.find(xpath="//p[contains(@class, 'standard-price')]")
+    business_price = browser.find(xpath="//p[contains(@class, 'business-price')]")
     assert standard_price.text == '$4.99' and business_price.text == '$8.99', 'Pricing is incorrect for non-India'
     standard_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-outline-primary') and contains(text(), 'Get started')]")
     business_card_cta = browser.find("//div[contains(@class, 'card-footer')]//button[contains(@class, 'btn-primary') and contains(text(), 'Get a demo')]")
@@ -34,8 +34,8 @@ def test_pricing_text(browser):
 # check annual/monthly toggle functionality: default should be annually
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_pricing_toggle(browser):
-    standard_price = browser.find(xpath="//h2[contains(@class, 'standard-price')]")
-    business_price = browser.find(xpath="//h2[contains(@class, 'business-price')]")
+    standard_price = browser.find(xpath="//p[contains(@class, 'standard-price')]")
+    business_price = browser.find(xpath="//p[contains(@class, 'business-price')]")
     assert business_price.text == '$8.99' and standard_price.text == '$4.99', 'Default annual pricing is incorrect for non-India'
     annual_price_active = browser.find(xpath="//label[contains(text(), 'Annually') and contains(@class, 'switch-active-text-color')]")
     browser.click_element(annual_price_active)

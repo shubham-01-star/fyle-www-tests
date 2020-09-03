@@ -62,13 +62,13 @@ def test_compareplan_table(browser):
     assert table and table.is_displayed() is False, 'Compare all plans table is already open, by default'
     # scrolling so that element is not hidden behind sticky cta
     browser.find(xpath="//a[@id='show-hide-enterprise']", scroll=True)
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
+    browser.click(xpath="//div[contains(text(), 'Compare all plans')]")
     assert table and table.is_displayed(), 'Compare all plans table is not opening'
 
 # check the ctas present inside the compare all plans table
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_download_cta(browser):
-    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    open_table_btn = browser.find(xpath="//div[contains(text(), 'Compare all plans')]", scroll=True)
     browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
     cta = browser.find(xpath="//button[contains(text(), 'Download all plans')]", scroll=True)
@@ -79,14 +79,15 @@ def test_download_cta(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_demo_cta(browser):
-    browser.click(xpath="//button[contains(text(), 'Compare all plans')]")
+    compare_cta  = browser.find("//div[contains(text(), 'Compare all plans')]", scroll=True)
+    browser.click_element(compare_cta)
     browser.click(xpath="//div[contains(@class, 'compare-all-cta')]//button[contains(text(), 'Get a demo')]")
     demo_form = browser.find(xpath="//form[@id='contact-us-form']")
     assert demo_form and demo_form.is_displayed(), 'Demo form is not open'
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_scroll_top_arrow(browser):
-    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    open_table_btn = browser.find(xpath="//div[contains(text(), 'Compare all plans')]", scroll=True)
     browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
     browser.scroll_up_or_down(100)
@@ -94,7 +95,7 @@ def test_scroll_top_arrow(browser):
     time.sleep(2)
     arrow = browser.find(xpath="//a[contains(@class, 'scroll-top-arrow')]")
     browser.click_element(arrow)
-    business_pricing_card = browser.find(xpath="//h2[contains(@class, 'card-title') and contains(text(), 'Business')]", scroll=True)
+    business_pricing_card = browser.find(xpath="//p[contains(@class, 'card-title') and contains(text(), 'Business')]", scroll=True)
     assert business_pricing_card.is_displayed(), 'Scroll top is not scrolling to the desired section'
 
 # check FAQ collapsibles
@@ -114,7 +115,7 @@ def test_collapsible_faq(browser):
 # check table header for compare all plans is sticky or not
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_sticky_table_header(browser):
-    open_table_btn = browser.find(xpath="//button[contains(text(), 'Compare all plans')]", scroll=True)
+    open_table_btn = browser.find(xpath="//div[contains(text(), 'Compare all plans')]", scroll=True)
     browser.scroll_up_or_down(-200)
     browser.click_element(open_table_btn)
     browser.find(xpath="//div[contains(@class, 'table-data') and contains(text(), 'Real-time Policy Violations')]", scroll=True)

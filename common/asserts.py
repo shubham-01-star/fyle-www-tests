@@ -49,6 +49,41 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
+
+def assert_spacing_between(element1=None, element2=None, value=None):
+    padding_below = int(element1.value_of_css_property('padding-bottom').replace('px', ''))
+    margin_below = int(element1.value_of_css_property('margin-bottom').replace('px', ''))
+    space_below = padding_below + margin_below
+    padding_top = int(element2.value_of_css_property('padding-top').replace('px', ''))
+    margin_top = int(element2.value_of_css_property('margin-top').replace('px', ''))
+    space_top = padding_top + margin_top
+    space_between = space_below + space_top
+    assert space_between == value, "spacing between is not correct"
+
+def assert_spacing_bottom(element=None, value=None):
+    padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
+    margin_below = int(element.value_of_css_property('margin-bottom').replace('px', ''))
+    space_below = padding_below + margin_below
+    assert space_below == value, "spacing below is not correct"
+
+def assert_spacing_top(element=None, value=None):
+    padding_top = int(element.value_of_css_property('padding-top').replace('px', ''))
+    margin_top = int(element.value_of_css_property('margin-top').replace('px', ''))
+    space_top = padding_top + margin_top
+    assert space_top == value, "spacing top is not correct"
+
+def assert_spacing_right(element=None, value=None):
+    padding_right = int(element.value_of_css_property('padding-right').replace('px', ''))
+    margin_right = int(element.value_of_css_property('margin-right').replace('px', ''))
+    space_top = padding_right + margin_right
+    assert space_top == value, "spacing right is not correct"
+
+def assert_spacing_left(element=None, value=None):
+    padding_left = int(element.value_of_css_property('padding-left').replace('px', ''))
+    margin_left = int(element.value_of_css_property('margin-left').replace('px', ''))
+    space_top = padding_left + margin_left
+    assert space_top == value, "spacing left is not correct"
+
 def assert_thank_you_modal(browser, ty_message, demoform=None):
     e = browser.find(xpath="//div[contains(@id, 'contact-us-ty-modal')]")
     assert e and e.is_displayed, "Thank you modal is not displayed"
@@ -81,17 +116,25 @@ def assert_collapsible_feature_comparison_table(browser):
             assert feature_contents.is_displayed() is False, f'Unable to collapse feature: {div.text}'
         browser.scroll_up_or_down(50)
 
-def assert_cards_redirection(browser, cards_xpath, redirect_to_urls):
-    cards = browser.find_many(xpath=cards_xpath)
-    assert len(cards) > 0, 'Wrong xpath given for cards'
-    for card in cards:
-        browser.click_element(card)
-        browser.switch_tab_next(1)
-        assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
-        browser.close_windows()
-        if browser.is_desktop() is False:
-            browser.scroll_up_or_down(300)
-        sleep(2)
+def assert_cards_redirection(browser, cards_xpath, redirect_to_urls, same_tab=False):
+    if same_tab:
+        for i, card_elem in enumerate(cards_xpath):
+           card = browser.find(card_elem, scroll=True)
+           browser.scroll_up_or_down(-100)
+           browser.click_element(card)
+           assert browser.get_current_url() == redirect_to_urls[i], "Redirecting to wrong page"
+           browser.back()
+    else:
+        cards = browser.find_many(xpath=cards_xpath)
+        assert len(cards) > 0, 'Wrong xpath given for cards'
+        for card in cards:
+            browser.click_element(card)
+            browser.switch_tab_next(1)
+            assert browser.get_current_url() in redirect_to_urls, 'Redirecting to wrong page'
+            browser.close_windows()
+            if browser.is_desktop() is False:
+                browser.scroll_up_or_down(300)
+            sleep(2)
 
 def assert_cta_click_and_modal_show(browser, cta_section_xpath, cta_xpath):
     section = browser.find(xpath=cta_section_xpath, scroll=True)
