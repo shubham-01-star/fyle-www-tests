@@ -2,7 +2,7 @@ import logging
 from time import sleep
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing, assert_collapse_sneak_peek_desktop_spacing, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile
+from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing, assert_collapse_sneak_peek_desktop_spacing, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile, assert_new_gradient_hero_section_typography
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
@@ -13,6 +13,10 @@ def browser(module_browser, base_url, request):
     module_browser.get(base_url + '/alternative/expensify')
     sleep(4)
     return module_browser
+
+@pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
+def test_hero_typography(browser):
+    assert_new_gradient_hero_section_typography(browser, logo_section=True)
 
 @pytest.mark.parametrize('browser', [('desktop_1'), ('mobile_1')], indirect=True)
 def test_page_overflow(browser):

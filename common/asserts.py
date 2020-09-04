@@ -243,3 +243,41 @@ def assert_collapse_sneak_peek_mobile(browser, card_header, card_opened, card_xp
             e = browser.find(card_xpath, scroll=True)
             assert e and e.is_displayed(), "collapse card is not displayed"
         browser.click_element(card)
+
+def assert_new_gradient_hero_section_typography(browser, logo_section=False):
+    hero_section =  browser.find(xpath="//section[contains(@class, 'new-hero new-background')]")
+    text_col_block = browser.find(xpath="//section[contains(@class, 'new-hero new-background')]//h1//parent::div[contains(@class, 'col')]")
+    img_col_block = browser.find(xpath="//section[contains(@class, 'new-hero new-background')]//div[contains(@class, 'hero-img-col')]")
+    img_div = browser.find(xpath="//section[contains(@class, 'new-hero new-background')]//img[contains(@class, 'gradient-hero-img')]")
+    h1 = browser.find(xpath="//section[contains(@class, 'new-hero new-background')]//h1")
+    subtext = browser.find(xpath="//section[contains(@class, 'new-hero new-background')]//p")
+    h1_font_size = h1.value_of_css_property('font-size')
+    h1_font_weight = h1.value_of_css_property('font-weight')
+    subtext_font_size = subtext.value_of_css_property('font-size')
+    subtext_font_weight = subtext.value_of_css_property('font-weight')
+    if browser.is_desktop():
+        assert_spacing_between(h1, subtext, 20)
+        assert_spacing_bottom(subtext, 30)
+        assert text_col_block.size['width'] == 580, "text block col width is not correct"
+        assert img_col_block.location['x'] - img_div.location['x'] == 45, "img positioning is not correct"
+        assert h1_font_size == '50px', "font size of h1 is not correct"
+        assert subtext_font_size == '20px', 'font size of subtext is not correct'
+        if logo_section:
+            assert_spacing_bottom(hero_section, 0)
+            logo_block = browser.find(xpath="//section[contains(@class, 'gradient-hero-logo')]//div[contains(@class, 'container')]")
+            assert_spacing_top(logo_block, 80)
+        else:
+            assert_spacing_bottom(hero_section, 80) 
+    else:
+        assert_spacing_between(h1, subtext, 16)
+        assert h1_font_size == '30px', "font size of h1 is not correct"
+        assert subtext_font_size == '16px', 'font size of subtext is not correct'
+        if logo_section:
+            assert_spacing_bottom(hero_section, 0)
+            logo_block = browser.find(xpath="//section[contains(@class, 'gradient-hero-logo')]//div[contains(@class, 'container')]")
+            assert_spacing_top(logo_block, 40)
+        else:
+            assert_spacing_bottom(hero_section, 40) 
+    
+    assert h1_font_weight == '500', "font weight of h1 is not correct"
+    assert subtext_font_weight == '400', "font weight of subtext is not correct"
