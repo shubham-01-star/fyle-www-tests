@@ -49,7 +49,6 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
-
 def assert_spacing_between(element1=None, element2=None, value=None):
     padding_below = int(element1.value_of_css_property('padding-bottom').replace('px', ''))
     margin_below = int(element1.value_of_css_property('margin-bottom').replace('px', ''))
@@ -59,6 +58,16 @@ def assert_spacing_between(element1=None, element2=None, value=None):
     space_top = padding_top + margin_top
     space_between = space_below + space_top
     assert space_between == value, "spacing between is not correct"
+
+def assert_horizontal_spacing_between(element1=None, element2=None, value=None):
+    padding_right = int(element1.value_of_css_property('padding-right').replace('px', ''))
+    margin_right = int(element1.value_of_css_property('margin-right').replace('px', ''))
+    space_right = padding_right + margin_right
+    padding_left = int(element2.value_of_css_property('padding-left').replace('px', ''))
+    margin_left = int(element2.value_of_css_property('margin-left').replace('px', ''))
+    space_left = padding_left + margin_left
+    space_between = space_right + space_left
+    assert space_between == value, f"Horizontal spacing between elements '{element11}' and '{element2}' is not correct"
 
 def assert_spacing_bottom(element=None, value=None):
     padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
@@ -76,7 +85,7 @@ def assert_spacing_right(element=None, value=None):
     padding_right = int(element.value_of_css_property('padding-right').replace('px', ''))
     margin_right = int(element.value_of_css_property('margin-right').replace('px', ''))
     space_top = padding_right + margin_right
-    assert space_top == value, "spacing right is not correct"
+    assert space_top == value, f"spacing right is not correct for '{element.text}'"
 
 def assert_spacing_left(element=None, value=None):
     padding_left = int(element.value_of_css_property('padding-left').replace('px', ''))
@@ -198,3 +207,22 @@ def assert_customer_testimonial(browser):
     browser.click_element(left_arrow)
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
+
+def assert_spacing_between_text_image(browser, section_xpath):
+    section = browser.find(xpath=section_xpath, scroll=True)
+    assert_spacing_top(section, 80)
+    assert_spacing_bottom(section, 80)
+    columns = browser.find_many(xpath=f"{section_xpath}//div[contains(@class, 'container')]//div[contains(@class, 'row')]//div[contains(@class, 'col')]")
+    for idx, val in enumerate(columns):
+        # Iterate on all divs having text as well as image
+        # Checing if idx is odd or even, and thus checking spacing for alternate divs
+        if idx^1 == idx+1:
+            assert_horizontal_spacing_between(element1=columns[idx], element2=columns[idx+1], value=60)
+        else:
+            continue
+
+def assert_click_scroll_into_view(browser, clickable_elements_xpath):
+    clickable_elements = browser.find_many(xpath=clickable_elements_xpath)
+    for ele in clickable_elements:
+        browser.click_element(ele)
+        assert ele.is_displayed(), "Clicking element '{ele.text}' scrolled to wrong section"
