@@ -83,27 +83,16 @@ def test_overflowing(browser):
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_collapse_sneak_peek_section_spacing_desktop(browser):
-    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
-    card_content_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]//div[contains(@class, 'card-content')]"
-    assert_collapse_sneak_peek_desktop_spacing(browser, card_header, card_content_xpath)
-
-@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
-def test_collapse_sneak_peek_section_desktop(browser):
-    card_header = browser.find_many(xpath="//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-header')]")
-    card_body_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]"
-    assert_collapse_sneak_peek_desktop(browser, card_header, card_body_xpath)
+    assert_collapse_sneak_peek_desktop_spacing(browser)
 
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_collapse_sneak_peek_section_spacing_mobile(browser):
-    collapse_card = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-card')]")
-    card_divider = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'card-divider')]")
-    card_header = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'reimburse-collapse-header')]//h3")
-    card_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]//div[contains(@class, 'img-with-link')]"
-    assert_collapse_sneak_peek_mobile_spacing(browser, collapse_card, card_divider, card_header, card_xpath)
+    assert_collapse_sneak_peek_mobile_spacing(browser)
+
+@pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
+def test_collapse_sneak_peek_section_desktop(browser):
+    assert_collapse_sneak_peek_desktop(browser)
 
 @pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
 def test_collapse_sneak_peek_section_mobile(browser):
-    card_header = browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'reimburse-collapse-header')]")
-    card_opened =  browser.find_many("//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-open')]//a[contains(@class, 'reimburse-collapse-header')]")
-    card_xpath = "//section[contains(@class,'partner-collapsible-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]"
-    assert_collapse_sneak_peek_mobile(browser, card_header, card_opened, card_xpath)
+    assert_collapse_sneak_peek_mobile(browser)

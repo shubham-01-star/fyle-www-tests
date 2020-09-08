@@ -199,20 +199,34 @@ def assert_customer_testimonial(browser):
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
 
-def assert_collapse_sneak_peek_desktop_spacing(browser, card_header, card_content_xpath):
-    for card in card_header:
-        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
-        assert_spacing_right(card, 30)
-        assert_spacing_left(card, 30)
-        assert_spacing_top(card, 10)
-        assert_spacing_bottom(card, 10)
-        browser.click_element(card)
-        card_body = browser.find(xpath=card_content_xpath)
-        assert_spacing_right(card_body, 30)
-        assert_spacing_left(card_body, 30)
-        assert_spacing_bottom(card_body, 30)
+def assert_collapse_sneak_peek_desktop_spacing(browser):
+    card_header_expanded = browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card expanded')]//div[contains(@class, 'collapsible-card-header')]", scroll=True)
+    card_header = browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card') and not(contains(@class, 'expanded'))]//div[contains(@class, 'collapsible-card-header')]")
+    card_body = browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]//div[contains(@class, 'card-content')]")
+    img_element = browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]//img")
+    # Expanded card header
+    assert_spacing_right(card_header_expanded, 30)
+    assert_spacing_left(card_header_expanded, 30)
+    assert_spacing_top(card_header_expanded, 30)
+    assert_spacing_bottom(card_header_expanded, 10)
+    # Default card header
+    assert_spacing_right(card_header, 30)
+    assert_spacing_left(card_header, 30)
+    assert_spacing_top(card_header, 20)
+    assert_spacing_bottom(card_header, 20)
+    # Card body on expand
+    assert_spacing_right(card_body, 30)
+    assert_spacing_left(card_body, 30)
+    assert_spacing_bottom(card_body, 30)
+    # Image width
+    assert img_element.size['width'] == 635, "width of image is not correct"
 
-def assert_collapse_sneak_peek_mobile_spacing(browser, collapse_card, card_divider, card_header, card_xpath):
+
+def assert_collapse_sneak_peek_mobile_spacing(browser):
+    collapse_card = browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-card')]")
+    card_divider = browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'card-divider')]")
+    card_header = browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'sneak-peek-collapse-header')]//h3")
+    card_xpath = "//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]//div[contains(@class, 'img-with-link')]"
     for i, card in enumerate(collapse_card):
         if i != 0:
             assert_spacing_top(card, 20)
@@ -220,24 +234,29 @@ def assert_collapse_sneak_peek_mobile_spacing(browser, collapse_card, card_divid
         assert_spacing_top(divider, 20)
     for i, card in enumerate(card_header):
         assert_spacing_bottom(card, 10)
-        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
+        browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
         if i != 0:
             browser.click_element(card)
             e = browser.find(card_xpath, scroll=True)
             assert_spacing_bottom(e, 10)
         browser.click_element(card)
 
-def assert_collapse_sneak_peek_desktop(browser, card_header, card_body_xpath):
+def assert_collapse_sneak_peek_desktop(browser):
+    card_header = browser.find_many(xpath="//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card-header')]")
+    card_body_xpath = "//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]"
     for card in card_header:
-        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
+        browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
         browser.click_element(card)
         e = browser.find(xpath=card_body_xpath)
         assert e and e.is_displayed(), "collapse content is not displayed"
 
-def assert_collapse_sneak_peek_mobile(browser, card_header, card_opened, card_xpath):
+def assert_collapse_sneak_peek_mobile(browser):
+    card_header = browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'sneak-peek-collapse-header')]")
+    card_opened =  browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//div[contains(@class, 'collapse-open')]//a[contains(@class, 'sneak-peek-collapse-header')]")
+    card_xpath = "//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile-card') and not(contains(@class, 'd-none'))]"
     for i, card in enumerate(card_header):
         assert len(card_opened) > 0, "no card is opened initially"
-        browser.find("//section[contains(@class,'partner-collapsible-section')]", scroll=True)
+        browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
         if i != 0:
             browser.click_element(card)
             e = browser.find(card_xpath, scroll=True)
