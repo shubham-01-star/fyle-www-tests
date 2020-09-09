@@ -2,7 +2,8 @@ import logging
 from time import sleep
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing, assert_collapse_sneak_peek_desktop_spacing, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile, assert_new_gradient_hero_section_typography
+from common.asserts import assert_hero_image, assert_typography, assert_customer_logo, assert_overflowing, assert_collapse_sneak_peek_desktop_spacing
+from common.asserts import assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile, assert_new_gradient_hero_section_typography
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)

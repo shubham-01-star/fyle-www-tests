@@ -244,11 +244,11 @@ def assert_collapse_sneak_peek_mobile_spacing(browser):
 def assert_collapse_sneak_peek_desktop(browser):
     card_header = browser.find_many(xpath="//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card-header')]")
     card_body_xpath = "//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'collapsible-card-body') and contains(@class, 'show')]"
-    for card in card_header:
+    for i, card in enumerate(card_header):
         browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
         browser.click_element(card)
         e = browser.find(xpath=card_body_xpath)
-        assert e and e.is_displayed(), "collapse content is not displayed"
+        assert e and e.is_displayed(), f"{ i+1 } collapse content is not displayed"
 
 def assert_collapse_sneak_peek_mobile(browser):
     card_header = browser.find_many("//section[contains(@class,'new-sneak-peek-collapse-section')]//div[contains(@class, 'sneak-peek-mobile')]//a[contains(@class, 'sneak-peek-collapse-header')]")
@@ -260,7 +260,7 @@ def assert_collapse_sneak_peek_mobile(browser):
         if i != 0:
             browser.click_element(card)
             e = browser.find(card_xpath, scroll=True)
-            assert e and e.is_displayed(), "collapse card is not displayed"
+            assert e and e.is_displayed(), f"{ i+1 } collapse card is not displayed"
         browser.click_element(card)
 
 def assert_new_gradient_hero_section_typography(browser, logo_section=False):

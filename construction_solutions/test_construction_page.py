@@ -2,7 +2,8 @@ from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_overflowing, assert_typography, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_desktop_spacing, assert_new_gradient_hero_section_typography, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile
+from common.asserts import assert_overflowing, assert_typography, assert_collapse_sneak_peek_desktop, assert_collapse_sneak_peek_desktop_spacing
+from common.asserts import  assert_new_gradient_hero_section_typography, assert_collapse_sneak_peek_mobile_spacing, assert_collapse_sneak_peek_mobile
 logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope='function')
