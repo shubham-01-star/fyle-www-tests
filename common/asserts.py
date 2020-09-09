@@ -49,7 +49,7 @@ def assert_typography(browser):
     # for other_section in other_sections:
     #     assert_other_section(browser=browser, section=other_section)
 
-def assert_spacing_between(element1=None, element2=None, value=None):
+def assert_vertical_spacing_between(element1=None, element2=None, value=None):
     padding_below = int(element1.value_of_css_property('padding-bottom').replace('px', ''))
     margin_below = int(element1.value_of_css_property('margin-bottom').replace('px', ''))
     space_below = padding_below + margin_below
@@ -57,7 +57,7 @@ def assert_spacing_between(element1=None, element2=None, value=None):
     margin_top = int(element2.value_of_css_property('margin-top').replace('px', ''))
     space_top = padding_top + margin_top
     space_between = space_below + space_top
-    assert space_between == value, "spacing between is not correct"
+    assert space_between == value, f"Verical spacing between '{element1.text[:20]}...' and '{element2.text[:20]}...' is not correct"
 
 def assert_horizontal_spacing_between(element1=None, element2=None, value=None):
     padding_right = int(element1.value_of_css_property('padding-right').replace('px', ''))
@@ -67,7 +67,7 @@ def assert_horizontal_spacing_between(element1=None, element2=None, value=None):
     margin_left = int(element2.value_of_css_property('margin-left').replace('px', ''))
     space_left = padding_left + margin_left
     space_between = space_right + space_left
-    assert space_between == value, f"Horizontal spacing between elements '{element11}' and '{element2}' is not correct"
+    assert space_between == value, f"Horizontal spacing between elements '{element1.text[:20]}...' and '{element2.text[:20]}...' is not correct"
 
 def assert_spacing_bottom(element=None, value=None):
     padding_below = int(element.value_of_css_property('padding-bottom').replace('px', ''))
@@ -208,18 +208,25 @@ def assert_customer_testimonial(browser):
     active_index = get_active_index(carousel_items)
     assert active_index == ((current_active_index + (carousel_length - 1)) % carousel_length), 'Left click operation is not working'
 
-def assert_spacing_between_text_image(browser, section_xpath):
+def assert_spacing_between_text_image(browser, section_xpath, feature_section_rows_xpath, slider_feature_section=False):
     section = browser.find(xpath=section_xpath, scroll=True)
     assert_spacing_top(section, 80)
     assert_spacing_bottom(section, 80)
-    columns = browser.find_many(xpath=f"{section_xpath}//div[contains(@class, 'container')]//div[contains(@class, 'row')]//div[contains(@class, 'col')]")
+    horizontal_spacing_value = 60 if slider_feature_section is False else 40
+    rows = browser.find_many(xpath=feature_section_rows_xpath)
+    columns = browser.find_many(xpath=f"{feature_section_rows_xpath}//div[contains(@class, 'col')]")
+    # Check horizontal spacing
     for idx, val in enumerate(columns):
         # Iterate on all divs having text as well as image
         # Checing if idx is odd or even, and thus checking spacing for alternate divs
         if idx^1 == idx+1:
-            assert_horizontal_spacing_between(element1=columns[idx], element2=columns[idx+1], value=60)
+            assert_horizontal_spacing_between(element1=columns[idx], element2=columns[idx+1], value=horizontal_spacing_value)
         else:
             continue
+    # Check vertical spacing between rows
+    for idx, row in enumerate(rows):
+        if idx != len(rows)-1:
+            assert_vertical_spacing_between(element1=rows[idx], element2=rows[idx+1], value=80)
 
 def assert_click_scroll_into_view(browser, clickable_elements_xpath):
     clickable_elements = browser.find_many(xpath=clickable_elements_xpath)

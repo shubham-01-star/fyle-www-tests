@@ -4,7 +4,7 @@ import pytest
 
 from common.utils import resize_browser
 from common.asserts import assert_cta_click_and_modal_show, assert_customer_logo
-from common.asserts import assert_overflowing, assert_click_scroll_into_view
+from common.asserts import assert_overflowing, assert_click_scroll_into_view, assert_spacing_between_text_image
 from common.test_getdemo import assert_bad_email, assert_missing_firstname, assert_success
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,8 @@ def test_sticky_slider_feature_section(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_feature_section_spacing(browser):
     section_xpath = "//section[contains(@class, 'sticky-slider-feature-section')]"
-    assert_spacing_between_text_image(browser, section_xpath)
+    feature_section_rows_xpath = f"{section_xpath}//div[contains(@class, 'fyle-slider-features-col')]//div[contains(@class, 'collapse-card')]//div[contains(@class, 'row')]"
+    assert_spacing_between_text_image(browser, section_xpath, feature_section_rows_xpath, slider_feature_section=True)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_bottom_section_cta(browser):

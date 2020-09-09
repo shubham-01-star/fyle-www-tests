@@ -48,7 +48,8 @@ def test_customer_logo_section(browser):
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_legal_solutions_feature_section_spacing(browser):
     section_xpath = "//section[contains(@class, 'legal-solutions-feature-section')]"
-    assert_spacing_between_text_image(browser, section_xpath)
+    feature_section_rows_xpath = f"{section_xpath}//div[contains(@class, 'container')]//div[contains(@class, 'row')]"
+    assert_spacing_between_text_image(browser, section_xpath, feature_section_rows_xpath)
 
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_bottom_section_cta(browser):
