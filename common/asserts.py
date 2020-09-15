@@ -235,6 +235,7 @@ def assert_collapse_sneak_peek_mobile_spacing(browser):
     for i, card in enumerate(card_header):
         assert_spacing_bottom(card, 10)
         browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
+        # First card will be open by default
         if i != 0:
             browser.click_element(card)
             e = browser.find(card_xpath, scroll=True)
@@ -257,6 +258,7 @@ def assert_collapse_sneak_peek_mobile(browser):
     for i, card in enumerate(card_header):
         assert len(card_opened) > 0, "no card is opened initially"
         browser.find("//section[contains(@class,'new-sneak-peek-collapse-section')]", scroll=True)
+        # First card will be open by default
         if i != 0:
             browser.click_element(card)
             e = browser.find(card_xpath, scroll=True)
