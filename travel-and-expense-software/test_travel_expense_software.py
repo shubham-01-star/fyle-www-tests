@@ -2,7 +2,7 @@ from time import sleep
 import logging
 import pytest
 from common.utils import resize_browser
-from common.asserts import assert_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection, assert_overflowing
+from common.asserts import assert_vertical_spacing_between, assert_spacing_bottom, assert_spacing_top, assert_spacing_right, assert_spacing_left, assert_cards_redirection, assert_overflowing
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ def test_competitor_section_spacing(browser):
     card_sub_text = browser.find_many(xpath="//section[contains(@class, 'fyle-vs-competitors')]//a[contains(@class, 'competitor-cards')]//p[contains(@class, 'paragraph-4--regular')]")
     assert_spacing_top(section, 80)
     assert_spacing_bottom(section, 80)
-    assert_spacing_between(h2, underline_dash, 60)
+    assert_vertical_spacing_between(h2, underline_dash, 60)
     assert_spacing_bottom(underline_dash, 60)
     assert_spacing_top(para_text, 40)
     assert_spacing_right(para_text, 50)
@@ -54,8 +54,8 @@ def test_competitor_section_spacing_mobile(browser):
     assert_spacing_bottom(section, 20)
     assert_spacing_bottom(h2, 40)
     assert_spacing_top(para_text, 10)
-    assert_spacing_between(para_text, versus_row, 40)
-    assert_spacing_between(versus_row, card_list[0], 40)
+    assert_vertical_spacing_between(para_text, versus_row, 40)
+    assert_vertical_spacing_between(versus_row, card_list[0], 40)
     for card in card_list:
         assert_spacing_top(card, 20)
         assert_spacing_bottom(card, 20)
