@@ -23,11 +23,6 @@ def test_hero_typography(browser):
 def test_page_overflow(browser):
     assert_overflowing(browser=browser)
 
-# check for hero image in mobile
-@pytest.mark.parametrize('browser', [('mobile_1')], indirect=True)
-def test_hero_image(browser):
-    assert_hero_image(browser=browser)
-
 @pytest.mark.parametrize('browser', [('desktop_1')], indirect=True)
 def test_table(browser):
     section = browser.find(xpath='//section[contains(@class, "alternative-fyle-comparison")]', scroll=True)
